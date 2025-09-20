@@ -12,7 +12,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ["placeholder.png","blob.v0.dev"],
+    domains: ["blob.v0.dev"],
     unoptimized: true,
     remotePatterns: [
       {
@@ -62,10 +62,8 @@ const nextConfig = {
     RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
   webpack(config) {
-    // 👇 Cấu hình @svgr/webpack
     config.module.rules.push({
-      test: /\.svg$/i,
-      issuer: /\.[jt]sx?$/,
+      test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
     return config;

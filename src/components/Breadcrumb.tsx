@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
 import { BreadcrumbItem } from "@/types/bread-crumb"
 import { cn } from "@/lib/utils"
-import { useTranslations } from "@/hooks/useTranslations"
 
 type BreadcrumbProps = {
   items: BreadcrumbItem[]
@@ -21,7 +20,6 @@ export default function Breadcrumb({
   useLastItemHighlight = true, // <-- mặc định là true
 }: BreadcrumbProps) {
   const router = useRouter()
-  const t = useTranslations("common")
 
   function handleBack() {
     if (window.history.length > 1) {
@@ -37,17 +35,17 @@ export default function Breadcrumb({
         <>
           <button
             onClick={handleBack}
-            className="flex items-center gap-2 text-base hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black cursor-pointer"
+            className="flex items-center gap-2 text-base hover:bg-black hover:text-white cursor-pointer"
           >
             <ArrowLeft size={16} />
-            {t?.back || "BACK"}
+            BACK
           </button>
           <span className="text-gray-400 cursor-default">/</span>
         </>
       )}
 
-      <Link href="/" className="text-base hover:underline hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black">
-        {t?.home || "Home"}
+      <Link href="/" className="text-base hover:underline hover:bg-black hover:text-white">
+        Home
       </Link>
 
       {items.map((crumb, index) => {
@@ -57,13 +55,13 @@ export default function Breadcrumb({
           <div key={index} className="flex items-center gap-2">
             <span className="text-gray-400 cursor-default">/</span>
             {isLast && useLastItemHighlight ? (
-              <span className="text-base text-gray-600 dark:text-white cursor-default select-none">
+              <span className="text-base text-gray-600 cursor-default select-none">
                 {crumb.label}
               </span>
             ) : (
               <Link
                 href={crumb.href}
-                className="text-base hover:underline hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black"
+                className="text-base hover:underline hover:bg-black hover:text-white"
               >
                 {crumb.label}
               </Link>

@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { BaseButton } from "./ui/base-button";
+import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,7 +25,7 @@ export function UserDropdown({ user }: UserDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <BaseButton variant="outline">
+        <Button variant="outline">
           {user.image ? (
             <Image
               src={user.image}
@@ -38,7 +38,7 @@ export function UserDropdown({ user }: UserDropdownProps) {
             <UserIcon />
           )}
           <span className="max-w-[12rem] truncate">{user.name}</span>
-        </BaseButton>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
