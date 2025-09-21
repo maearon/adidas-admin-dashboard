@@ -14,7 +14,7 @@ export default async function SignIn() {
   const session = await getServerSession();
   const user = session?.user;
 
-  if (!user) redirect("/signin");
+  if (user) redirect("/");
 
   return <SignInForm />;
 }
