@@ -1,20 +1,101 @@
 "use client";
-import Checkbox from "@/components/form/input/Checkbox";
+// import Checkbox from "@/components/form/input/Checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
-import Button from "@/components/ui/button/Button";
-import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
+import { LoadingButton } from "@/components/loading-button";
+import { PasswordInput } from "@/components/password-input";
+import { useTranslations } from "@/hooks/useTranslations";
+import { authClient } from "@/lib/auth-client";
+import { ChevronLeftIcon } from "@/icons";
 import Link from "next/link";
 import React, { useState } from "react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  // FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+const signInSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email" }),
+  password: z.string().min(1, { message: "Password is required" }),
+  // rememberMe: z.boolean().default(true),
+  rememberMe: z.boolean().optional(),
+});
+
+type SignInValues = z.infer<typeof signInSchema>;
 
 export default function SignInForm() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+  const t = useTranslations("auth");
+  const pathname = usePathname();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  // const [showPassword, setShowPassword] = useState(false);
+  // const [isChecked, setIsChecked] = useState(false);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const redirect = searchParams.get("redirect");
+
+  const form = useForm<SignInValues>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: true,
+    },
+  });
+
+  async function onSubmit({ email, password, rememberMe }: SignInValues) {
+    setError(null);
+    setLoading(true);
+
+    const { error } = await authClient.signIn.email({
+      email,
+      password,
+      rememberMe,
+    });
+
+    setLoading(false);
+
+    if (error) {
+      setError(error.message || "Something went wrong");
+    } else {
+      toast.success("Signed in successfully");
+      router.push(redirect ?? "/");
+    }
+  }
+
+  async function handleSocialSignIn(provider: "google" | "x") {
+    setError(null);
+    setLoading(true);
+
+    const { error } = await authClient.signIn.social({
+      provider,
+      callbackURL: redirect ?? "/my-account",
+    });
+
+    setLoading(false);
+
+    if (error) {
+      setError(error.message || "Something went wrong");
+    }
+  }
+
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
         <Link
-          href="/"
+          href={`/?redirect=${pathname}`}
           className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
         >
           <ChevronLeftIcon />
@@ -33,7 +114,7 @@ export default function SignInForm() {
           </div>
           <div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
-              <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
+              <button onClick={() => handleSocialSignIn("google")} className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
                 <svg
                   width="20"
                   height="20"
@@ -60,7 +141,7 @@ export default function SignInForm() {
                 </svg>
                 Sign in with Google
               </button>
-              <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
+              <button onClick={() => handleSocialSignIn("x")} className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
                 <svg
                   width="21"
                   className="fill-current"
@@ -84,56 +165,111 @@ export default function SignInForm() {
                 </span>
               </div>
             </div>
-            <form>
-              <div className="space-y-6">
-                <div>
-                  <Label>
-                    Email <span className="text-error-500">*</span>{" "}
-                  </Label>
-                  <Input placeholder="info@gmail.com" type="email" />
-                </div>
-                <div>
-                  <Label>
-                    Password <span className="text-error-500">*</span>{" "}
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
-                    />
-                    <span
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                    >
-                      {showPassword ? (
-                        <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
-                      ) : (
-                        <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="space-y-6">
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Label>
+                            Email <span className="text-error-500">*</span>{" "}
+                          </Label>
+                          <FormControl>
+                            <Input 
+                              placeholder="info@gmail.com" 
+                              type="email"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
                       )}
-                    </span>
+                    />
+                  </div>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Label>
+                            Password <span className="text-error-500">*</span>{" "}
+                          </Label>
+                          <div className="relative">
+                            <FormControl>
+                              {/* <Input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Enter your password"
+                                {...field}
+                              />
+                              <span
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
+                              >
+                                {showPassword ? (
+                                  <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+                                ) : (
+                                  <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                                )}
+                              </span> */}
+                              <PasswordInput
+                                autoComplete="current-password"
+                                placeholder="Password"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      {/* <Checkbox checked={isChecked} onChange={setIsChecked} /> */}
+                      <FormField
+                        control={form.control}
+                        name="rememberMe"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              {/* <Checkbox checked={isChecked} onChange={setIsChecked} /> */}
+                              <Checkbox
+                                id="keepLoggedIn"
+                                checked={field.value}
+                                onChange={field.onChange}
+                              />
+                            </FormControl>
+                            <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
+                              {t?.keepMeLoggedIn || "Keep me logged in"}
+                            </span>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <Link
+                      href="/reset-password"
+                      className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                  {error && (
+                    <div role="alert" className="text-sm text-red-600">
+                      {error}
+                    </div>
+                  )}
+                  <div>
+                    <LoadingButton type="submit" className="w-full" size="sm" loading={loading}>
+                      {t?.signIn || "Sign in"}
+                    </LoadingButton>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Checkbox checked={isChecked} onChange={setIsChecked} />
-                    <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
-                      Keep me logged in
-                    </span>
-                  </div>
-                  <Link
-                    href="/reset-password"
-                    className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-                <div>
-                  <Button className="w-full" size="sm">
-                    Sign in
-                  </Button>
-                </div>
-              </div>
-            </form>
+              </form>
+            </Form>
 
             <div className="mt-5">
               <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
