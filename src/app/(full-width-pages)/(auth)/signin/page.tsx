@@ -1,13 +1,20 @@
 import SignInForm from "@/components/auth/SignInForm";
 import { Metadata } from "next";
+import { getServerSession } from "@/lib/get-session";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-  title: "Next.js SignIn Page | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Signin Page TailAdmin Dashboard Template",
-};
+    title: "👕Admin Dashboard' adidas US | adidas US👕 admin Dashboard",
+    description: "This is Next.js Signin Page TailAdmin Dashboard Shop the latest shoes, clothing, and accessories at adidas US.",
+  };
 }
 
-export default function SignIn() {
+export default async function SignIn() {
+  const session = await getServerSession();
+  const user = session?.user;
+
+  if (!user) redirect("/signin");
+
   return <SignInForm />;
 }

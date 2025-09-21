@@ -6,8 +6,8 @@ import AdminLayoutClient from "./AdminLayoutClient";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "👕Admin' Sneakers and Activewear | adidas US👕",
-    description: "Shop the latest kids' shoes, clothing, and accessories at adidas US.",
+    title: "👕Admin Dashboard' adidas US | adidas US👕 admin Dashboard",
+    description: "This is Next.js Signin Page TailAdmin Dashboard Shop the latest shoes, clothing, and accessories at adidas US.",
   };
 }
 
@@ -20,6 +20,8 @@ export default async function AdminLayout({
   const user = session?.user;
 
   if (!user) redirect("/signin");
+
+  if (user.role !== "admin") redirect("/signin");
 
   return <AdminLayoutClient>{children}</AdminLayoutClient>;
 }
