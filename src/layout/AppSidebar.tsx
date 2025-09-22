@@ -5,6 +5,16 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  BarChart3,
+  Settings,
+  Truck,
+  MessageSquare,
+} from "lucide-react"
+import {
   BoxCubeIcon,
   CalenderIcon,
   ChevronDownIcon,
@@ -27,6 +37,46 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
+  {
+    name: "Dashboard",
+    icon: <LayoutDashboard />,
+    path: "/admin/dashboard",
+  },
+  {
+    name: "Products",
+    icon: <Package />,
+    path: "/admin/products",
+  },
+  {
+    name: "Orders",
+    icon: <ShoppingCart />,
+    path: "/admin/orders",
+  },
+  {
+    name: "Customers",
+    icon: <Users />,
+    path: "/admin/customers",
+  },
+  {
+    name: "Inventory",
+    icon: <BarChart3 />,
+    path: "/admin/inventory",
+  },
+  {
+    name: "Shipping",
+    icon: <Truck />,
+    path: "/admin/shipping",
+  },
+  {
+    name: "Chat",
+    icon: <MessageSquare />,
+    path: "/admin/chat",
+  },
+  {
+    name: "Settings",
+    icon: <Settings />,
+    path: "/admin/settings",
+  },
   {
     icon: <GridIcon />,
     name: "Dashboard",
