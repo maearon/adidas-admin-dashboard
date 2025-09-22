@@ -254,12 +254,6 @@ export default function CustomersPage() {
                         <div className="text-sm text-muted-foreground">ID: #{customer.id}</div>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <div>
-                        <div className="font-medium">{customer.name}</div>
-                        <div className="text-sm text-muted-foreground">ID: #{customer.id}</div>
-                      </div>
-                    </TableCell>
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 overflow-hidden rounded-full">
