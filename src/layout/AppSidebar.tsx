@@ -45,7 +45,7 @@ const navItems: NavItem[] = [
   {
     name: "Dashboard",
     icon: <GridIcon />,
-    path: "/dashboard",
+    path: "/",
   },
   {
     name: "Products",
