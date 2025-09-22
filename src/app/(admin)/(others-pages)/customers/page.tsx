@@ -18,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, MoreHorizontal, Eye, Mail, Phone, Users, UserPlus, Download, RefreshCw } from "lucide-react"
 import { useUsers } from "@/hooks/useUsers"
 // import { User } from "@/lib/auth"
+import Image from "next/image";
 
 // interface Customer {
 //   id: number
@@ -234,6 +235,7 @@ export default function CustomersPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Customer</TableHead>
+                  <TableHead>User</TableHead>
                   <TableHead>Contact</TableHead>
                   {/* <TableHead>Location</TableHead> */}
                   {/* <TableHead>Orders</TableHead> */}
@@ -250,6 +252,32 @@ export default function CustomersPage() {
                       <div>
                         <div className="font-medium">{customer.name}</div>
                         <div className="text-sm text-muted-foreground">ID: #{customer.id}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">{customer.name}</div>
+                        <div className="text-sm text-muted-foreground">ID: #{customer.id}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="px-5 py-4 sm:px-6 text-start">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 overflow-hidden rounded-full">
+                          <Image
+                            width={40}
+                            height={40}
+                            src={customer.image || "/avatar-placeholder.png"}
+                            alt={customer.name}
+                          />
+                        </div>
+                        <div>
+                          <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                            {customer.name}
+                          </span>
+                          <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
+                            {customer.role}
+                          </span>
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>
