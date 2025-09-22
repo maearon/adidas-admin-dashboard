@@ -234,9 +234,9 @@ export default function CustomersPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Customer</TableHead>
                   <TableHead>User</TableHead>
                   <TableHead>Contact</TableHead>
+                  <TableHead>Customer</TableHead>
                   {/* <TableHead>Location</TableHead> */}
                   {/* <TableHead>Orders</TableHead> */}
                   {/* <TableHead>Total Spent</TableHead> */}
@@ -248,12 +248,6 @@ export default function CustomersPage() {
               <TableBody>
                 {customers.map((customer) => (
                   <TableRow key={customer.id}>
-                    <TableCell>
-                      <div>
-                        <div className="font-medium">{customer.name}</div>
-                        <div className="text-sm text-muted-foreground">ID: #{customer.id}</div>
-                      </div>
-                    </TableCell>
                     <TableCell>
                       <div className="flex items-start gap-3">
                         <div className="w-10 h-10 overflow-hidden rounded-full">
@@ -278,6 +272,12 @@ export default function CustomersPage() {
                       <div>
                         <div className="text-sm">{customer.email}</div>
                         {/* {customer.phone && <div className="text-sm text-muted-foreground">{customer.phone}</div>} */}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">{customer.name}</div>
+                        <div className="text-sm text-muted-foreground">ID: #{customer.id}</div>
                       </div>
                     </TableCell>
                     {/* <TableCell>{customer.location}</TableCell> */}
