@@ -38,9 +38,9 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
+    icon: <GridIcon />,
     name: "Dashboard",
-    icon: <LayoutDashboard />,
-    path: "/dashboard",
+    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
   },
   {
     name: "Products",
@@ -78,9 +78,9 @@ const navItems: NavItem[] = [
     path: "/settings",
   },
   {
-    icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+    icon: <LayoutDashboard />,
+    path: "/dashboard",
   },
   {
     icon: <CalenderIcon />,
