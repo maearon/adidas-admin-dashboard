@@ -6,7 +6,7 @@ import Label from "@/components/form/Label";
 import { LoadingButton } from "@/components/loading-button";
 import { PasswordInput } from "@/components/password-input";
 import { useTranslations } from "@/hooks/useTranslations";
-import { authClient } from "@/lib/auth-client";
+import { authClient, ProviderId } from "@/lib/auth-client";
 import { ChevronLeftIcon } from "@/icons";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -75,7 +75,7 @@ export default function SignInForm() {
     }
   }
 
-  async function handleSocialSignIn(provider: "google" | "x") {
+  async function handleSocialSignIn(provider: ProviderId) {
     setError(null);
     setLoading(true);
 
@@ -141,7 +141,7 @@ export default function SignInForm() {
                 </svg>
                 Sign in with Google
               </button>
-              <button disabled={loading} onClick={() => handleSocialSignIn("x")} className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
+              <button disabled={loading} onClick={() => handleSocialSignIn("twitter")} className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
                 <svg
                   width="21"
                   className="fill-current"

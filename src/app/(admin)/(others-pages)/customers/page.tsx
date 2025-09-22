@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AdidasButton } from "@/components/ui/adidas-button"
 import { Input } from "@/components/ui/input"
@@ -16,23 +16,31 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, MoreHorizontal, Eye, Mail, Phone, Users, UserPlus, Download, RefreshCw } from "lucide-react"
+import { useUsers } from "@/hooks/useUsers"
+// import { User } from "@/lib/auth"
 
-interface Customer {
-  id: number
-  name: string
-  email: string
-  phone?: string
-  total_orders: number
-  total_spent: number
-  status: string
-  created_at: string
-  last_order_at?: string
-  location: string
-}
+// interface Customer {
+//   id: number
+//   name: string
+//   email: string
+//   phone?: string
+//   total_orders: number
+//   total_spent: number
+//   status: string
+//   created_at: string
+//   last_order_at?: string
+//   location: string
+// }
 
 export default function CustomersPage() {
-  const [customers, setCustomers] = useState<Customer[]>([])
-  const [loading, setLoading] = useState(true)
+  const { 
+    users: customers, 
+    // total, 
+    isLoading: loading 
+  } = useUsers()
+  // const customers = data?.data ?? []
+  // const [customers, setCustomers] = useState<User[]>([])
+  // const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({
     q: "",
     status: "all",
@@ -42,55 +50,57 @@ export default function CustomersPage() {
     sort: "created_desc",
   })
 
+  type Filters = typeof filters
+
   // Mock data
-  const mockCustomers: Customer[] = [
-    {
-      id: 1,
-      name: "Nguyễn Văn A",
-      email: "nguyenvana@email.com",
-      phone: "+84 901 234 567",
-      total_orders: 15,
-      total_spent: 12500000,
-      status: "active",
-      created_at: "2023-06-15T10:30:00Z",
-      last_order_at: "2024-01-15T10:30:00Z",
-      location: "Ho Chi Minh City",
-    },
-    {
-      id: 2,
-      name: "Trần Thị B",
-      email: "tranthib@email.com",
-      phone: "+84 902 345 678",
-      total_orders: 8,
-      total_spent: 6800000,
-      status: "active",
-      created_at: "2023-08-20T14:20:00Z",
-      last_order_at: "2024-01-10T14:20:00Z",
-      location: "Hanoi",
-    },
-    {
-      id: 3,
-      name: "Lê Văn C",
-      email: "levanc@email.com",
-      phone: "+84 903 456 789",
-      total_orders: 3,
-      total_spent: 2100000,
-      status: "inactive",
-      created_at: "2023-12-01T09:15:00Z",
-      last_order_at: "2023-12-15T09:15:00Z",
-      location: "Da Nang",
-    },
-  ]
+  // const mockCustomers: Customer[] = [
+  //   {
+  //     id: 1,
+  //     name: "Nguyễn Văn A",
+  //     email: "nguyenvana@email.com",
+  //     phone: "+84 901 234 567",
+  //     total_orders: 15,
+  //     total_spent: 12500000,
+  //     status: "active",
+  //     created_at: "2023-06-15T10:30:00Z",
+  //     last_order_at: "2024-01-15T10:30:00Z",
+  //     location: "Ho Chi Minh City",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Trần Thị B",
+  //     email: "tranthib@email.com",
+  //     phone: "+84 902 345 678",
+  //     total_orders: 8,
+  //     total_spent: 6800000,
+  //     status: "active",
+  //     created_at: "2023-08-20T14:20:00Z",
+  //     last_order_at: "2024-01-10T14:20:00Z",
+  //     location: "Hanoi",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Lê Văn C",
+  //     email: "levanc@email.com",
+  //     phone: "+84 903 456 789",
+  //     total_orders: 3,
+  //     total_spent: 2100000,
+  //     status: "inactive",
+  //     created_at: "2023-12-01T09:15:00Z",
+  //     last_order_at: "2023-12-15T09:15:00Z",
+  //     location: "Da Nang",
+  //   },
+  // ]
 
-  useEffect(() => {
-    setLoading(true)
-    setTimeout(() => {
-      setCustomers(mockCustomers)
-      setLoading(false)
-    }, 1000)
-  }, [filters])
+  // useEffect(() => {
+  //   setLoading(true)
+  //   setTimeout(() => {
+  //     setCustomers(mockCustomers)
+  //     setLoading(false)
+  //   }, 1000)
+  // }, [filters])
 
-  const handleFilterChange = (key: string, value: any) => {
+  const handleFilterChange = <K extends keyof Filters>(key: K, value: Filters[K]) => {
     setFilters((prev) => ({ ...prev, [key]: value, page: 1 }))
   }
 
@@ -107,12 +117,12 @@ export default function CustomersPage() {
     }
   }
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(amount)
-  }
+  // const formatCurrency = (amount: number) => {
+  //   return new Intl.NumberFormat("vi-VN", {
+  //     style: "currency",
+  //     currency: "VND",
+  //   }).format(amount)
+  // }
 
   return (
     <div className="space-y-6">
@@ -225,11 +235,11 @@ export default function CustomersPage() {
                 <TableRow>
                   <TableHead>Customer</TableHead>
                   <TableHead>Contact</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead>Orders</TableHead>
-                  <TableHead>Total Spent</TableHead>
+                  {/* <TableHead>Location</TableHead> */}
+                  {/* <TableHead>Orders</TableHead> */}
+                  {/* <TableHead>Total Spent</TableHead> */}
                   <TableHead>Status</TableHead>
-                  <TableHead>Last Order</TableHead>
+                  {/* <TableHead>Last Order</TableHead> */}
                   <TableHead className="w-[70px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -245,20 +255,21 @@ export default function CustomersPage() {
                     <TableCell>
                       <div>
                         <div className="text-sm">{customer.email}</div>
-                        {customer.phone && <div className="text-sm text-muted-foreground">{customer.phone}</div>}
+                        {/* {customer.phone && <div className="text-sm text-muted-foreground">{customer.phone}</div>} */}
                       </div>
                     </TableCell>
-                    <TableCell>{customer.location}</TableCell>
-                    <TableCell className="font-medium">{customer.total_orders}</TableCell>
-                    <TableCell className="font-medium">{formatCurrency(customer.total_spent)}</TableCell>
+                    {/* <TableCell>{customer.location}</TableCell> */}
+                    {/* <TableCell className="font-medium">{customer.total_orders}</TableCell> */}
+                    {/* <TableCell className="font-medium">{formatCurrency(customer.total_spent)}</TableCell> */}
                     <TableCell>
-                      <Badge variant={getStatusBadgeVariant(customer.status)}>
-                        {customer.status.charAt(0).toUpperCase() + customer.status.slice(1)}
+                      <Badge variant={getStatusBadgeVariant(customer.emailVerified ? "active" : "inactive")}>
+                        {/* {customer.status.charAt(0).toUpperCase() + customer.status.slice(1)} */}
+                        {customer.emailVerified ? "Active" : "Inactive"}
                       </Badge>
                     </TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       {customer.last_order_at ? new Date(customer.last_order_at).toLocaleDateString("vi-VN") : "Never"}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>

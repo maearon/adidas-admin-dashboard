@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { sendEmail } from "./email";
 import { db } from "@/db";
+import { admin } from "better-auth/plugins"
 
 export type Session = typeof auth.$Infer.Session // 👈 Lấy type Session
 export type User = typeof auth.$Infer.Session.user; // 👈 Lấy type User
@@ -68,4 +69,9 @@ export const auth = betterAuth({
       },
     },
   },
+  plugins: [
+    admin({
+      adminRoles: ["admin"],
+    }),
+  ],
 });
