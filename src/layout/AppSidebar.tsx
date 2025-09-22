@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
-  LayoutDashboard,
+  // LayoutDashboard,
   Package,
   ShoppingCart,
   Users,
@@ -37,10 +37,15 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
+  // {
+  //   icon: <GridIcon />,
+  //   name: "Dashboard",
+  //   subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+  // },
   {
-    icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+    icon: <GridIcon />,
+    path: "/dashboard",
   },
   {
     name: "Products",
@@ -77,11 +82,11 @@ const navItems: NavItem[] = [
     icon: <Settings />,
     path: "/settings",
   },
-  {
-    name: "Dashboard",
-    icon: <LayoutDashboard />,
-    path: "/dashboard",
-  },
+  // {
+  //   name: "Dashboard",
+  //   icon: <LayoutDashboard />,
+  //   path: "/dashboard",
+  // },
   {
     icon: <CalenderIcon />,
     name: "Calendar",
