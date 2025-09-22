@@ -40,42 +40,42 @@ const navItems: NavItem[] = [
   {
     name: "Dashboard",
     icon: <LayoutDashboard />,
-    path: "/admin/dashboard",
+    path: "/dashboard",
   },
   {
     name: "Products",
     icon: <Package />,
-    path: "/admin/products",
+    path: "/products",
   },
   {
     name: "Orders",
     icon: <ShoppingCart />,
-    path: "/admin/orders",
+    path: "/orders",
   },
   {
     name: "Customers",
     icon: <Users />,
-    path: "/admin/customers",
+    path: "/customers",
   },
   {
     name: "Inventory",
     icon: <BarChart3 />,
-    path: "/admin/inventory",
+    path: "/inventory",
   },
   {
     name: "Shipping",
     icon: <Truck />,
-    path: "/admin/shipping",
+    path: "/shipping",
   },
   {
     name: "Chat",
     icon: <MessageSquare />,
-    path: "/admin/chat",
+    path: "/chat",
   },
   {
     name: "Settings",
     icon: <Settings />,
-    path: "/admin/settings",
+    path: "/settings",
   },
   {
     icon: <GridIcon />,

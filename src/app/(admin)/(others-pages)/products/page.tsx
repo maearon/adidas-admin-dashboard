@@ -98,13 +98,13 @@ export default function ProductsPage() {
       params.delete("q")
     }
     params.set("page", "1")
-    router.push(`/admin/products?${params.toString()}`)
+    router.push(`/products?${params.toString()}`)
   }
 
   const handlePageChange = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString())
     params.set("page", newPage.toString())
-    router.push(`/admin/products?${params.toString()}`)
+    router.push(`/products?${params.toString()}`)
   }
 
   return (
@@ -161,7 +161,7 @@ export default function ProductsPage() {
                 <span className="hidden sm:inline">FILTERS</span>
               </AdidasButton>
 
-              <AdidasButton href="/admin/products/new" className="border-2 border-foreground">
+              <AdidasButton href="/products/new" className="border-2 border-foreground">
                 <Plus className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">ADD PRODUCT</span>
               </AdidasButton>

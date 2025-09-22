@@ -44,7 +44,7 @@ export function EnhancedSearchField({
     if (onSearch) {
       onSearch(query)
     } else {
-      router.push(`/admin/products?q=${encodeURIComponent(query)}`)
+      router.push(`/products?q=${encodeURIComponent(query)}`)
     }
   }
 
@@ -125,7 +125,7 @@ export function EnhancedSearchField({
             if (onSearch) {
               onSearch(query)
             } else {
-              router.push(`/admin/products?q=${encodeURIComponent(query)}`)
+              router.push(`/products?q=${encodeURIComponent(query)}`)
             }
           }}
         />

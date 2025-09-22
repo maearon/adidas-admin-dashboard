@@ -10,10 +10,10 @@ export const MobileBottomNav = () => {
 
   const navItems = [
     { href: "/admin", icon: HomeIcon, label: "Home" },
-    { href: "/admin/products", icon: SearchIcon, label: "Products" },
-    { href: "/admin/orders", icon: PlusCircleIcon, label: "Orders" },
-    { href: "/admin/customers", icon: HeartIcon, label: "Customers" },
-    { href: "/admin/settings", icon: UserIcon, label: "Settings" },
+    { href: "/products", icon: SearchIcon, label: "Products" },
+    { href: "/orders", icon: PlusCircleIcon, label: "Orders" },
+    { href: "/customers", icon: HeartIcon, label: "Customers" },
+    { href: "/settings", icon: UserIcon, label: "Settings" },
   ]
 
   return (

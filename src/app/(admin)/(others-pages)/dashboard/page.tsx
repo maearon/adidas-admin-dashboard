@@ -273,7 +273,7 @@ export default function AdminDashboard() {
               pressEffect={true}
               fullWidth={true}
               className="h-auto p-4 flex flex-col items-start gap-3 text-left border-2 border-black hover-lift"
-              href="/admin/products/new"
+              href="/products/new"
             >
               <Package className="h-6 w-6 text-black" />
               <div>
@@ -288,7 +288,7 @@ export default function AdminDashboard() {
               pressEffect={true}
               fullWidth={true}
               className="h-auto p-4 flex flex-col items-start gap-3 text-left border-2 border-black hover-lift"
-              href="/admin/orders"
+              href="/orders"
             >
               <ShoppingCart className="h-6 w-6 text-black" />
               <div>
@@ -303,7 +303,7 @@ export default function AdminDashboard() {
               pressEffect={true}
               fullWidth={true}
               className="h-auto p-4 flex flex-col items-start gap-3 text-left border-2 border-black hover-lift"
-              href="/admin/customers"
+              href="/customers"
             >
               <Users className="h-6 w-6 text-black" />
               <div>

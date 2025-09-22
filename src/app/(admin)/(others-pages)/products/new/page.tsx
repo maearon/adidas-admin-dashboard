@@ -13,7 +13,7 @@ export default function NewProductPage() {
     try {
       setLoading(true)
       await railsApi.createProduct(formData)
-      router.push("/admin/products")
+      router.push("/products")
     } catch (error) {
       console.error("Failed to create product:", error)
     } finally {

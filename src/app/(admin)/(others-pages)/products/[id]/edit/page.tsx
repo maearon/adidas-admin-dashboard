@@ -36,7 +36,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
     try {
       setLoading(true)
       await railsApi.updateProduct(params.id, formData)
-      router.push("/admin/products")
+      router.push("/products")
     } catch (error) {
       console.error("Failed to update product:", error)
     } finally {
