@@ -254,7 +254,7 @@ export default function CustomersPage() {
                         <div className="text-sm text-muted-foreground">ID: #{customer.id}</div>
                       </div>
                     </TableCell>
-                    <TableCell className="px-4 py-4 sm:px-6 text-left">
+                    <TableCell>
                       <div className="flex items-start gap-3">
                         <div className="w-10 h-10 overflow-hidden rounded-full">
                           <Image
