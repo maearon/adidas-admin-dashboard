@@ -7,7 +7,7 @@ import { AdidasButton } from "@/components/ui/adidas-button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { EnhancedSearchField } from "@/components/search/enhanced-search-field"
-import { AdminHeader } from "@/components/admin-header"
+// import { AdminHeader } from "@/components/admin-header"
 import Image from "next/image"
 
 interface Product {
@@ -109,7 +109,7 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <AdminHeader />
+      {/* <AdminHeader /> */}
 
       <div className="container mx-auto px-4 py-6">
         {/* Header Section */}
