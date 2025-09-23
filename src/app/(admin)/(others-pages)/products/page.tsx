@@ -35,7 +35,7 @@ export default function ProductsPage() {
   const query = searchParams.get("q") || ""
   const page = Number.parseInt(searchParams.get("page") || "1")
 
-  const { data, isFetching } = useSearchProductsFeed(query, page)
+  const { data, isFetching } = useSearchProductsFeed(query)
 
   const products: Product[] = data?.pages.flatMap((p) => p.products) || []
   const pagination = data?.pages?.[0]?.pagination ?? {
