@@ -35,17 +35,10 @@ export default function ProductsPage() {
   const query = searchParams.get("q") || ""
   const page = Number.parseInt(searchParams.get("page") || "1")
 
-  const {
-    data,
-    isFetching,
-    status,
-  } = useSearchProductsFeed(query)
+  const { data, isFetching } = useSearchProductsFeed(query, page)
 
-  const products = data?.pages.flatMap((page) => page.products) || [];
-  const totalCount = data?.pages?.[0]?.totalCount ?? 0;
-
-  // const products: Product[] = data?.products ?? []
-  const pagination = data?.pagination ?? {
+  const products: Product[] = data?.pages.flatMap((p) => p.products) || []
+  const pagination = data?.pages?.[0]?.pagination ?? {
     currentPage: 1,
     totalPages: 1,
     totalProducts: 0,
@@ -73,17 +66,17 @@ export default function ProductsPage() {
       <PageBreadcrumb pageTitle="Products" />
       <ComponentCard title="All Products">
         <div className="container mx-auto px-4 py-6">
-          {/* Header Section */}
+          {/* Header */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
-              <div className="flex aspect-square size-10 items-center justify-center bg-foreground text-background">
+              <div className="flex aspect-square size-10 items-center justify-center bg-black dark:bg-white text-white dark:text-black">
                 <Package className="size-5" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold uppercase tracking-wide text-foreground">
+                <h1 className="text-2xl font-bold uppercase tracking-wide text-black dark:text-white">
                   PRODUCTS
                 </h1>
-                <p className="text-sm text-foreground">
+                <p className="text-sm text-gray-700 dark:text-gray-400">
                   {pagination.totalProducts} products found
                   {query && ` for "${query}"`}
                 </p>
@@ -119,14 +112,14 @@ export default function ProductsPage() {
                   <List className="h-4 w-4" />
                 </AdidasButton>
 
-                <AdidasButton className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-foreground">
+                <AdidasButton className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400">
                   <Filter className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">FILTERS</span>
                 </AdidasButton>
 
                 <AdidasButton
                   href="/products/new"
-                  className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-foreground"
+                  className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">ADD PRODUCT</span>
@@ -135,7 +128,7 @@ export default function ProductsPage() {
             </div>
           </div>
 
-          {/* Loading State */}
+          {/* Loading Skeleton */}
           {isFetching && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {Array.from({ length: 8 }).map((_, i) => (
@@ -150,7 +143,7 @@ export default function ProductsPage() {
             </div>
           )}
 
-          {/* Products Grid */}
+          {/* Products */}
           {!isFetching && products.length > 0 && (
             <>
               <div
@@ -166,10 +159,9 @@ export default function ProductsPage() {
                     className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] hover:shadow-lg transition-shadow"
                   >
                     <CardContent
-                      className={`p-4 ${
-                        viewMode === "list" ? "flex gap-4" : ""
-                      }`}
+                      className={`p-4 ${viewMode === "list" ? "flex gap-4" : ""}`}
                     >
+                      {/* Image */}
                       <div
                         className={`${
                           viewMode === "list"
@@ -194,16 +186,17 @@ export default function ProductsPage() {
                         )}
                       </div>
 
+                      {/* Content */}
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
                           <div>
-                            <h3 className="font-semibold text-sm line-clamp-2 text-foreground">
+                            <h3 className="font-semibold text-sm line-clamp-2 text-gray-700 dark:text-gray-400">
                               {product.name || product.title}
                             </h3>
                             {product.sport && (
                               <Badge
                                 variant="secondary"
-                                className="text-xs mt-1 text-foreground"
+                                className="text-xs mt-1 text-gray-700 dark:text-gray-400"
                               >
                                 {product.sport}
                               </Badge>
@@ -213,22 +206,22 @@ export default function ProductsPage() {
 
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-foreground">
+                            <span className="font-bold text-gray-700 dark:text-gray-400">
                               ${product.price}
                             </span>
                             {product.original_price &&
                               product.original_price > product.price && (
-                                <span className="text-sm text-foreground line-through">
+                                <span className="text-sm text-gray-700 dark:text-gray-400 line-through">
                                   ${product.original_price}
                                 </span>
                               )}
                           </div>
 
                           <div className="flex gap-1">
-                            <AdidasButton size="sm" variant="outline" className="text-xs text-foreground">
+                            <AdidasButton size="sm" variant="outline" className="text-xs text-gray-700 dark:text-gray-400">
                               EDIT
                             </AdidasButton>
-                            <AdidasButton size="sm" className="text-xs text-foreground">
+                            <AdidasButton size="sm" className="text-xs text-gray-700 dark:text-gray-400">
                               VIEW
                             </AdidasButton>
                           </div>
@@ -246,7 +239,7 @@ export default function ProductsPage() {
                     variant="outline"
                     disabled={!pagination.hasPrevPage}
                     onClick={() => handlePageChange(pagination.currentPage - 1)}
-                    className="border text-foreground"
+                    className="border text-gray-700 dark:text-gray-400"
                   >
                     PREVIOUS
                   </AdidasButton>
@@ -260,7 +253,7 @@ export default function ProductsPage() {
                           variant={pageNum === pagination.currentPage ? "default" : "outline"}
                           size="sm"
                           onClick={() => handlePageChange(pageNum)}
-                          className="border w-10 text-foreground"
+                          className="border w-10 text-gray-700 dark:text-gray-400"
                         >
                           {pageNum}
                         </AdidasButton>
@@ -272,7 +265,7 @@ export default function ProductsPage() {
                     variant="outline"
                     disabled={!pagination.hasNextPage}
                     onClick={() => handlePageChange(pagination.currentPage + 1)}
-                    className="border text-foreground"
+                    className="border text-gray-700 dark:text-gray-400"
                   >
                     NEXT
                   </AdidasButton>
@@ -284,18 +277,18 @@ export default function ProductsPage() {
           {/* No Results */}
           {!isFetching && products.length === 0 && (
             <div className="text-center py-12">
-              <Search className="h-12 w-12 text-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2 text-foreground">
+              <Search className="h-12 w-12 text-gray-700 dark:text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-400">
                 No products found
               </h3>
-              <p className="text-foreground mb-4">
+              <p className="text-gray-700 dark:text-gray-400 mb-4">
                 {query ? `No results for "${query}"` : "No products available"}
               </p>
               {query && (
                 <AdidasButton
                   onClick={() => handleSearch("")}
                   variant="outline"
-                  className="border text-foreground"
+                  className="border text-gray-700 dark:text-gray-400"
                 >
                   CLEAR SEARCH
                 </AdidasButton>
