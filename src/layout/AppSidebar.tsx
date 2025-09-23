@@ -57,8 +57,9 @@ const navItems: NavItem[] = [
     icon: <Package />,
     subItems: [
       { name: "All Products", path: "/products", pro: false },
-      { name: "Edit Product", path: "/products/edit", pro: false },
       { name: "Create New Product", path: "/products/new", pro: false },
+      { name: "View Product", path: "/products/f50-messi-elite-firm-ground-cleats/JP5593.html", pro: false },
+      { name: "Edit Product", path: "/products/edit/f50-messi-elite-firm-ground-cleats/JP5593.html", pro: false },
     ],
   },
   {
