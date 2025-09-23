@@ -45,7 +45,7 @@ export default function ProductsPage() {
   const query = searchParams.get("q") || ""
   const page = Number.parseInt(searchParams.get("page") || "1")
 
-  const { data, isFetching } = useSearchProductsFeed(query)
+  const { data, isFetching } = useSearchProductsFeed(query || 'a')
 
   const products: Product[] = data?.pages.flatMap((p) => p.products) || []
   const totalCount = data?.pages?.[0]?.totalCount ?? 0;
