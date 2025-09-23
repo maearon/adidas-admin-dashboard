@@ -125,7 +125,7 @@ export default function ProductsPage() {
                 <h1 className="text-2xl font-bold uppercase tracking-wide text-gray-700 dark:text-gray-400">
                   PRODUCTS
                 </h1>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-gray-700 dark:text-gray-400">
                   {pagination.totalProducts} products found
                   {query && ` for "${query}"`}
                 </p>
@@ -260,7 +260,7 @@ export default function ProductsPage() {
                             </span>
                             {product.original_price &&
                               product.original_price > product.price && (
-                                <span className="text-sm text-muted-foreground line-through">
+                                <span className="text-sm text-gray-700 dark:text-gray-400 line-through">
                                   ${product.original_price}
                                 </span>
                               )}
@@ -344,11 +344,11 @@ export default function ProductsPage() {
           {/* No Results */}
           {!loading && products.length === 0 && (
             <div className="text-center py-12">
-              <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <Search className="h-12 w-12 text-gray-700 dark:text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-400">
                 No products found
               </h3>
-              <p className="text-muted-foreground mb-4">
+              <p className="text-gray-700 dark:text-gray-400 mb-4">
                 {query
                   ? `No results for "${query}"`
                   : "No products available"}
