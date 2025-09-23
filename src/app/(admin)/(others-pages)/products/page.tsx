@@ -78,7 +78,7 @@ export default function ProductsPage() {
       params.set("page", page.toString())
       params.set("limit", "12")
 
-      const response = await fetch(`/api/search?${params.toString()}`)
+      const response = await fetch(`/api/search?q=a&${params.toString()}`)
       const result: SearchResponse = await response.json()
 
       if (result.success) {
