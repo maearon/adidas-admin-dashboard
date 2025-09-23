@@ -13,6 +13,7 @@ import Image from "next/image"
 import ComponentCard from "@/components/common/ComponentCard"
 import { useSearchProductsFeed } from "@/hooks/useProducts"
 import Link from "next/link"
+import { slugify } from "@/utils/slugify"
 
 interface Variant {
   variant_code: string
@@ -250,14 +251,14 @@ export default function ProductsPage() {
                                 size="sm"
                                 variant="outline"
                                 className="text-xs text-gray-700 dark:text-gray-400"
-                                href={`/products/edit/${product.slug}/${firstVariant?.variant_code}.html`}
+                                href={`/products/edit/${slugify(product.name)}/${firstVariant?.variant_code}.html`}
                               >
                                 EDIT
                               </AdidasButton>
                               <AdidasButton
                                 size="sm"
                                 className="text-xs text-gray-700 dark:text-gray-400"
-                                href={`/products/${product.slug}/${firstVariant?.variant_code}.html`}
+                                href={`/products/${slugify(product.name)}/${firstVariant?.variant_code}.html`}
                               >
                                 VIEW
                               </AdidasButton>
