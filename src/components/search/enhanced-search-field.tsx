@@ -91,7 +91,8 @@ export function EnhancedSearchField({
           className={`
             pe-10 
             focus:placeholder-transparent 
-            text-sm 
+            text-sm
+            text-gray-700 dark:text-gray-400
             pl-3
             pr-10 
             py-2
@@ -103,14 +104,14 @@ export function EnhancedSearchField({
         {searchText ? (
           <X
             className={`absolute right-3 top-1/2 size-4 -translate-y-1/2 cursor-pointer hover:opacity-70 ${
-              variant === "header" ? "text-white/70 hover:text-white" : "text-muted-foreground hover:text-foreground"
+              variant === "header" ? "text-white/70 hover:text-white" : "text-gray-700 dark:text-gray-400"
             }`}
             onClick={clearInput}
           />
         ) : (
           <SearchIcon
             className={`absolute right-3 top-1/2 size-4 -translate-y-1/2 ${
-              variant === "header" ? "text-white/70" : "text-muted-foreground"
+              variant === "header" ? "text-white/70" : "text-gray-700 dark:text-gray-400"
             }`}
           />
         )}

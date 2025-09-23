@@ -5,12 +5,14 @@ import { useState } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Package, Plus, Filter, Grid, List, Search } from "lucide-react"
 import { AdidasButton } from "@/components/ui/adidas-button"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { EnhancedSearchField } from "@/components/search/enhanced-search-field"
 import Image from "next/image"
 import ComponentCard from "@/components/common/ComponentCard"
 import { useSearchProductsFeed } from "@/hooks/useProducts"
+import Link from "next/link"
 
 interface Variant {
   variant_code: string
@@ -119,18 +121,19 @@ export default function ProductsPage() {
                   <List className="h-4 w-4" />
                 </AdidasButton>
 
-                <AdidasButton className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400">
+                <Button className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400">
                   <Filter className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">FILTERS</span>
-                </AdidasButton>
+                </Button>
 
-                <AdidasButton
-                  href="/products/new"
+                <Button
                   className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400"
                 >
+                  <Link href="/products/new">
                   <Plus className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">ADD PRODUCT</span>
-                </AdidasButton>
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>
