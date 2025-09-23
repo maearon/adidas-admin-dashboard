@@ -12,19 +12,26 @@ import Image from "next/image"
 import ComponentCard from "@/components/common/ComponentCard"
 import { useSearchProductsFeed } from "@/hooks/useProducts"
 
+interface Variant {
+  variant_code: string
+  avatar_url: string
+  hover_url?: string
+}
+
 interface Product {
   id: number | string
   name: string
   title?: string
+  slug?: string | null
   price: number
   original_price?: number
   sport?: string
   brand?: string
   category?: string
-  image?: string
-  image_url?: string
+  main_image_url?: string
+  hover_image_url?: string
   thumbnail?: string
-  variants?: any[]
+  variants?: Variant[]
 }
 
 export default function ProductsPage() {
@@ -132,7 +139,10 @@ export default function ProductsPage() {
           {isFetching && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {Array.from({ length: 8 }).map((_, i) => (
-                <Card key={i} className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                <Card
+                  key={i}
+                  className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
+                >
                   <CardContent className="p-4">
                     <div className="aspect-square bg-muted animate-pulse mb-4" />
                     <div className="h-4 bg-muted animate-pulse mb-2" />
@@ -153,83 +163,108 @@ export default function ProductsPage() {
                     : "grid-cols-1"
                 }`}
               >
-                {products.map((product) => (
-                  <Card
-                    key={product.id}
-                    className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] hover:shadow-lg transition-shadow"
-                  >
-                    <CardContent
-                      className={`p-4 ${viewMode === "list" ? "flex gap-4" : ""}`}
+                {products.map((product) => {
+                  const firstVariant = product.variants?.[0]
+                  const mainImage =
+                    product.main_image_url ||
+                    firstVariant?.avatar_url ||
+                    product.thumbnail ||
+                    ""
+                  const hoverImage =
+                    product.hover_image_url || firstVariant?.hover_url || ""
+
+                  return (
+                    <Card
+                      key={product.id}
+                      className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] hover:shadow-lg transition-shadow"
                     >
-                      {/* Image */}
-                      <div
-                        className={`${
-                          viewMode === "list"
-                            ? "w-32 h-32 flex-shrink-0"
-                            : "aspect-square"
-                        } bg-muted mb-4 relative overflow-hidden`}
+                      <CardContent
+                        className={`p-4 ${
+                          viewMode === "list" ? "flex gap-4" : ""
+                        }`}
                       >
-                        {(product.image ||
-                          product.image_url ||
-                          product.thumbnail) && (
-                          <Image
-                            src={
-                              product.image ||
-                              product.image_url ||
-                              product.thumbnail ||
-                              ""
-                            }
-                            alt={product.name || product.title || ""}
-                            fill
-                            className="object-cover"
-                          />
-                        )}
-                      </div>
-
-                      {/* Content */}
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <h3 className="font-semibold text-sm line-clamp-2 text-gray-700 dark:text-gray-400">
-                              {product.name || product.title}
-                            </h3>
-                            {product.sport && (
-                              <Badge
-                                variant="secondary"
-                                className="text-xs mt-1 text-gray-700 dark:text-gray-400"
-                              >
-                                {product.sport}
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-gray-700 dark:text-gray-400">
-                              ${product.price}
-                            </span>
-                            {product.original_price &&
-                              product.original_price > product.price && (
-                                <span className="text-sm text-gray-700 dark:text-gray-400 line-through">
-                                  ${product.original_price}
-                                </span>
+                        {/* Image */}
+                        <div
+                          className={`${
+                            viewMode === "list"
+                              ? "w-32 h-32 flex-shrink-0"
+                              : "aspect-square"
+                          } mb-4 relative overflow-hidden`}
+                        >
+                          {mainImage && (
+                            <>
+                              <Image
+                                src={mainImage}
+                                alt={product.name || product.title || ""}
+                                fill
+                                className="object-cover transition-opacity duration-300 group-hover:opacity-0"
+                              />
+                              {hoverImage && (
+                                <Image
+                                  src={hoverImage}
+                                  alt={`${product.name} hover`}
+                                  fill
+                                  className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                                />
                               )}
+                            </>
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between mb-2">
+                            <div>
+                              <h3 className="font-semibold text-sm line-clamp-2 text-gray-700 dark:text-gray-400">
+                                {product.name || product.title}
+                              </h3>
+                              {product.sport && (
+                                <Badge
+                                  variant="secondary"
+                                  className="text-xs mt-1 text-gray-700 dark:text-gray-400"
+                                >
+                                  {product.sport}
+                                </Badge>
+                              )}
+                            </div>
                           </div>
 
-                          <div className="flex gap-1">
-                            <AdidasButton size="sm" variant="outline" className="text-xs text-gray-700 dark:text-gray-400">
-                              EDIT
-                            </AdidasButton>
-                            <AdidasButton size="sm" className="text-xs text-gray-700 dark:text-gray-400">
-                              VIEW
-                            </AdidasButton>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-gray-700 dark:text-gray-400">
+                                ${product.price}
+                              </span>
+                              {product.original_price &&
+                                product.original_price > product.price && (
+                                  <span className="text-sm text-gray-700 dark:text-gray-400 line-through">
+                                    ${product.original_price}
+                                  </span>
+                                )}
+                            </div>
+
+                            <div className="flex gap-1">
+                              <AdidasButton
+                                size="sm"
+                                variant="outline"
+                                className="text-xs text-gray-700 dark:text-gray-400"
+                                href={`/products/edit/${product.slug}/${firstVariant?.variant_code}.html`}
+                              >
+                                EDIT
+                              </AdidasButton>
+                              <AdidasButton
+                                size="sm"
+                                className="text-xs text-gray-700 dark:text-gray-400"
+                                href={`/products/${product.slug}/${firstVariant?.variant_code}.html`}
+                              >
+                                VIEW
+                              </AdidasButton>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </div>
 
               {/* Pagination */}
@@ -238,33 +273,44 @@ export default function ProductsPage() {
                   <AdidasButton
                     variant="outline"
                     disabled={!pagination.hasPrevPage}
-                    onClick={() => handlePageChange(pagination.currentPage - 1)}
+                    onClick={() =>
+                      handlePageChange(pagination.currentPage - 1)
+                    }
                     className="border text-gray-700 dark:text-gray-400"
                   >
                     PREVIOUS
                   </AdidasButton>
 
                   <div className="flex items-center gap-2">
-                    {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
-                      const pageNum = i + 1
-                      return (
-                        <AdidasButton
-                          key={pageNum}
-                          variant={pageNum === pagination.currentPage ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => handlePageChange(pageNum)}
-                          className="border w-10 text-gray-700 dark:text-gray-400"
-                        >
-                          {pageNum}
-                        </AdidasButton>
-                      )
-                    })}
+                    {Array.from(
+                      { length: Math.min(5, pagination.totalPages) },
+                      (_, i) => {
+                        const pageNum = i + 1
+                        return (
+                          <AdidasButton
+                            key={pageNum}
+                            variant={
+                              pageNum === pagination.currentPage
+                                ? "default"
+                                : "outline"
+                            }
+                            size="sm"
+                            onClick={() => handlePageChange(pageNum)}
+                            className="border w-10 text-gray-700 dark:text-gray-400"
+                          >
+                            {pageNum}
+                          </AdidasButton>
+                        )
+                      }
+                    )}
                   </div>
 
                   <AdidasButton
                     variant="outline"
                     disabled={!pagination.hasNextPage}
-                    onClick={() => handlePageChange(pagination.currentPage + 1)}
+                    onClick={() =>
+                      handlePageChange(pagination.currentPage + 1)
+                    }
                     className="border text-gray-700 dark:text-gray-400"
                   >
                     NEXT
@@ -282,7 +328,9 @@ export default function ProductsPage() {
                 No products found
               </h3>
               <p className="text-gray-700 dark:text-gray-400 mb-4">
-                {query ? `No results for "${query}"` : "No products available"}
+                {query
+                  ? `No results for "${query}"`
+                  : "No products available"}
               </p>
               {query && (
                 <AdidasButton
