@@ -4,7 +4,8 @@ import './globals.css';
 import { SidebarProvider } from '@/context/SidebarContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { Metadata } from 'next';
-import Providers from '@/components/providers'
+import { ReduxProvider } from "@/providers/redux-provider";
+import ReactQueryProvider from './ReactQueryProvider';
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -26,11 +27,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${outfit.className} dark:bg-gray-900`}>
-        <Providers>
-          <ThemeProvider>
-            <SidebarProvider>{children}</SidebarProvider>
-          </ThemeProvider>
-        </Providers>
+        <ReduxProvider>
+          <ReactQueryProvider>
+            <ThemeProvider>
+              <SidebarProvider>{children}</SidebarProvider>
+            </ThemeProvider>
+          </ReactQueryProvider>
+        </ReduxProvider>
       </body>
     </html>
   );
