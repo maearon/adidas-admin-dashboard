@@ -48,6 +48,7 @@ export default function ProductsPage() {
   const { data, isFetching } = useSearchProductsFeed(query)
 
   const products: Product[] = data?.pages.flatMap((p) => p.products) || []
+  const totalCount = data?.pages?.[0]?.totalCount ?? 0;
   const pagination = data?.pages?.[0]?.pagination ?? {
     currentPage: 1,
     totalPages: 1,
@@ -87,7 +88,7 @@ export default function ProductsPage() {
                   PRODUCTS
                 </h1>
                 <p className="text-sm text-gray-700 dark:text-gray-400">
-                  {pagination.totalProducts} products found
+                  {totalCount} products found
                   {query && ` for "${query}"`}
                 </p>
               </div>
