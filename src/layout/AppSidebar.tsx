@@ -56,10 +56,10 @@ const navItems: NavItem[] = [
     name: "Products",
     icon: <Package />,
     subItems: [
-      { name: "All Products", path: "/products", pro: false },
+      { name: "All Products", path: "/products?q=a&page=1", pro: false },
       { name: "Create New Product", path: "/products/new", pro: false },
-      { name: "View Product", path: "/products/f50-messi-elite-firm-ground-cleats/JP5593.html", pro: false },
-      { name: "Edit Product", path: "/products/edit/f50-messi-elite-firm-ground-cleats/JP5593.html", pro: false },
+      { name: "View Product", path: "/products/athletics-hoodie-95/VC95-BL-1cd6.html", pro: false },
+      { name: "Edit Product", path: "/products/edit/athletics-hoodie-95/VC95-BL-1cd6.html", pro: false },
     ],
   },
   {
