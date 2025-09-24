@@ -74,6 +74,10 @@ const nextConfig = {
         source: "/products/:slug/:variant_code.html",
         destination: "/products/:slug/:variant_code",
       },
+      {
+        source: "/products/edit/:slug/:variant_code.html",
+        destination: "/products/edit/:slug/:variant_code",
+      },
     ];
   },
 };
