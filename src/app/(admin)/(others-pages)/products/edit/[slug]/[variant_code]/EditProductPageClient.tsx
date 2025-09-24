@@ -7,6 +7,7 @@ import { AdminHeader } from "@/components/admin-header"
 import { Loading } from "@/components/loading"
 import { toast } from "sonner"
 import { useProductDetail } from "@/hooks/useProducts"
+import { useState } from "react"
 
 interface ProductDetailPageProps {
   params: { 
@@ -54,6 +55,10 @@ export default function EditProductPageClient({ params }: ProductDetailPageProps
     // error,
     // refetch,
   } = useProductDetail(slug, variant_code)
+
+  const variant = productData?.variants.find((v) => v.variant_code === variant_code)
+  const [hoveredColor, setHoveredColor] = useState<string | null>(null)
+  const displayColor = hoveredColor || variant?.color
 
   const handleSubmit = async (data: ProductFormData) => {
     try {
