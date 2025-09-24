@@ -78,6 +78,8 @@ export async function GET(req: NextRequest) {
         hover_url: hover[0], // ✅ variant-specific hover
         image_urls: sortedImages ?? [],
         image_url: avatar[0],
+        main_image: avatar[0],
+        main_image_url: avatar[0],
         hover_image: hover[0],
         hover_image_url: hover[0],
       }
@@ -143,6 +145,8 @@ export async function GET(req: NextRequest) {
             variant_code: v?.variant_code ?? null,
             avatar_url: avatar[0],
             hover_url: hover[0],
+            main_image: avatar[0],
+            hover_image: hover[0],
             image_urls: images ?? [],
           },
         ],
@@ -176,6 +180,7 @@ export async function GET(req: NextRequest) {
         currencyId: "USD",
         currencyFormat: "$",
         isFreeShipping: true,
+        main_image: mainImage[0],
         main_image_url: mainImage[0],
         hover_image: hoverImage[0],
         hover_image_url: hoverImage[0],

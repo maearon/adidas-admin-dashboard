@@ -190,9 +190,28 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
                     <SelectItem value="draft">Draft</SelectItem>
                   </SelectContent>
                 </Select>
-                {errors.status && <p className="text-sm text-red-500">{errors.status.message}</p>}
+                {/* {errors.status && <p className="text-sm text-red-500">{errors.status.message}</p>} */}
               </div>
             </div>
+
+            <Separator />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <ImageUploadField
+                label="Main Image"
+                value={watch("main_image")}
+                onChange={(file) => setValue("main_image", file)}
+                disabled={isReadOnly}
+              />
+
+              <ImageUploadField
+                label="Hover Image"
+                value={watch("hover_image")}
+                onChange={(file) => setValue("hover_image", file)}
+                disabled={isReadOnly}
+              />
+            </div>
+            {errors.status && <p className="text-sm text-red-500">{errors.status.message}</p>}
           </CardContent>
         </Card>
 
