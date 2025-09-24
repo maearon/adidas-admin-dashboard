@@ -77,6 +77,7 @@ export async function GET(req: NextRequest) {
         avatar_url: avatar[0],
         hover_url: hover[0], // ✅ variant-specific hover
         image_urls: sortedImages ?? [],
+        additional_images: images ?? [],
         image_url: avatar[0],
         main_image: avatar[0],
         main_image_url: avatar[0],
@@ -148,6 +149,7 @@ export async function GET(req: NextRequest) {
             main_image: avatar[0],
             hover_image: hover[0],
             image_urls: images ?? [],
+            additional_images: images ?? [],
           },
         ],
         image_url: relatedMainImages[i][0],
