@@ -94,7 +94,7 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
   const isReadOnly = mode === "view"
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 text-gray-700 dark:text-gray-400">
+    <div className="space-y-6 text-gray-700 dark:text-gray-400">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">
           {mode === "create" ? "Create Product" : mode === "edit" ? "Edit Product" : "Product Details"}
