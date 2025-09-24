@@ -1,6 +1,5 @@
 // /data/fake-last-visited-products.ts
-// ✅ Fake new arrival data
-import { NewArrivalProduct } from "@/types/product"
+import { LastVisitedProduct } from "@/types/product"
 
 function slugify(str: string): string {
   return str
@@ -21,7 +20,7 @@ function nowIso(offsetMs = 0) {
   return new Date(Date.now() - offsetMs).toISOString()
 }
 
-export const newArrivalProducts: NewArrivalProduct[] = [
+export const fakeLastVisitedProducts: LastVisitedProduct[] = [
   {
     product: {
       id: "1",

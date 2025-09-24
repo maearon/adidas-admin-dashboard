@@ -1,54 +1,43 @@
-"use client"
-
-import { useRouter } from "next/navigation"
-import { ProductForm } from "@/components/products/product-form"
-import { railsApi } from "@/lib/api/rails-client"
-import { useProductDetail } from "@/hooks/useProducts"
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { Metadata } from "next";
+import ProductDetailPageClient from "./ProductDetailPageClient";
+import { formatSlugTitle } from "@/utils/category-config.auto";
+import Loading from "@/components/loading";
 
 interface ProductDetailPageProps {
-  params: { 
-    slug: string; 
-    variant_code: string
+  params: { slug?: string; variant_code?: string };
+}
+
+// ✅ generateMetadata must be async with awaited `params`
+export async function generateMetadata(
+  props: { params: { slug?: string } }
+): Promise<Metadata> {
+  const { slug } = await Promise.resolve(props.params || {});
+  const pageTitle = formatSlugTitle(slug || "Product Detail");
+  return {
+    title: pageTitle,
   };
 }
 
-export default function ProductDetailsPage({ params }: ProductDetailPageProps) {
-  const { slug, variant_code } = params
-  console.log("ProductDetailsPage params:", params)
-  const router = useRouter()
+// ✅ Main page function must await `params`
+const ProductDetailPage = async (props: ProductDetailPageProps) => {
+  const { slug, variant_code } = await Promise.resolve(props.params || {});
 
-  const {
-      data: product,
-      isLoading,
-      // error,
-      // refetch,
-  } = useProductDetail(slug, variant_code)
-
-  const handleSubmit = async (formData: FormData) => {
-    try {
-      await railsApi.updateProduct(variant_code, formData)
-      router.push("/products")
-    } catch (error) {
-      console.error("Failed to update product:", error)
-    }
-  }
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground"></div>
-      </div>
-    )
-  }
+  if (!slug || !variant_code) notFound();
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight uppercase">Product Details</h1>
-        <p className="text-muted-foreground">Update product information and settings.</p>
-      </div>
-
-      <ProductForm product={product} onSubmit={handleSubmit} loading={isLoading} />
+    <div className="min-h-screen bg-background">
+      <Suspense fallback={<Loading />}>
+        <ProductDetailPageClient
+          params={{
+            slug,
+            variant_code,
+          }}
+        />
+      </Suspense>
     </div>
-  )
-}
+  );
+};
+
+export default ProductDetailPage;
