@@ -5,13 +5,14 @@ import { useRouter } from "next/navigation"
 import { ProductForm } from "@/components/products/product-form"
 import { railsApi } from "@/lib/api/rails-client"
 
-interface EditProductPageProps {
-  params: {
-    id: string
-  }
+interface ProductDetailPageProps {
+  params: { 
+    slug?: string; 
+    variant_code?: string 
+  };
 }
 
-export default function EditProductPage({ params }: EditProductPageProps) {
+export default function EditProductPage({ params }: ProductDetailPageProps) {
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
@@ -20,7 +21,7 @@ export default function EditProductPage({ params }: EditProductPageProps) {
   useEffect(() => {
     const loadProduct = async () => {
       try {
-        const productData = await railsApi.getProduct(params.id)
+        const productData = await railsApi.getProduct(params.variant_code)
         setProduct(productData)
       } catch (error) {
         console.error("Failed to load product:", error)
