@@ -19,9 +19,9 @@ export default function NewProductPageClient() {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="text-gray-700 dark:text-gray-400">
         <h1 className="text-3xl font-bold tracking-tight uppercase">Create New Product</h1>
-        <p className="text-muted-foreground">Add a new product to your store catalog.</p>
+        <p>Add a new product to your store catalog.</p>
       </div>
 
       <ProductForm

@@ -43,9 +43,9 @@ export default function ProductDetailPageClient({ params }: ProductDetailPageCli
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="text-gray-700 dark:text-gray-400">
         <h1 className="text-3xl font-bold tracking-tight uppercase">Product Details</h1>
-        <p className="text-muted-foreground">Update product information and settings.</p>
+        <p>Update product information and settings.</p>
       </div>
 
       <ProductForm

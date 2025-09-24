@@ -230,7 +230,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Information */}
-      <Card className="border-2 border-foreground">
+      <Card className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <CardHeader>
           <CardTitle className="uppercase tracking-wide">Basic Information</CardTitle>
           <CardDescription>Enter the basic product details.</CardDescription>
@@ -244,7 +244,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                 value={formData.name}
                 disabled={isDetail}
                 onChange={(e) => handleInputChange("name", e.target.value)}
-                className="border-2 border-foreground"
+                className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                 required
               />
             </div>
@@ -255,17 +255,17 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                 value={formData.model_number}
                 disabled={isDetail}
                 onChange={(e) => handleInputChange("model_number", e.target.value)}
-                className="border-2 border-foreground"
+                className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                 required
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="brand">Brand *</Label>
               <Select value={formData.brand} disabled={isDetail} onValueChange={(value) => handleInputChange("brand", value)}>
-                <SelectTrigger className="border-2 border-foreground">
+                <SelectTrigger className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                   <SelectValue placeholder="Select brand" />
                 </SelectTrigger>
-                <SelectContent className="border-2 border-foreground">
+                <SelectContent className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                   {BRANDS.map((brand) => (
                     <SelectItem key={brand} value={brand}>
                       {brand}
@@ -277,10 +277,10 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
             <div className="space-y-2">
               <Label htmlFor="gender">Gender *</Label>
               <Select value={formData.gender} disabled={isDetail} onValueChange={(value) => handleInputChange("gender", value)}>
-                <SelectTrigger className="border-2 border-foreground">
+                <SelectTrigger className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                   <SelectValue placeholder="Select gender" />
                 </SelectTrigger>
-                <SelectContent className="border-2 border-foreground">
+                <SelectContent className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                   {GENDERS.map((gender) => (
                     <SelectItem key={gender} value={gender}>
                       {gender}
@@ -292,10 +292,10 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
             <div className="space-y-2">
               <Label htmlFor="category">Category *</Label>
               <Select value={formData.category} disabled={isDetail} onValueChange={(value) => handleInputChange("category", value)}>
-                <SelectTrigger className="border-2 border-foreground">
+                <SelectTrigger className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
-                <SelectContent className="border-2 border-foreground">
+                <SelectContent className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                   {CATEGORIES.map((category) => (
                     <SelectItem key={category} value={category}>
                       {category}
@@ -307,10 +307,10 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
             <div className="space-y-2">
               <Label htmlFor="sport">Sport</Label>
               <Select value={formData.sport} disabled={isDetail} onValueChange={(value) => handleInputChange("sport", value)}>
-                <SelectTrigger className="border-2 border-foreground">
+                <SelectTrigger className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                   <SelectValue placeholder="Select sport" />
                 </SelectTrigger>
-                <SelectContent className="border-2 border-foreground">
+                <SelectContent className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                   {SPORTS.map((sport) => (
                     <SelectItem key={sport} value={sport}>
                       {sport}
@@ -322,10 +322,10 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
             <div className="space-y-2">
               <Label htmlFor="product_type">Product Type</Label>
               <Select value={formData.product_type} disabled={isDetail} onValueChange={(value) => handleInputChange("product_type", value)}>
-                <SelectTrigger className="border-2 border-foreground">
+                <SelectTrigger className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                   <SelectValue placeholder="Select product type" />
                 </SelectTrigger>
-                <SelectContent className="border-2 border-foreground">
+                <SelectContent className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                   {PRODUCT_TYPES.map((type) => (
                     <SelectItem key={type} value={type}>
                       {type}
@@ -339,7 +339,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
       </Card>
 
       {/* Product Images */}
-      <Card className="border-2 border-foreground">
+      <Card className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <CardHeader>
           <CardTitle className="uppercase tracking-wide">Product Images</CardTitle>
           <CardDescription>Upload main product images.</CardDescription>
@@ -348,7 +348,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="product-image">Main Image</Label>
-              <div className="border-2 border-dashed border-foreground rounded-lg p-4">
+              <div className="border border-dashed border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] rounded-lg p-4">
                 <input
                   id="product-image"
                   type="file"
@@ -357,8 +357,8 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                   className="hidden"
                 />
                 <label htmlFor="product-image" className="cursor-pointer flex flex-col items-center gap-2">
-                  <Upload className="h-8 w-8 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">
+                  <Upload className="h-8 w-8 text-gray-700 dark:text-gray-400" />
+                  <span className="text-sm text-gray-700 dark:text-gray-400">
                     {productImages.image ? productImages.image.name : "Click to upload main image"}
                   </span>
                 </label>
@@ -366,7 +366,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
             </div>
             <div className="space-y-2">
               <Label htmlFor="product-hover-image">Hover Image</Label>
-              <div className="border-2 border-dashed border-foreground rounded-lg p-4">
+              <div className="border border-dashed border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] rounded-lg p-4">
                 <input
                   id="product-hover-image"
                   type="file"
@@ -375,8 +375,8 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                   className="hidden"
                 />
                 <label htmlFor="product-hover-image" className="cursor-pointer flex flex-col items-center gap-2">
-                  <Upload className="h-8 w-8 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">
+                  <Upload className="h-8 w-8 text-gray-700 dark:text-gray-400" />
+                  <span className="text-sm text-gray-700 dark:text-gray-400">
                     {productImages.hover_image ? productImages.hover_image.name : "Click to upload hover image"}
                   </span>
                 </label>
@@ -387,7 +387,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
       </Card>
 
       {/* Product Description */}
-      <Card className="border-2 border-foreground">
+      <Card className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <CardHeader>
           <CardTitle className="uppercase tracking-wide">Product Description</CardTitle>
           <CardDescription>Add detailed product information.</CardDescription>
@@ -399,7 +399,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
               id="description_h5"
               value={formData.description_h5}
               onChange={(e) => handleInputChange("description_h5", e.target.value)}
-              className="border-2 border-foreground"
+              className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
               placeholder="Brief product description"
             />
           </div>
@@ -409,7 +409,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
               id="description_p"
               value={formData.description_p}
               onChange={(e) => handleInputChange("description_p", e.target.value)}
-              className="border-2 border-foreground"
+              className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
               rows={4}
               placeholder="Detailed product description"
             />
@@ -421,7 +421,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                 id="care"
                 value={formData.care}
                 onChange={(e) => handleInputChange("care", e.target.value)}
-                className="border-2 border-foreground"
+                className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                 rows={3}
                 placeholder="How to care for this product"
               />
@@ -432,7 +432,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                 id="specifications"
                 value={formData.specifications}
                 onChange={(e) => handleInputChange("specifications", e.target.value)}
-                className="border-2 border-foreground"
+                className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                 rows={3}
                 placeholder="Product specifications"
               />
@@ -442,7 +442,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
       </Card>
 
       {/* Variants */}
-      <Card className="border-2 border-foreground">
+      <Card className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <CardHeader>
           <CardTitle className="uppercase tracking-wide">Product Variants</CardTitle>
           <CardDescription>Configure different color variants with pricing and inventory.</CardDescription>
@@ -458,7 +458,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                     size="sm"
                     variant="destructive"
                     onClick={() => removeVariant(index)}
-                    className="border-2 border-foreground"
+                    className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                   >
                     <Trash2 className="h-4 w-4" />
                   </AdidasButton>
@@ -471,7 +471,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                   <Input
                     value={variant.color}
                     onChange={(e) => handleVariantChange(index, "color", e.target.value)}
-                    className="border-2 border-foreground"
+                    className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                     placeholder="e.g., Black, White, Red"
                     required
                   />
@@ -482,7 +482,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                     type="number"
                     value={variant.price}
                     onChange={(e) => handleVariantChange(index, "price", Number.parseFloat(e.target.value) || 0)}
-                    className="border-2 border-foreground"
+                    className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                     required
                   />
                 </div>
@@ -494,7 +494,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                     onChange={(e) =>
                       handleVariantChange(index, "compare_at_price", Number.parseFloat(e.target.value) || 0)
                     }
-                    className="border-2 border-foreground"
+                    className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                   />
                 </div>
                 <div className="space-y-2">
@@ -503,7 +503,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                     type="number"
                     value={variant.stock}
                     onChange={(e) => handleVariantChange(index, "stock", Number.parseInt(e.target.value) || 0)}
-                    className="border-2 border-foreground"
+                    className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                     required
                   />
                 </div>
@@ -518,7 +518,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                       <Badge
                         key={size}
                         variant={variant.sizes.includes(size) ? "default" : "outline"}
-                        className="cursor-pointer border-2 border-foreground"
+                        className="cursor-pointer border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                         onClick={() => toggleSize(index, size)}
                       >
                         {size}
@@ -534,7 +534,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Avatar Image</Label>
-                    <div className="border-2 border-dashed border-foreground rounded-lg p-4">
+                    <div className="border border-dashed border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] rounded-lg p-4">
                       <input
                         type="file"
                         accept="image/*"
@@ -546,8 +546,8 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                         htmlFor={`variant-avatar-${index}`}
                         className="cursor-pointer flex flex-col items-center gap-2"
                       >
-                        <Upload className="h-6 w-6 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">
+                        <Upload className="h-6 w-6 text-gray-700 dark:text-gray-400" />
+                        <span className="text-xs text-gray-700 dark:text-gray-400">
                           {variant.avatar ? variant.avatar.name : "Upload avatar"}
                         </span>
                       </label>
@@ -555,7 +555,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                   </div>
                   <div className="space-y-2">
                     <Label>Hover Image</Label>
-                    <div className="border-2 border-dashed border-foreground rounded-lg p-4">
+                    <div className="border border-dashed border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] rounded-lg p-4">
                       <input
                         type="file"
                         accept="image/*"
@@ -567,8 +567,8 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                         htmlFor={`variant-hover-${index}`}
                         className="cursor-pointer flex flex-col items-center gap-2"
                       >
-                        <Upload className="h-6 w-6 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">
+                        <Upload className="h-6 w-6 text-gray-700 dark:text-gray-400" />
+                        <span className="text-xs text-gray-700 dark:text-gray-400">
                           {variant.hover ? variant.hover.name : "Upload hover"}
                         </span>
                       </label>
@@ -577,7 +577,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                 </div>
                 <div className="space-y-2">
                   <Label>Detail Images</Label>
-                  <div className="border-2 border-dashed border-foreground rounded-lg p-4">
+                  <div className="border border-dashed border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] rounded-lg p-4">
                     <input
                       type="file"
                       accept="image/*"
@@ -590,8 +590,8 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
                       htmlFor={`variant-images-${index}`}
                       className="cursor-pointer flex flex-col items-center gap-2"
                     >
-                      <Upload className="h-6 w-6 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">
+                      <Upload className="h-6 w-6 text-gray-700 dark:text-gray-400" />
+                      <span className="text-xs text-gray-700 dark:text-gray-400">
                         {variant.images.length > 0 ? `${variant.images.length} files selected` : "Upload detail images"}
                       </span>
                     </label>
@@ -603,7 +603,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
             </div>
           ))}
 
-          <AdidasButton type="button" variant="outline" onClick={addVariant} className="border-2 border-foreground">
+          <AdidasButton type="button" variant="outline" onClick={addVariant} className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
             <Plus className="mr-2 h-4 w-4" />
             Add Variant
           </AdidasButton>
