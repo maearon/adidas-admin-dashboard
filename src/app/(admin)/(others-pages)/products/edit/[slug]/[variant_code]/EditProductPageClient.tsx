@@ -56,7 +56,7 @@ export default function EditProductPageClient({ params }: ProductDetailPageProps
     // refetch,
   } = useProductDetail(slug, variant_code)
 
-  const variant = productData?.variants.find((v) => v.variant_code === variant_code)
+  const variant = productData?.variants?.find((v) => v.variant_code === variant_code)
   const [hoveredColor, setHoveredColor] = useState<string | null>(null)
   const displayColor = hoveredColor || variant?.color
 
