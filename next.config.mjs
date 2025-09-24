@@ -70,10 +70,9 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      // Rewrite URL type /some-slug/ABC123.html → /some-slug/ABC123
       {
-        source: '/:slug/:model.html',
-        destination: '/:slug/:model', // dùng route động thật sự ở đây
+        source: "/products/:slug/:variant_code.html",
+        destination: "/products/:slug/:variant_code",
       },
     ];
   },
