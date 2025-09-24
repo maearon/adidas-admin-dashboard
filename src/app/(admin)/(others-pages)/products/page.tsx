@@ -123,7 +123,7 @@ export default function ProductsPage() {
                   <List className="h-4 w-4" />
                 </AdidasButton>
 
-                <Button className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400">
+                {/* <Button className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400">
                   <Filter className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">FILTERS</span>
                 </Button>
@@ -135,7 +135,7 @@ export default function ProductsPage() {
                   <Plus className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">ADD PRODUCT</span>
                   </Link>
-                </Button>
+                </Button> */}
               </div>
             </div>
           </div>
@@ -252,14 +252,14 @@ export default function ProductsPage() {
                                 size="sm"
                                 variant="outline"
                                 className="text-xs text-gray-700 dark:text-gray-400"
-                                href={`/products/edit/${slugify(product.name)}/${firstVariant?.variant_code}.html`}
+                                href={`/products/edit/${slugify(product.name)}/${firstVariant?.variant_code}.html?mode=edit`}
                               >
                                 EDIT
                               </AdidasButton>
                               <AdidasButton
                                 size="sm"
                                 className="text-xs text-gray-700 dark:text-gray-400"
-                                href={`/products/${slugify(product.name)}/${firstVariant?.variant_code}.html`}
+                                href={`/products/edit/${slugify(product.name)}/${firstVariant?.variant_code}.html?mode=view`}
                               >
                                 VIEW
                               </AdidasButton>

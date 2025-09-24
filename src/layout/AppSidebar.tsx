@@ -57,9 +57,9 @@ const navItems: NavItem[] = [
     icon: <Package />,
     subItems: [
       { name: "All Products", path: "/products", pro: false },
-      { name: "Create New Product", path: "/products/new", pro: false },
-      { name: "View Product", path: "/products/", pro: false },
-      { name: "Edit Product", path: "/products/edit", pro: false },
+      { name: "Create New Product", path: "/products/edit/athletics-hoodie-95/VC95-BL-1cd6.html?mode=create", pro: false },
+      { name: "View Product", path: "/products/edit/athletics-hoodie-95/VC95-BL-1cd6.html?mode=view", pro: false },
+      { name: "Edit Product", path: "/products/edit/athletics-hoodie-95/VC95-BL-1cd6.html?mode=edit", pro: false },
     ],
   },
   {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { EnhancedProductForm } from "@/components/products/enhanced-product-form"
 import type { ProductFormData } from "@/lib/validations/product"
 import { AdminHeader } from "@/components/admin-header"
@@ -18,12 +18,14 @@ interface ProductDetailPageProps {
 export default function EditProductPageClient({ params }: ProductDetailPageProps) {
   const { slug, variant_code } = params
   const router = useRouter()
-  // const searchParams = useSearchParams()
+  const searchParams = useSearchParams()
   // const [productData, setProductData] = useState<ProductFormData | null>(null)
   // const [loading, setLoading] = useState(true)
 
   // const slug = searchParams.get("slug")
   // const variantCode = searchParams.get("variant_code")
+  const modeParam = searchParams.get("mode");
+  const mode = (modeParam === "create" || modeParam === "edit") ? modeParam : undefined;
 
   // useEffect(() => {
   //   if (slug && variantCode) {
@@ -150,9 +152,9 @@ export default function EditProductPageClient({ params }: ProductDetailPageProps
 
   return (
     <div className="min-h-screen bg-background">
-      <AdminHeader />
+      {/* <AdminHeader /> */}
       <div className="container mx-auto px-4 py-6">
-        <EnhancedProductForm initialData={productData} onSubmit={handleSubmit} mode="edit" />
+        <EnhancedProductForm initialData={productData} onSubmit={handleSubmit} mode={mode} />
       </div>
     </div>
   )
