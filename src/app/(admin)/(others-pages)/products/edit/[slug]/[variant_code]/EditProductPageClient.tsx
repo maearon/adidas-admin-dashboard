@@ -128,7 +128,6 @@ export default function EditProductPageClient({ params }: ProductDetailPageProps
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
-        <AdminHeader />
         <div className="container mx-auto px-4 py-6">
           <Loading />
         </div>
@@ -138,8 +137,7 @@ export default function EditProductPageClient({ params }: ProductDetailPageProps
 
   if (!productData) {
     return (
-      <div className="min-h-screen bg-background">
-        <AdminHeader />
+      <div className="min-h-screen bg-background">        
         <div className="container mx-auto px-4 py-6">
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
@@ -152,7 +150,6 @@ export default function EditProductPageClient({ params }: ProductDetailPageProps
 
   return (
     <div className="min-h-screen bg-background">
-      {/* <AdminHeader /> */}
       <div className="container mx-auto px-4 py-6">
         <EnhancedProductForm initialData={productData} onSubmit={handleSubmit} mode={mode} />
       </div>
