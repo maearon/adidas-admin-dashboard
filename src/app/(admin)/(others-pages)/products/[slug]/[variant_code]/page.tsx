@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import ProductDetailPageClient from "./ProductDetailPageClient";
 import { formatSlugTitle } from "@/utils/category-config.auto";
 import Loading from "@/components/loading";
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import ComponentCard from "@/components/common/ComponentCard";
 
 interface ProductDetailPageProps {
   params: { slug?: string; variant_code?: string };
@@ -29,12 +31,15 @@ const ProductDetailPage = async (props: ProductDetailPageProps) => {
   return (
     <div className="min-h-screen bg-background">
       <Suspense fallback={<Loading />}>
+        <PageBreadcrumb pageTitle="Product Detail" />
+        <ComponentCard title="All Products">
         <ProductDetailPageClient
           params={{
             slug,
             variant_code,
           }}
         />
+        </ComponentCard>
       </Suspense>
     </div>
   );
