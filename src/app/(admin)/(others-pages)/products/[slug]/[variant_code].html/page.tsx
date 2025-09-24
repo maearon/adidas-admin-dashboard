@@ -1,51 +1,38 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { ProductForm } from "@/components/products/product-form"
 import { railsApi } from "@/lib/api/rails-client"
+import { useProductDetail } from "@/hooks/useProducts"
 
 interface ProductDetailPageProps {
   params: { 
-    slug?: string; 
-    variant_code?: string
+    slug: string; 
+    variant_code: string
   };
 }
 
 export default function ProductDetailsPage({ params }: ProductDetailPageProps) {
-  const [product, setProduct] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [initialLoading, setInitialLoading] = useState(true)
+  const { slug, variant_code } = params
   const router = useRouter()
 
-  useEffect(() => {
-    const loadProduct = async () => {
-      try {
-        const productData = await railsApi.getProduct(params.variant_code)
-        setProduct(productData)
-      } catch (error) {
-        console.error("Failed to load product:", error)
-      } finally {
-        setInitialLoading(false)
-      }
-    }
-
-    loadProduct()
-  }, [params.id])
+  const {
+      data: product,
+      isLoading,
+      // error,
+      // refetch,
+  } = useProductDetail(slug, variant_code)
 
   const handleSubmit = async (formData: FormData) => {
     try {
-      setLoading(true)
-      await railsApi.updateProduct(params.id, formData)
+      await railsApi.updateProduct(variant_code, formData)
       router.push("/products")
     } catch (error) {
       console.error("Failed to update product:", error)
-    } finally {
-      setLoading(false)
     }
   }
 
-  if (initialLoading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground"></div>
@@ -60,7 +47,7 @@ export default function ProductDetailsPage({ params }: ProductDetailPageProps) {
         <p className="text-muted-foreground">Update product information and settings.</p>
       </div>
 
-      <ProductForm product={product} onSubmit={handleSubmit} loading={loading} />
+      <ProductForm product={product} onSubmit={handleSubmit} loading={isLoading} />
     </div>
   )
 }
