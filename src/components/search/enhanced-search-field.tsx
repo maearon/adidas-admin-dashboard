@@ -1,11 +1,12 @@
 "use client"
 
+import { Input } from "@/components/ui/input"
 import type React from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Input } from "@/components/ui/input"
-import { SearchIcon, X } from "lucide-react"
+import { Search, X } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import { EnhancedSearchAutocomplete } from "./enhanced-search-autocomplete"
+import { cn } from "@/lib/utils"
 
 interface EnhancedSearchFieldProps {
   onSearch?: (query: string) => void
@@ -17,7 +18,7 @@ interface EnhancedSearchFieldProps {
 
 export function EnhancedSearchField({
   onSearch,
-  placeholder = "Search",
+  placeholder = "Search or type command...",
   className = "",
   autoFocus = false,
   variant = "page",
@@ -63,9 +64,7 @@ export function EnhancedSearchField({
   }
 
   function handleFocus() {
-    if (searchText.length > 0) {
-      setShowAutocomplete(true)
-    }
+    if (searchText.length > 0) setShowAutocomplete(true)
   }
 
   function handleBlur() {
@@ -74,47 +73,50 @@ export function EnhancedSearchField({
 
   const inputClasses =
     variant === "header"
-      ? "bg-white/10 border-white/20 text-white placeholder-white/70 focus:bg-white/20 focus:border-white"
-      : "bg-background border-2 border-foreground placeholder-muted-foreground focus:ring-2 focus:ring-foreground"
-
+      ? "xl:w-[430px]"
+      : ""
   return (
-    <form onSubmit={handleSubmit} className={`relative ${className}`}>
+    <form onSubmit={handleSubmit} className={cn("relative", className)}>
       <div className="relative">
+        {/* Icon bên trái */}
+        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2">
+          <Search className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+        </span>
+
+        {/* Input */}
         <Input
           ref={inputRef}
+          type="text"
           name="q"
           value={searchText}
           onChange={handleInputChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder={placeholder}
-          className={`
-            pe-10 
-            focus:placeholder-transparent 
-            text-sm
-            text-gray-700 dark:text-gray-400
-            pl-3
-            pr-10 
-            py-2
-            focus:outline-none
-            ${inputClasses}
-          `}
+          className={cn(
+            "h-11 rounded-lg pl-12 pr-14", // chỉ override padding & height
+            variant === "header" && "sm:text-sm",
+            inputClasses,
+          )}
         />
 
-        {searchText ? (
+        {/* Clear hoặc icon */}
+        {searchText && (
           <X
-            className={`absolute right-3 top-1/2 size-4 -translate-y-1/2 cursor-pointer hover:opacity-70 ${
-              variant === "header" ? "text-white/70 hover:text-white" : "text-gray-700 dark:text-gray-400"
-            }`}
+            className="absolute right-10 top-1/2 h-4 w-4 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white"
             onClick={clearInput}
           />
-        ) : (
-          <SearchIcon
-            className={`absolute right-3 top-1/2 size-4 -translate-y-1/2 ${
-              variant === "header" ? "text-white/70" : "text-gray-700 dark:text-gray-400"
-            }`}
-          />
         )}
+
+        {/* ⌘K nút bên phải */}
+        {/* <button
+          type="button"
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400"
+          onClick={() => onSearch?.(searchText)}
+        >
+          <span>⌘</span>
+          <span>K</span>
+        </button> */}
       </div>
 
       {showAutocomplete && searchText && (
