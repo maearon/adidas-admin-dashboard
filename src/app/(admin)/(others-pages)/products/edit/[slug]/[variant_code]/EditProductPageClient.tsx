@@ -1,8 +1,11 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { ProductForm } from "@/components/products/product-form"
-import { railsApi } from "@/lib/api/rails-client"
+import { EnhancedProductForm } from "@/components/products/enhanced-product-form"
+import type { ProductFormData } from "@/lib/validations/product"
+import { AdminHeader } from "@/components/admin-header"
+import { Loading } from "@/components/loading"
+import { toast } from "sonner"
 import { useProductDetail } from "@/hooks/useProducts"
 
 interface ProductDetailPageProps {
@@ -14,47 +17,143 @@ interface ProductDetailPageProps {
 
 export default function EditProductPageClient({ params }: ProductDetailPageProps) {
   const { slug, variant_code } = params
-  console.log("EditProductPage params:", params)
   const router = useRouter()
+  // const searchParams = useSearchParams()
+  // const [productData, setProductData] = useState<ProductFormData | null>(null)
+  // const [loading, setLoading] = useState(true)
+
+  // const slug = searchParams.get("slug")
+  // const variantCode = searchParams.get("variant_code")
+
+  // useEffect(() => {
+  //   if (slug && variantCode) {
+  //     fetchProduct()
+  //   }
+  // }, [slug, variantCode])
+
+  // const fetchProduct = async () => {
+  //   try {
+  //     const response = await fetch(`/api/admin/products/${slug}/${variantCode}`)
+  //     if (!response.ok) throw new Error("Failed to fetch product")
+
+  //     const product = await response.json()
+  //     setProductData(product)
+  //   } catch (error) {
+  //     console.error("Error fetching product:", error)
+  //     toast.error("Failed to load product data")
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   const {
-    data: product,
+    data: productData,
     isLoading,
     // error,
     // refetch,
   } = useProductDetail(slug, variant_code)
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (data: ProductFormData) => {
     try {
-      await railsApi.updateProduct(variant_code, formData)
-      router.push("/products")
+      const formData = new FormData()
+
+      formData.append("product[name]", data.name)
+      formData.append("product[slug]", data.slug)
+      formData.append("product[description]", data.description)
+      formData.append("product[category]", data.category)
+      formData.append("product[sport]", data.sport)
+      formData.append("product[brand]", data.brand)
+      formData.append("product[status]", data.status)
+
+      data.variants.forEach((variant, index) => {
+        formData.append(`product[variants_attributes][${index}][id]`, variant.id || "")
+        formData.append(`product[variants_attributes][${index}][variant_code]`, variant.variant_code)
+        formData.append(`product[variants_attributes][${index}][size]`, variant.size)
+        formData.append(`product[variants_attributes][${index}][color]`, variant.color)
+        formData.append(`product[variants_attributes][${index}][price]`, variant.price.toString())
+        formData.append(`product[variants_attributes][${index}][stock_quantity]`, variant.stock_quantity.toString())
+        formData.append(`product[variants_attributes][${index}][sku]`, variant.sku)
+
+        if (variant.main_image instanceof File) {
+          formData.append(`product[variants_attributes][${index}][main_image]`, variant.main_image)
+        } else if (variant.existing_main_image) {
+          formData.append(`product[variants_attributes][${index}][existing_main_image]`, variant.existing_main_image)
+        }
+
+        if (variant.hover_image instanceof File) {
+          formData.append(`product[variants_attributes][${index}][hover_image]`, variant.hover_image)
+        } else if (variant.existing_hover_image) {
+          formData.append(`product[variants_attributes][${index}][existing_hover_image]`, variant.existing_hover_image)
+        }
+
+        if (variant.additional_images) {
+          variant.additional_images.forEach((image, imageIndex) => {
+            if (image instanceof File) {
+              formData.append(`product[variants_attributes][${index}][additional_images][${imageIndex}]`, image)
+            } else if (typeof image === "string") {
+              formData.append(
+                `product[variants_attributes][${index}][existing_additional_images][${imageIndex}]`,
+                image,
+              )
+            }
+          })
+        }
+
+        if (variant.remove_images) {
+          variant.remove_images.forEach((imageId, removeIndex) => {
+            formData.append(`product[variants_attributes][${index}][remove_images][${removeIndex}]`, imageId)
+          })
+        }
+      })
+
+      const response = await fetch(`/api/admin/products/${slug}/${variant_code}`, {
+        method: "PATCH",
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to update product")
+      }
+
+      toast.success("Product updated successfully!")
+      router.push(`/admin/products/${data.id}`)
     } catch (error) {
-      console.error("Failed to update product:", error)
-    } finally {
+      console.error("Error updating product:", error)
+      toast.error("Failed to update product. Please try again.")
     }
   }
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground"></div>
+      <div className="min-h-screen bg-background">
+        <AdminHeader />
+        <div className="container mx-auto px-4 py-6">
+          <Loading />
+        </div>
+      </div>
+    )
+  }
+
+  if (!productData) {
+    return (
+      <div className="min-h-screen bg-background">
+        <AdminHeader />
+        <div className="container mx-auto px-4 py-6">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
+            <p className="text-muted-foreground">The requested product could not be found.</p>
+          </div>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
-      <div className="text-gray-700 dark:text-gray-400">
-        <h1 className="text-3xl font-bold tracking-tight uppercase">Edit Product</h1>
-        <p>Update product information and settings.</p>
+    <div className="min-h-screen bg-background">
+      <AdminHeader />
+      <div className="container mx-auto px-4 py-6">
+        <EnhancedProductForm initialData={productData} onSubmit={handleSubmit} mode="edit" />
       </div>
-
-      <ProductForm
-        product={product}
-        onSubmit={handleSubmit}
-        loading={isLoading}
-        mode="edit"
-      />
     </div>
   )
 }

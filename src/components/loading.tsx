@@ -1,5 +1,8 @@
-import { Loader2 } from "lucide-react";
-
-export default function Loading() {
-  return <Loader2 className="mx-auto my-3 h-6 w-6 animate-spin text-black dark:text-white" />;
+export function Loading() {
+  return (
+    <div className="flex items-center justify-center py-12">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground"></div>
+    </div>
+  )
 }
+
