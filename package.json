@@ -6,7 +6,8 @@
     "dev": "next dev -H 0.0.0.0 --port 5000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
