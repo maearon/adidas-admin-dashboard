@@ -190,6 +190,30 @@
   body {
     @apply relative font-normal font-outfit z-1 bg-gray-50;
   }
+
+  /* Override Chrome autofill background */
+
+  /* Light mode */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--color-white) inset !important;
+    -webkit-text-fill-color: var(--color-gray-800) !important;
+    transition: background-color 9999s ease-in-out 0s !important;
+    background-clip: content-box, padding-box !important;
+    border-radius: inherit !important;
+  }
+
+  /* Dark mode */
+  .dark input:-webkit-autofill,
+  .dark input:-webkit-autofill:hover,
+  .dark input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--color-gray-900) inset !important;
+    -webkit-text-fill-color: var(--color-gray-100) !important;
+    transition: background-color 9999s ease-in-out 0s !important;
+    background-clip: content-box, padding-box !important;
+    border-radius: inherit !important;
+  }
 }
 
 @utility menu-item {
