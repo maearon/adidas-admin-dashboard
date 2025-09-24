@@ -49,7 +49,12 @@ export default function EditProductPageClient({ params }: ProductDetailPageProps
         <p className="text-muted-foreground">Update product information and settings.</p>
       </div>
 
-      <ProductForm product={product} onSubmit={handleSubmit} loading={isLoading} />
+      <ProductForm
+        product={product}
+        onSubmit={handleSubmit}
+        loading={isLoading}
+        mode="edit"
+      />
     </div>
   )
 }

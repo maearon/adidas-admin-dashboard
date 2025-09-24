@@ -48,7 +48,12 @@ export default function ProductDetailPageClient({ params }: ProductDetailPageCli
         <p className="text-muted-foreground">Update product information and settings.</p>
       </div>
 
-      <ProductForm product={product} onSubmit={handleSubmit} loading={isLoading} />
+      <ProductForm
+        product={product}
+        onSubmit={handleSubmit}
+        loading={isLoading}
+        mode="detail"
+      />
     </div>
   )
 }

@@ -1,8 +1,8 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AdidasButton } from "@/components/ui/adidas-button"
 import { Input } from "@/components/ui/input"
@@ -12,11 +12,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Plus, Upload, Trash2 } from "lucide-react"
+import { ProductData } from "@/lib/types"
+
+export type ProductFormMode = "create" | "edit" | "detail"
 
 interface ProductFormProps {
-  product?: any
-  onSubmit: (data: FormData) => void
+  product?: ProductData
+  onSubmit: (formData: FormData) => Promise<void>
   loading?: boolean
+  mode?: ProductFormMode
 }
 
 interface Variant {
@@ -38,32 +42,15 @@ const SPORTS = ["Running", "Soccer", "Basketball", "Tennis", "Gym", "Training", 
 const PRODUCT_TYPES = ["Sneakers", "Cleats", "Sandals", "Hoodie", "Pants", "Shorts", "Jacket", "Jersey", "T-Shirt"]
 
 const SIZES = {
-  Shoes: [
-    "36",
-    "36.5",
-    "37",
-    "37.5",
-    "38",
-    "38.5",
-    "39",
-    "39.5",
-    "40",
-    "40.5",
-    "41",
-    "41.5",
-    "42",
-    "42.5",
-    "43",
-    "43.5",
-    "44",
-    "44.5",
-    "45",
-  ],
+  Shoes: ["36","36.5","37","37.5","38","38.5","39","39.5","40","40.5","41","41.5","42","42.5","43","43.5","44","44.5","45"],
   Apparel: ["XS", "S", "M", "L", "XL", "XXL"],
   Accessories: ["One Size"],
 }
 
-export function ProductForm({ product, onSubmit, loading = false }: ProductFormProps) {
+export function ProductForm({ product, onSubmit, loading = false, mode = "create" }: ProductFormProps) {
+  const router = useRouter()
+  const isDetail = mode === "detail"
+
   const [formData, setFormData] = useState({
     name: "",
     model_number: "",
@@ -78,10 +65,7 @@ export function ProductForm({ product, onSubmit, loading = false }: ProductFormP
     specifications: "",
   })
 
-  const [productImages, setProductImages] = useState<{
-    image: File | null
-    hover_image: File | null
-  }>({
+  const [productImages, setProductImages] = useState<{ image: File | null; hover_image: File | null }>({
     image: null,
     hover_image: null,
   })
@@ -136,7 +120,7 @@ export function ProductForm({ product, onSubmit, loading = false }: ProductFormP
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
-
+  
   const handleProductImageChange = (type: "image" | "hover_image", file: File | null) => {
     setProductImages((prev) => ({ ...prev, [type]: file }))
   }
@@ -258,6 +242,7 @@ export function ProductForm({ product, onSubmit, loading = false }: ProductFormP
               <Input
                 id="name"
                 value={formData.name}
+                disabled={isDetail}
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 className="border-2 border-foreground"
                 required
@@ -268,6 +253,7 @@ export function ProductForm({ product, onSubmit, loading = false }: ProductFormP
               <Input
                 id="model_number"
                 value={formData.model_number}
+                disabled={isDetail}
                 onChange={(e) => handleInputChange("model_number", e.target.value)}
                 className="border-2 border-foreground"
                 required
@@ -275,7 +261,7 @@ export function ProductForm({ product, onSubmit, loading = false }: ProductFormP
             </div>
             <div className="space-y-2">
               <Label htmlFor="brand">Brand *</Label>
-              <Select value={formData.brand} onValueChange={(value) => handleInputChange("brand", value)}>
+              <Select value={formData.brand} disabled={isDetail} onValueChange={(value) => handleInputChange("brand", value)}>
                 <SelectTrigger className="border-2 border-foreground">
                   <SelectValue placeholder="Select brand" />
                 </SelectTrigger>
@@ -290,7 +276,7 @@ export function ProductForm({ product, onSubmit, loading = false }: ProductFormP
             </div>
             <div className="space-y-2">
               <Label htmlFor="gender">Gender *</Label>
-              <Select value={formData.gender} onValueChange={(value) => handleInputChange("gender", value)}>
+              <Select value={formData.gender} disabled={isDetail} onValueChange={(value) => handleInputChange("gender", value)}>
                 <SelectTrigger className="border-2 border-foreground">
                   <SelectValue placeholder="Select gender" />
                 </SelectTrigger>
@@ -305,7 +291,7 @@ export function ProductForm({ product, onSubmit, loading = false }: ProductFormP
             </div>
             <div className="space-y-2">
               <Label htmlFor="category">Category *</Label>
-              <Select value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
+              <Select value={formData.category} disabled={isDetail} onValueChange={(value) => handleInputChange("category", value)}>
                 <SelectTrigger className="border-2 border-foreground">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
@@ -320,7 +306,7 @@ export function ProductForm({ product, onSubmit, loading = false }: ProductFormP
             </div>
             <div className="space-y-2">
               <Label htmlFor="sport">Sport</Label>
-              <Select value={formData.sport} onValueChange={(value) => handleInputChange("sport", value)}>
+              <Select value={formData.sport} disabled={isDetail} onValueChange={(value) => handleInputChange("sport", value)}>
                 <SelectTrigger className="border-2 border-foreground">
                   <SelectValue placeholder="Select sport" />
                 </SelectTrigger>
@@ -335,7 +321,7 @@ export function ProductForm({ product, onSubmit, loading = false }: ProductFormP
             </div>
             <div className="space-y-2">
               <Label htmlFor="product_type">Product Type</Label>
-              <Select value={formData.product_type} onValueChange={(value) => handleInputChange("product_type", value)}>
+              <Select value={formData.product_type} disabled={isDetail} onValueChange={(value) => handleInputChange("product_type", value)}>
                 <SelectTrigger className="border-2 border-foreground">
                   <SelectValue placeholder="Select product type" />
                 </SelectTrigger>
@@ -624,14 +610,20 @@ export function ProductForm({ product, onSubmit, loading = false }: ProductFormP
         </CardContent>
       </Card>
 
-      {/* Submit Button */}
+      {/* Footer Buttons */}
       <div className="flex justify-end gap-4">
-        <AdidasButton type="button" variant="outline" className="border-2 border-foreground">
+        <AdidasButton type="button" variant="outline" onClick={() => router.push("/products")}>
           Cancel
         </AdidasButton>
-        <AdidasButton type="submit" disabled={loading} className="border-2 border-foreground">
-          {loading ? "Saving..." : product ? "Update Product" : "Create Product"}
-        </AdidasButton>
+        {isDetail ? (
+          <AdidasButton type="button" onClick={() => router.push(`/products/${product?.slug}/edit`)}>
+            Edit Product
+          </AdidasButton>
+        ) : (
+          <AdidasButton type="submit" disabled={loading}>
+            {loading ? "Saving..." : mode === "edit" ? "Update Product" : "Create Product"}
+          </AdidasButton>
+        )}
       </div>
     </form>
   )

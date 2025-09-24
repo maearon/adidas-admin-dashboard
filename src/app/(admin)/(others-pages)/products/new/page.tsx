@@ -1,34 +1,38 @@
-"use client"
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { Metadata } from "next";
+import NewProductPageClient from "./NewProductPageClient";
+import { formatSlugTitle } from "@/utils/category-config.auto";
+import Loading from "@/components/loading";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { ProductForm } from "@/components/products/product-form"
-import { railsApi } from "@/lib/api/rails-client"
+interface ProductDetailPageProps {
+  params: { slug?: string; variant_code?: string };
+}
 
-export default function NewProductPage() {
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
+// ✅ generateMetadata must be async with awaited `params`
+export async function generateMetadata(
+  props: { params: { slug?: string } }
+): Promise<Metadata> {
+  const { slug } = await Promise.resolve(props.params || {});
+  const pageTitle = formatSlugTitle(slug || "New Product");
+  return {
+    title: pageTitle,
+  };
+}
 
-  const handleSubmit = async (formData: FormData) => {
-    try {
-      setLoading(true)
-      await railsApi.createProduct(formData)
-      router.push("/products")
-    } catch (error) {
-      console.error("Failed to create product:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
+// ✅ Main page function must await `params`
+const ProductDetailPage = async (props: ProductDetailPageProps) => {
+  const { slug, variant_code } = await Promise.resolve(props.params || {});
+
+  if (!slug || !variant_code) notFound();
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight uppercase">Create New Product</h1>
-        <p className="text-muted-foreground">Add a new product to your store catalog.</p>
-      </div>
-
-      <ProductForm onSubmit={handleSubmit} loading={loading} />
+    <div className="min-h-screen bg-background">
+      <Suspense fallback={<Loading />}>
+        <NewProductPageClient />
+      </Suspense>
     </div>
-  )
-}
+  );
+};
+
+export default ProductDetailPage;
