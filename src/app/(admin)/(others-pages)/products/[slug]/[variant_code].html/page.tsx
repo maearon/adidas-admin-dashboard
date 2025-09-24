@@ -14,6 +14,7 @@ interface ProductDetailPageProps {
 
 export default function ProductDetailsPage({ params }: ProductDetailPageProps) {
   const { slug, variant_code } = params
+  console.log("ProductDetailsPage params:", params)
   const router = useRouter()
 
   const {
