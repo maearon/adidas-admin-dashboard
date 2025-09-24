@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Plus, Upload, Trash2 } from "lucide-react"
 import { ProductData } from "@/lib/types"
+import { slugify } from "@/utils/slugify"
 
 export type ProductFormMode = "create" | "edit" | "detail"
 
@@ -227,8 +228,17 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
 
   const availableSizes = SIZES[formData.category as keyof typeof SIZES] || []
 
+  const firstVariant = product.variants?.[0]
+  const mainImage =
+    product.main_image_url ||
+    firstVariant?.avatar_url ||
+    product.thumbnail ||
+    ""
+  const hoverImage =
+    product.hover_image_url || firstVariant?.hover_url || ""
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 text-gray-700 dark:text-gray-400">
       {/* Basic Information */}
       <Card className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <CardHeader>
@@ -449,7 +459,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
         </CardHeader>
         <CardContent className="space-y-6">
           {variants.map((variant, index) => (
-            <div key={index} className="border border-muted rounded-lg p-4 space-y-4">
+            <div key={index} className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] rounded-lg p-4 space-y-4">
               <div className="flex items-center justify-between">
                 <h4 className="font-medium">Variant {index + 1}</h4>
                 {variants.length > 1 && (
@@ -616,7 +626,7 @@ export function ProductForm({ product, onSubmit, loading = false, mode = "create
           Cancel
         </AdidasButton>
         {isDetail ? (
-          <AdidasButton type="button" onClick={() => router.push(`/products/${product?.slug}/edit`)}>
+          <AdidasButton type="button" onClick={() => router.push(`/products/edit/${slugify(product.name)}/${firstVariant?.variant_code}.html`)}>
             Edit Product
           </AdidasButton>
         ) : (
