@@ -16,6 +16,7 @@ import Link from "next/link"
 import { slugify } from "@/utils/slugify"
 import { Mode } from "@/components/ui/mode-switcher"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { cn } from "@/lib/utils"
 
 interface Variant {
   variant_code: string
@@ -107,37 +108,59 @@ export default function ProductsPage() {
               </div>
 
               <div className="flex gap-2">
+                {/* Grid view */}
                 <AdidasButton
                   variant={viewMode === "grid" ? "default" : "outline"}
                   size="icon"
                   onClick={() => setViewMode("grid")}
-                  className="border"
+                  className={cn(
+                    "border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400",
+                    viewMode === "grid" &&
+                      "border-brand-500 ring-2 ring-brand-500/20 text-brand-600 dark:text-brand-400"
+                  )}
                 >
                   <Grid className="h-4 w-4" />
                 </AdidasButton>
 
+                {/* List view */}
                 <AdidasButton
-                  variant={viewMode === "list" ? "default" : "outline"}
+                  variant={viewMode === "grid" ? "default" : "outline"}
                   size="icon"
                   onClick={() => setViewMode("list")}
-                  className="border"
+                  className={cn(
+                    "border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400",
+                    viewMode === "list" &&
+                      "border-brand-500 ring-2 ring-brand-500/20 text-brand-600 dark:text-brand-400"
+                  )}
                 >
                   <List className="h-4 w-4" />
                 </AdidasButton>
 
-                {/* <Button className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400">
-                  <Filter className="h-4 w-4 mr-2" />
-                  <span className="hidden sm:inline">FILTERS</span>
-                </Button>
-
-                <Button
+                {/* Filters */}
+                <AdidasButton
+                  variant="outline"
+                  shadow={false}
+                  pressEffect={false}
+                  showArrow={false}
                   className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400"
                 >
-                  <Link href="/products/new">
-                  <Plus className="h-4 w-4 mr-2" />
-                  <span className="hidden sm:inline">ADD PRODUCT</span>
+                  <Filter className="h-4 w-4 mr-2" />
+                  <span className="hidden sm:inline">FILTERS</span>
+                </AdidasButton>
+
+                {/* Add product */}
+                <AdidasButton
+                  variant="outline"
+                  shadow={false}
+                  pressEffect={false}
+                  showArrow={false}
+                  className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400"
+                >
+                  <Link href="/products/new" className="flex items-center">
+                    <Plus className="h-4 w-4 mr-2" />
+                    <span className="hidden sm:inline">ADD PRODUCT</span>
                   </Link>
-                </Button> */}
+                </AdidasButton>
               </div>
             </div>
           </div>
