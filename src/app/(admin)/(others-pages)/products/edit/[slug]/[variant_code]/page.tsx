@@ -31,15 +31,15 @@ const ProductDetailPage = async (props: ProductDetailPageProps) => {
   return (
     <div className="min-h-screen bg-background">
       <Suspense fallback={<Loading />}>
-        <PageBreadcrumb pageTitle="Edit, View, Create Product" />
-        <ComponentCard title="Edit, View, Create Product">
+        {/* <PageBreadcrumb pageTitle="Edit, View, Create Product" />
+        <ComponentCard title="Edit, View, Create Product"> */}
         <EditProductPageClient
           params={{
             slug,
             variant_code,
           }}
         />
-        </ComponentCard>
+        {/* </ComponentCard> */}
       </Suspense>
     </div>
   );
