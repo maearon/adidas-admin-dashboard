@@ -247,7 +247,7 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
                 <div className="flex items-center justify-between">
                   <h4 className="font-medium">Variant {index + 1}</h4>
                   {!isReadOnly && fields.length > 1 && (
-                    <Button type="button" variant="destructive" size="sm" onClick={() => remove(index)}>
+                    <Button type="button" variant="destructive" className="text-gray-700 dark:text-white" size="sm" onClick={() => remove(index)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   )}

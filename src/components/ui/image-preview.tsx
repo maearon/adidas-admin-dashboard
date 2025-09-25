@@ -24,7 +24,7 @@ export function ImagePreview({ src, alt, onRemove, className = "" }: ImagePrevie
       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button size="sm" variant="secondary" className="h-8 w-8 p-0">
+            <Button size="sm" variant="destructive" className="h-8 w-8 p-0">
               <Eye className="h-4 w-4" />
             </Button>
           </DialogTrigger>
