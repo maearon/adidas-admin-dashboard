@@ -78,7 +78,7 @@ export default function ProductsPage() {
     <div className="min-h-screen bg-background">
       <PageBreadcrumb pageTitle="Products" />
       <ComponentCard title="All Products">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 py-6 text-gray-700 dark:text-gray-400">
           {/* Header */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
