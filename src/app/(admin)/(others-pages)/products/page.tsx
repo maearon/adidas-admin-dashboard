@@ -109,10 +109,12 @@ export default function ProductsPage() {
               <h1 className="text-2xl font-bold uppercase tracking-wide text-black dark:text-white">
                 PRODUCTS
               </h1>
-              <p className="text-sm text-gray-700 dark:text-gray-400">
-                {totalCount} products found
-                {query && ` for "${query}"`}
-              </p>
+              {products.length > 0 && (
+                <p className="text-sm text-gray-700 dark:text-gray-400">
+                  {t2?.showingResults?.replace('{count}', products.length.toString()).replace('{total}', totalCount.toString()) || `Showing ${products.length} of ${totalCount} results `}
+                  {(query || "a") && ` for "${query || "a"}"`}
+                </p>
+              )}
             </div>
           </div>
 
