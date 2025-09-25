@@ -22,8 +22,11 @@ interface EnhancedProductFormProps {
   mode?: Mode
 }
 
-export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode = "create" }: EnhancedProductFormProps) {
-  const [mode, setMode] = useState<Mode>(initialMode)
+export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode = "view" }: EnhancedProductFormProps) {
+  const modeParam: Mode = initialMode === "view" || initialMode === "edit" || initialMode === "create"
+    ? (initialMode as Mode)
+    : "view"
+  const [mode, setMode] = useState<Mode>(modeParam)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const {
