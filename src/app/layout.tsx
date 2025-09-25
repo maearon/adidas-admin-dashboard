@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/context/ThemeContext';
 import { Metadata } from 'next';
 import { ReduxProvider } from "@/providers/redux-provider";
 import ReactQueryProvider from './ReactQueryProvider';
+import ScrollToTop from '@/components/scroll-to-top';
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <ThemeProvider>
               <SidebarProvider>{children}</SidebarProvider>
+              <ScrollToTop />
             </ThemeProvider>
           </ReactQueryProvider>
         </ReduxProvider>
