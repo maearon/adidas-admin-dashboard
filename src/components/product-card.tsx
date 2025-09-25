@@ -16,19 +16,27 @@ import type { Product } from "@/types/product";
 import { cn } from "@/lib/utils";
 import ProductPrice from "./ProductCardPrice";
 import { useTranslations } from "@/hooks/useTranslations";
+import { Badge } from "@/components/ui/badge"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { Edit, Eye } from "lucide-react";
+import { useRouter } from "next/navigation"
+import { Mode } from "@/components/ui/mode-switcher";
 
 interface ProductCardProps {
   slug?: string;
   product: Product;
+  viewMode: "grid" | "list";
   showAddToBag?: boolean;
   minimalMobile?: boolean;
 }
 
 export default function ProductCard({
   product,
+  viewMode,
   showAddToBag = false,
   minimalMobile = false,
 }: ProductCardProps) {
+  const router = useRouter()
   const [isMobile, setIsMobile] = useState(false);
   const [variantHeight, setVariantHeight] = useState(0);
   const variantRef = useRef<HTMLDivElement>(null);
@@ -50,7 +58,7 @@ export default function ProductCard({
 
   const dispatch = useAppDispatch();
   const defaultVariant = product.variants?.[0] ?? null;
-  const fallbackUrl = `/${slugify(product.name || "product")}/${defaultVariant?.variant_code}.html`;
+  const fallbackUrl = `/products/edit/${slugify(product.name || "product")}/${defaultVariant?.variant_code}.html?mode=view`;
 
   const [currentVariant, setCurrentVariant] = useState(defaultVariant);
   const [currentUrl, setCurrentUrl] = useState(fallbackUrl);
@@ -111,138 +119,96 @@ export default function ProductCard({
       }}
     >
       <Card
-        className={cn(
-          "group relative z-0 hover:z-20 overflow-visible",
-          "flex flex-col justify-between border border-transparent",
-          "transition-all duration-200 shadow-none cursor-pointer rounded-none",
-          "hover:border-black dark:hover:border-white",
-          // Khi hover thì ẩn border-bottom để info block nối tiếp
-          hasVariantPanel && "hover:border-b-0",
-          // hasVariantPanel && "border-b-0" // bỏ border dưới của card khi có variant
-          // minimalMobile ? "min-h-fit" : "min-h-fit sm:min-h-[470px]"
-        )}
+        key={product.id}
+        className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] hover:shadow-lg transition-shadow"
       >
-        <CardContent className="p-0 relative">
-          {/* IMAGE WRAPPER */}
-          <div className="relative">
-            <div className="relative aspect-square overflow-hidden group/image">
-              <Image
-                src={productImage}
-                alt={product.name || "Product Name"}
-                fill
-                className={cn(
-                  "object-cover transition-opacity duration-300",
-                  hasHoverImage && "group-hover/image:opacity-0"
-                )}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-              />
-              {hasHoverImage && (
-                <Image
-                  src={hoverImage}
-                  alt={product.name || "Product Name"}
-                  fill
-                  className="object-cover absolute top-0 left-0 transition-opacity duration-300 opacity-0 group-hover/image:opacity-100"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                />
-              )}
-
-              <div
-                className="absolute top-4 right-4 z-10"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-              >
-                <WishButton item={mapProductToWishlistItem(product)} />
-              </div>
-            </div>
-
-            {/* VARIANTS PANEL */}
-            {hasVariants && !shouldHideDetails && (
+        <CardContent
+          className={`p-4 ${
+            viewMode === "list" ? "flex gap-4" : ""
+          }`}
+        >
+          {/* Image */}
+          <div
+            className={`${
+              viewMode === "list"
+                ? "w-32 h-32 flex-shrink-0"
+                : "aspect-square"
+            } mb-4 relative overflow-hidden`}
+          >
+            {productImage && (
               <>
-                {isMobile ? (
-                  <div
-                    ref={variantRef}
-                    className="relative block opacity-100 pointer-events-auto"
-                  >
-                    <ProductVariantCarousel
-                      product={product}
-                      currentVariant={currentVariant}
-                      onHover={(variant, url) => {
-                        setCurrentVariant(variant);
-                        setCurrentUrl(url);
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div
-                    ref={variantRef}
-                    className={cn(
-                      "absolute left-0 right-0 top-full z-10",
-                      "opacity-0 pointer-events-none transition-opacity duration-200",
-                      "group-hover:opacity-100 group-hover:pointer-events-auto"
-                    )}
-                  >
-                    <ProductVariantCarousel
-                      product={product}
-                      currentVariant={currentVariant}
-                      onHover={(variant, url) => {
-                        setCurrentVariant(variant);
-                        setCurrentUrl(url);
-                      }}
-                    />
-                  </div>
+                <Image
+                  src={productImage}
+                  alt={product.name || product.title || ""}
+                  fill
+                  className="object-cover transition-opacity duration-300 group-hover:opacity-0"
+                />
+                {hoverImage && (
+                  <Image
+                    src={hoverImage}
+                    alt={`${product.name} hover`}
+                    fill
+                    className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  />
                 )}
               </>
             )}
           </div>
 
-          {/* INFO BLOCK */}
-          {!shouldHideDetails && (
-          <div
-            className={cn(
-              "pb-1 space-y-1 relative bg-white dark:bg-black",
-              hasVariants && !isMobile && "transition-transform duration-200 group-hover:translate-y-8",
-              hasVariantPanel &&
-                "group-hover:border-x group-hover:border-b group-hover:border-black dark:group-hover:border-white -ml-px -mr-px",
-            )}
-          >
-            <div className="px-[10px] py-[10px] mb-[10px]">
-            <ProductPrice
-              price={product?.price ?? null}
-              compareAtPrice={product?.compare_at_price ?? null}
-            />
-            <h3 className="font-medium text-base leading-tight line-clamp-2">
-              {product.name}
-            </h3>
-            {product.sport && (
-              <p className="text-gray-600 dark:text-white text-sm">
-                {product.gender ? `${product.gender}'s` : ""}{" "}
-                {product.gender && product.sport ? " " : ""}
-                {product.sport}
-              </p>
-            )}
-            {hasVariants && (
-              <p className="text-gray-600 dark:text-white text-sm">
-                {product.variants.length} {t?.colors || "colors"}
-              </p>
-            )}
-            {(product?.tags?.length || 0) > 0 && (
-              <p className="text-foreground text-sm font-medium">
-                {product?.tags?.[0]}
-              </p>
-            )}
-            {showAddToBag && (
-              <Button
-                className="w-full bg-black text-white hover:bg-gray-800 mt-3"
-                onClick={handleAddToBag}
-              >
-                {t?.addToBag || "ADD TO BAG"}
-              </Button>
-            )}
+          {/* Content */}
+          <div className="flex-1">
+            <div className="flex items-start justify-between mb-2">
+              <div>
+                <h3 className="font-semibold text-sm line-clamp-2 text-gray-700 dark:text-gray-400">
+                  {product.name || product.title}
+                </h3>
+                {product.sport && (
+                  <Badge
+                    variant="secondary"
+                    className="text-xs mt-1 text-gray-700 dark:text-gray-400"
+                  >
+                    {product.sport}
+                  </Badge>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-gray-700 dark:text-gray-400">
+                  ${product.price}
+                </span>
+                {product.compare_at_price &&
+                  product.compare_at_price > product.price && (
+                    <span className="text-sm text-gray-700 dark:text-gray-400 line-through">
+                      ${product.compare_at_price}
+                    </span>
+                  )}
+              </div>
+
+              <div className="flex gap-1">
+                <ToggleGroup
+                  type="single"
+                  onValueChange={(value) => {
+                    if (value) {
+                      router.push(
+                        `/products/edit/${slugify(product.name)}/${defaultVariant?.variant_code}.html?mode=${value as Mode}`
+                      )
+                    }
+                  }}
+                >
+                  <ToggleGroupItem value="view" aria-label="View mode">
+                    <Eye className="h-4 w-4 mr-2" />
+                    View
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="edit" aria-label="Edit mode">
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit
+                  </ToggleGroupItem>
+                </ToggleGroup>
+              </div>
             </div>
           </div>
-          )}
         </CardContent>
       </Card>
     </Link>
