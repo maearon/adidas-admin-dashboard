@@ -17,6 +17,9 @@ import { slugify } from "@/utils/slugify"
 import { Mode } from "@/components/ui/mode-switcher"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { cn } from "@/lib/utils"
+import InfiniteScrollContainer from "@/components/InfiniteScrollContainer"
+import ProductListContainer from "@/components/ProductListContainer"
+import { useTranslations } from "@/hooks/useTranslations"
 
 interface Variant {
   variant_code: string
@@ -41,6 +44,8 @@ interface Product {
 }
 
 export default function ProductsPage() {
+  const t = useTranslations("common")
+  const t2 = useTranslations("productList")
   const searchParams = useSearchParams()
   const router = useRouter()
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
@@ -48,7 +53,15 @@ export default function ProductsPage() {
   const query = searchParams.get("q") || ""
   const page = Number.parseInt(searchParams.get("page") || "1")
 
-  const { data, isFetching } = useSearchProductsFeed(query || 'a')
+  const { 
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage, 
+    status,
+    refetch,
+  } = useSearchProductsFeed(query || 'a')
 
   const products: Product[] = data?.pages.flatMap((p) => p.products) || []
   const totalCount = data?.pages?.[0]?.totalCount ?? 0;
@@ -73,6 +86,12 @@ export default function ProductsPage() {
     const params = new URLSearchParams(searchParams.toString())
     params.set("page", newPage.toString())
     router.push(`/products?${params.toString()}`)
+  }
+
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetching) {
+      fetchNextPage()
+    }
   }
 
   return (
@@ -166,7 +185,7 @@ export default function ProductsPage() {
         </div>
 
         {/* Loading Skeleton */}
-        {isFetching && (
+        {(status === "pending") && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {Array.from({ length: 8 }).map((_, i) => (
               <Card
@@ -183,183 +202,22 @@ export default function ProductsPage() {
           </div>
         )}
 
-        {/* Products */}
-        {!isFetching && products.length > 0 && (
-          <>
-            <div
-              className={`grid gap-6 ${
-                viewMode === "grid"
-                  ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                  : "grid-cols-1"
-              }`}
-            >
-              {products.map((product) => {
-                const firstVariant = product.variants?.[0]
-                const mainImage =
-                  product.main_image_url ||
-                  firstVariant?.avatar_url ||
-                  product.thumbnail ||
-                  ""
-                const hoverImage =
-                  product.hover_image_url || firstVariant?.hover_url || ""
-
-                return (
-                  <Card
-                    key={product.id}
-                    className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] hover:shadow-lg transition-shadow"
-                  >
-                    <CardContent
-                      className={`p-4 ${
-                        viewMode === "list" ? "flex gap-4" : ""
-                      }`}
-                    >
-                      {/* Image */}
-                      <div
-                        className={`${
-                          viewMode === "list"
-                            ? "w-32 h-32 flex-shrink-0"
-                            : "aspect-square"
-                        } mb-4 relative overflow-hidden`}
-                      >
-                        {mainImage && (
-                          <>
-                            <Image
-                              src={mainImage}
-                              alt={product.name || product.title || ""}
-                              fill
-                              className="object-cover transition-opacity duration-300 group-hover:opacity-0"
-                            />
-                            {hoverImage && (
-                              <Image
-                                src={hoverImage}
-                                alt={`${product.name} hover`}
-                                fill
-                                className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                              />
-                            )}
-                          </>
-                        )}
-                      </div>
-
-                      {/* Content */}
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <h3 className="font-semibold text-sm line-clamp-2 text-gray-700 dark:text-gray-400">
-                              {product.name || product.title}
-                            </h3>
-                            {product.sport && (
-                              <Badge
-                                variant="secondary"
-                                className="text-xs mt-1 text-gray-700 dark:text-gray-400"
-                              >
-                                {product.sport}
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-gray-700 dark:text-gray-400">
-                              ${product.price}
-                            </span>
-                            {product.original_price &&
-                              product.original_price > product.price && (
-                                <span className="text-sm text-gray-700 dark:text-gray-400 line-through">
-                                  ${product.original_price}
-                                </span>
-                              )}
-                          </div>
-
-                          <div className="flex gap-1">
-                            <ToggleGroup
-                              type="single"
-                              onValueChange={(value) => {
-                                if (value) {
-                                  router.push(
-                                    `/products/edit/${slugify(product.name)}/${firstVariant?.variant_code}.html?mode=${value as Mode}`
-                                  )
-                                }
-                              }}
-                            >
-                              <ToggleGroupItem value="view" aria-label="View mode">
-                                <Eye className="h-4 w-4 mr-2" />
-                                View
-                              </ToggleGroupItem>
-                              <ToggleGroupItem value="edit" aria-label="Edit mode">
-                                <Edit className="h-4 w-4 mr-2" />
-                                Edit
-                              </ToggleGroupItem>
-                            </ToggleGroup>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
-
-            {/* Pagination */}
-            {pagination.totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-8">
-                <AdidasButton
-                  variant="outline"
-                  disabled={!pagination.hasPrevPage}
-                  onClick={() =>
-                    handlePageChange(pagination.currentPage - 1)
-                  }
-                  className="border text-gray-700 dark:text-gray-400"
-                >
-                  PREVIOUS
-                </AdidasButton>
-
-                <div className="flex items-center gap-2">
-                  {Array.from(
-                    { length: Math.min(5, pagination.totalPages) },
-                    (_, i) => {
-                      const pageNum = i + 1
-                      return (
-                        <AdidasButton
-                          key={pageNum}
-                          variant={
-                            pageNum === pagination.currentPage
-                              ? "default"
-                              : "outline"
-                          }
-                          size="sm"
-                          onClick={() => handlePageChange(pageNum)}
-                          className="border w-10 text-gray-700 dark:text-gray-400"
-                        >
-                          {pageNum}
-                        </AdidasButton>
-                      )
-                    }
-                  )}
-                </div>
-
-                <AdidasButton
-                  variant="outline"
-                  disabled={!pagination.hasNextPage}
-                  onClick={() =>
-                    handlePageChange(pagination.currentPage + 1)
-                  }
-                  className="border text-gray-700 dark:text-gray-400"
-                >
-                  NEXT
-                </AdidasButton>
-              </div>
-            )}
-          </>
-        )}
+        {/* Product Grid */}
+        <InfiniteScrollContainer onBottomReached={handleLoadMore}>
+          <ProductListContainer
+            products={products}
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            viewMode={viewMode}
+          />
+        </InfiniteScrollContainer>
 
         {/* No Results */}
         {!isFetching && products.length === 0 && (
           <div className="text-center py-12">
             <Search className="h-12 w-12 text-gray-700 dark:text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-400">
-              No products found
+              {t?.noProductsFound || "No products found"}
             </h3>
             <p className="text-gray-700 dark:text-gray-400 mb-4">
               {query
@@ -367,14 +225,20 @@ export default function ProductsPage() {
                 : "No products available"}
             </p>
             {query && (
-              <AdidasButton
+              <Button
                 onClick={() => handleSearch("")}
                 variant="outline"
                 className="border text-gray-700 dark:text-gray-400"
               >
                 CLEAR SEARCH
-              </AdidasButton>
+              </Button>
             )}
+            <Button onClick={() => refetch()} variant="default">
+              {t2?.retry || "Retry"}
+            </Button>
+            <Button variant="link" onClick={() => router.back()} className="mt-2 text-base text-gray-500">
+              {t2?.goBack || "← Go Back"}
+            </Button>
           </div>
         )}
       </div>
