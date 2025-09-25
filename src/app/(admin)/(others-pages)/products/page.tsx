@@ -3,7 +3,7 @@
 import PageBreadcrumb from "@/components/common/PageBreadCrumb"
 import { useState } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
-import { Package, Plus, Filter, Grid, List, Search } from "lucide-react"
+import { Package, Plus, Filter, Grid, List, Search, Eye, Edit } from "lucide-react"
 import { AdidasButton } from "@/components/ui/adidas-button"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -14,6 +14,8 @@ import ComponentCard from "@/components/common/ComponentCard"
 import { useSearchProductsFeed } from "@/hooks/useProducts"
 import Link from "next/link"
 import { slugify } from "@/utils/slugify"
+import { Mode } from "@/components/ui/mode-switcher"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 interface Variant {
   variant_code: string
@@ -80,7 +82,7 @@ export default function ProductsPage() {
           {/* Header */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
-              <div className="flex aspect-square size-10 items-center justify-center bg-black dark:bg-white text-white dark:text-black">
+              <div className="flex aspect-square size-10 items-center justify-center text-black dark:text-white">
                 <Package className="size-5" />
               </div>
               <div>
@@ -248,21 +250,25 @@ export default function ProductsPage() {
                             </div>
 
                             <div className="flex gap-1">
-                              <AdidasButton
-                                size="sm"
-                                variant="outline"
-                                className="text-xs text-gray-700 dark:text-gray-400"
-                                href={`/products/edit/${slugify(product.name)}/${firstVariant?.variant_code}.html?mode=edit`}
+                              <ToggleGroup
+                                type="single"
+                                onValueChange={(value) => {
+                                  if (value) {
+                                    router.push(
+                                      `/products/edit/${slugify(product.name)}/${firstVariant?.variant_code}.html?mode=${value as Mode}`
+                                    )
+                                  }
+                                }}
                               >
-                                EDIT
-                              </AdidasButton>
-                              <AdidasButton
-                                size="sm"
-                                className="text-xs text-gray-700 dark:text-gray-400"
-                                href={`/products/edit/${slugify(product.name)}/${firstVariant?.variant_code}.html?mode=view`}
-                              >
-                                VIEW
-                              </AdidasButton>
+                                <ToggleGroupItem value="view" aria-label="View mode">
+                                  <Eye className="h-4 w-4 mr-2" />
+                                  View
+                                </ToggleGroupItem>
+                                <ToggleGroupItem value="edit" aria-label="Edit mode">
+                                  <Edit className="h-4 w-4 mr-2" />
+                                  Edit
+                                </ToggleGroupItem>
+                              </ToggleGroup>
                             </div>
                           </div>
                         </div>
