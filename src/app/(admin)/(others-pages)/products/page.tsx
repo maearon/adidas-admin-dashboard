@@ -77,308 +77,308 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <PageBreadcrumb pageTitle="Products" />
-      <ComponentCard title="All Products">
-        <div className="container mx-auto px-4 py-6 text-gray-700 dark:text-gray-400">
-          {/* Header */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-3">
-              <div className="flex aspect-square size-10 items-center justify-center text-black dark:text-white">
-                <Package className="size-5" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold uppercase tracking-wide text-black dark:text-white">
-                  PRODUCTS
-                </h1>
-                <p className="text-sm text-gray-700 dark:text-gray-400">
-                  {totalCount} products found
-                  {query && ` for "${query}"`}
-                </p>
-              </div>
+      {/* <PageBreadcrumb pageTitle="Products" />
+      <ComponentCard title="All Products"> */}
+      <div className="container mx-auto px-4 py-6 text-gray-700 dark:text-gray-400">
+        {/* Header */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-3">
+            <div className="flex aspect-square size-10 items-center justify-center text-black dark:text-white">
+              <Package className="size-5" />
             </div>
-
-            <div className="flex flex-col sm:flex-row gap-3">
-              <div className="flex-1 sm:w-80">
-                <EnhancedSearchField
-                  placeholder="Search products..."
-                  onSearch={handleSearch}
-                  autoFocus={!!query}
-                  className="w-full"
-                />
-              </div>
-
-              <div className="flex gap-2">
-                {/* Grid view */}
-                <AdidasButton
-                  variant={viewMode === "grid" ? "default" : "outline"}
-                  size="icon"
-                  onClick={() => setViewMode("grid")}
-                  className={cn(
-                    "border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400",
-                    viewMode === "grid" &&
-                      "border-brand-500 ring-2 ring-brand-500/20 text-brand-600 dark:text-brand-400"
-                  )}
-                >
-                  <Grid className="h-4 w-4" />
-                </AdidasButton>
-
-                {/* List view */}
-                <AdidasButton
-                  variant={viewMode === "grid" ? "default" : "outline"}
-                  size="icon"
-                  onClick={() => setViewMode("list")}
-                  className={cn(
-                    "border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400",
-                    viewMode === "list" &&
-                      "border-brand-500 ring-2 ring-brand-500/20 text-brand-600 dark:text-brand-400"
-                  )}
-                >
-                  <List className="h-4 w-4" />
-                </AdidasButton>
-
-                {/* Filters */}
-                <AdidasButton
-                  variant="outline"
-                  shadow={false}
-                  pressEffect={false}
-                  showArrow={false}
-                  className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400"
-                >
-                  <Filter className="h-4 w-4 mr-2" />
-                  <span className="hidden sm:inline">FILTERS</span>
-                </AdidasButton>
-
-                {/* Add product */}
-                <AdidasButton
-                  variant="outline"
-                  shadow={false}
-                  pressEffect={false}
-                  showArrow={false}
-                  className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400"
-                >
-                  <Link href="/products/new" className="flex items-center">
-                    <Plus className="h-4 w-4 mr-2" />
-                    <span className="hidden sm:inline">ADD PRODUCT</span>
-                  </Link>
-                </AdidasButton>
-              </div>
+            <div>
+              <h1 className="text-2xl font-bold uppercase tracking-wide text-black dark:text-white">
+                PRODUCTS
+              </h1>
+              <p className="text-sm text-gray-700 dark:text-gray-400">
+                {totalCount} products found
+                {query && ` for "${query}"`}
+              </p>
             </div>
           </div>
 
-          {/* Loading Skeleton */}
-          {isFetching && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <Card
-                  key={i}
-                  className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
-                >
-                  <CardContent className="p-4">
-                    <div className="aspect-square bg-muted animate-pulse mb-4" />
-                    <div className="h-4 bg-muted animate-pulse mb-2" />
-                    <div className="h-4 bg-muted animate-pulse w-2/3" />
-                  </CardContent>
-                </Card>
-              ))}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex-1 sm:w-80">
+              <EnhancedSearchField
+                placeholder="Search products..."
+                onSearch={handleSearch}
+                autoFocus={!!query}
+                className="w-full"
+              />
             </div>
-          )}
 
-          {/* Products */}
-          {!isFetching && products.length > 0 && (
-            <>
-              <div
-                className={`grid gap-6 ${
-                  viewMode === "grid"
-                    ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                    : "grid-cols-1"
-                }`}
+            <div className="flex gap-2">
+              {/* Grid view */}
+              <AdidasButton
+                variant={viewMode === "grid" ? "default" : "outline"}
+                size="icon"
+                onClick={() => setViewMode("grid")}
+                className={cn(
+                  "border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400",
+                  viewMode === "grid" &&
+                    "border-brand-500 ring-2 ring-brand-500/20 text-brand-600 dark:text-brand-400"
+                )}
               >
-                {products.map((product) => {
-                  const firstVariant = product.variants?.[0]
-                  const mainImage =
-                    product.main_image_url ||
-                    firstVariant?.avatar_url ||
-                    product.thumbnail ||
-                    ""
-                  const hoverImage =
-                    product.hover_image_url || firstVariant?.hover_url || ""
+                <Grid className="h-4 w-4" />
+              </AdidasButton>
 
-                  return (
-                    <Card
-                      key={product.id}
-                      className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] hover:shadow-lg transition-shadow"
+              {/* List view */}
+              <AdidasButton
+                variant={viewMode === "grid" ? "default" : "outline"}
+                size="icon"
+                onClick={() => setViewMode("list")}
+                className={cn(
+                  "border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400",
+                  viewMode === "list" &&
+                    "border-brand-500 ring-2 ring-brand-500/20 text-brand-600 dark:text-brand-400"
+                )}
+              >
+                <List className="h-4 w-4" />
+              </AdidasButton>
+
+              {/* Filters */}
+              <AdidasButton
+                variant="outline"
+                shadow={false}
+                pressEffect={false}
+                showArrow={false}
+                className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400"
+              >
+                <Filter className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">FILTERS</span>
+              </AdidasButton>
+
+              {/* Add product */}
+              <AdidasButton
+                variant="outline"
+                shadow={false}
+                pressEffect={false}
+                showArrow={false}
+                className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400"
+              >
+                <Link href="/products/new" className="flex items-center">
+                  <Plus className="h-4 w-4 mr-2" />
+                  <span className="hidden sm:inline">ADD PRODUCT</span>
+                </Link>
+              </AdidasButton>
+            </div>
+          </div>
+        </div>
+
+        {/* Loading Skeleton */}
+        {isFetching && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Card
+                key={i}
+                className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
+              >
+                <CardContent className="p-4">
+                  <div className="aspect-square bg-muted animate-pulse mb-4" />
+                  <div className="h-4 bg-muted animate-pulse mb-2" />
+                  <div className="h-4 bg-muted animate-pulse w-2/3" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {/* Products */}
+        {!isFetching && products.length > 0 && (
+          <>
+            <div
+              className={`grid gap-6 ${
+                viewMode === "grid"
+                  ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                  : "grid-cols-1"
+              }`}
+            >
+              {products.map((product) => {
+                const firstVariant = product.variants?.[0]
+                const mainImage =
+                  product.main_image_url ||
+                  firstVariant?.avatar_url ||
+                  product.thumbnail ||
+                  ""
+                const hoverImage =
+                  product.hover_image_url || firstVariant?.hover_url || ""
+
+                return (
+                  <Card
+                    key={product.id}
+                    className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] hover:shadow-lg transition-shadow"
+                  >
+                    <CardContent
+                      className={`p-4 ${
+                        viewMode === "list" ? "flex gap-4" : ""
+                      }`}
                     >
-                      <CardContent
-                        className={`p-4 ${
-                          viewMode === "list" ? "flex gap-4" : ""
-                        }`}
+                      {/* Image */}
+                      <div
+                        className={`${
+                          viewMode === "list"
+                            ? "w-32 h-32 flex-shrink-0"
+                            : "aspect-square"
+                        } mb-4 relative overflow-hidden`}
                       >
-                        {/* Image */}
-                        <div
-                          className={`${
-                            viewMode === "list"
-                              ? "w-32 h-32 flex-shrink-0"
-                              : "aspect-square"
-                          } mb-4 relative overflow-hidden`}
-                        >
-                          {mainImage && (
-                            <>
+                        {mainImage && (
+                          <>
+                            <Image
+                              src={mainImage}
+                              alt={product.name || product.title || ""}
+                              fill
+                              className="object-cover transition-opacity duration-300 group-hover:opacity-0"
+                            />
+                            {hoverImage && (
                               <Image
-                                src={mainImage}
-                                alt={product.name || product.title || ""}
+                                src={hoverImage}
+                                alt={`${product.name} hover`}
                                 fill
-                                className="object-cover transition-opacity duration-300 group-hover:opacity-0"
+                                className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                               />
-                              {hoverImage && (
-                                <Image
-                                  src={hoverImage}
-                                  alt={`${product.name} hover`}
-                                  fill
-                                  className="object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                                />
-                              )}
-                            </>
-                          )}
-                        </div>
+                            )}
+                          </>
+                        )}
+                      </div>
 
-                        {/* Content */}
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between mb-2">
-                            <div>
-                              <h3 className="font-semibold text-sm line-clamp-2 text-gray-700 dark:text-gray-400">
-                                {product.name || product.title}
-                              </h3>
-                              {product.sport && (
-                                <Badge
-                                  variant="secondary"
-                                  className="text-xs mt-1 text-gray-700 dark:text-gray-400"
-                                >
-                                  {product.sport}
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span className="font-bold text-gray-700 dark:text-gray-400">
-                                ${product.price}
-                              </span>
-                              {product.original_price &&
-                                product.original_price > product.price && (
-                                  <span className="text-sm text-gray-700 dark:text-gray-400 line-through">
-                                    ${product.original_price}
-                                  </span>
-                                )}
-                            </div>
-
-                            <div className="flex gap-1">
-                              <ToggleGroup
-                                type="single"
-                                onValueChange={(value) => {
-                                  if (value) {
-                                    router.push(
-                                      `/products/edit/${slugify(product.name)}/${firstVariant?.variant_code}.html?mode=${value as Mode}`
-                                    )
-                                  }
-                                }}
+                      {/* Content */}
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between mb-2">
+                          <div>
+                            <h3 className="font-semibold text-sm line-clamp-2 text-gray-700 dark:text-gray-400">
+                              {product.name || product.title}
+                            </h3>
+                            {product.sport && (
+                              <Badge
+                                variant="secondary"
+                                className="text-xs mt-1 text-gray-700 dark:text-gray-400"
                               >
-                                <ToggleGroupItem value="view" aria-label="View mode">
-                                  <Eye className="h-4 w-4 mr-2" />
-                                  View
-                                </ToggleGroupItem>
-                                <ToggleGroupItem value="edit" aria-label="Edit mode">
-                                  <Edit className="h-4 w-4 mr-2" />
-                                  Edit
-                                </ToggleGroupItem>
-                              </ToggleGroup>
-                            </div>
+                                {product.sport}
+                              </Badge>
+                            )}
                           </div>
                         </div>
-                      </CardContent>
-                    </Card>
-                  )
-                })}
-              </div>
 
-              {/* Pagination */}
-              {pagination.totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 mt-8">
-                  <AdidasButton
-                    variant="outline"
-                    disabled={!pagination.hasPrevPage}
-                    onClick={() =>
-                      handlePageChange(pagination.currentPage - 1)
-                    }
-                    className="border text-gray-700 dark:text-gray-400"
-                  >
-                    PREVIOUS
-                  </AdidasButton>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-gray-700 dark:text-gray-400">
+                              ${product.price}
+                            </span>
+                            {product.original_price &&
+                              product.original_price > product.price && (
+                                <span className="text-sm text-gray-700 dark:text-gray-400 line-through">
+                                  ${product.original_price}
+                                </span>
+                              )}
+                          </div>
 
-                  <div className="flex items-center gap-2">
-                    {Array.from(
-                      { length: Math.min(5, pagination.totalPages) },
-                      (_, i) => {
-                        const pageNum = i + 1
-                        return (
-                          <AdidasButton
-                            key={pageNum}
-                            variant={
-                              pageNum === pagination.currentPage
-                                ? "default"
-                                : "outline"
-                            }
-                            size="sm"
-                            onClick={() => handlePageChange(pageNum)}
-                            className="border w-10 text-gray-700 dark:text-gray-400"
-                          >
-                            {pageNum}
-                          </AdidasButton>
-                        )
-                      }
-                    )}
-                  </div>
+                          <div className="flex gap-1">
+                            <ToggleGroup
+                              type="single"
+                              onValueChange={(value) => {
+                                if (value) {
+                                  router.push(
+                                    `/products/edit/${slugify(product.name)}/${firstVariant?.variant_code}.html?mode=${value as Mode}`
+                                  )
+                                }
+                              }}
+                            >
+                              <ToggleGroupItem value="view" aria-label="View mode">
+                                <Eye className="h-4 w-4 mr-2" />
+                                View
+                              </ToggleGroupItem>
+                              <ToggleGroupItem value="edit" aria-label="Edit mode">
+                                <Edit className="h-4 w-4 mr-2" />
+                                Edit
+                              </ToggleGroupItem>
+                            </ToggleGroup>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
 
-                  <AdidasButton
-                    variant="outline"
-                    disabled={!pagination.hasNextPage}
-                    onClick={() =>
-                      handlePageChange(pagination.currentPage + 1)
-                    }
-                    className="border text-gray-700 dark:text-gray-400"
-                  >
-                    NEXT
-                  </AdidasButton>
-                </div>
-              )}
-            </>
-          )}
-
-          {/* No Results */}
-          {!isFetching && products.length === 0 && (
-            <div className="text-center py-12">
-              <Search className="h-12 w-12 text-gray-700 dark:text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-400">
-                No products found
-              </h3>
-              <p className="text-gray-700 dark:text-gray-400 mb-4">
-                {query
-                  ? `No results for "${query}"`
-                  : "No products available"}
-              </p>
-              {query && (
+            {/* Pagination */}
+            {pagination.totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-8">
                 <AdidasButton
-                  onClick={() => handleSearch("")}
                   variant="outline"
+                  disabled={!pagination.hasPrevPage}
+                  onClick={() =>
+                    handlePageChange(pagination.currentPage - 1)
+                  }
                   className="border text-gray-700 dark:text-gray-400"
                 >
-                  CLEAR SEARCH
+                  PREVIOUS
                 </AdidasButton>
-              )}
-            </div>
-          )}
-        </div>
-      </ComponentCard>
+
+                <div className="flex items-center gap-2">
+                  {Array.from(
+                    { length: Math.min(5, pagination.totalPages) },
+                    (_, i) => {
+                      const pageNum = i + 1
+                      return (
+                        <AdidasButton
+                          key={pageNum}
+                          variant={
+                            pageNum === pagination.currentPage
+                              ? "default"
+                              : "outline"
+                          }
+                          size="sm"
+                          onClick={() => handlePageChange(pageNum)}
+                          className="border w-10 text-gray-700 dark:text-gray-400"
+                        >
+                          {pageNum}
+                        </AdidasButton>
+                      )
+                    }
+                  )}
+                </div>
+
+                <AdidasButton
+                  variant="outline"
+                  disabled={!pagination.hasNextPage}
+                  onClick={() =>
+                    handlePageChange(pagination.currentPage + 1)
+                  }
+                  className="border text-gray-700 dark:text-gray-400"
+                >
+                  NEXT
+                </AdidasButton>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* No Results */}
+        {!isFetching && products.length === 0 && (
+          <div className="text-center py-12">
+            <Search className="h-12 w-12 text-gray-700 dark:text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-400">
+              No products found
+            </h3>
+            <p className="text-gray-700 dark:text-gray-400 mb-4">
+              {query
+                ? `No results for "${query}"`
+                : "No products available"}
+            </p>
+            {query && (
+              <AdidasButton
+                onClick={() => handleSearch("")}
+                variant="outline"
+                className="border text-gray-700 dark:text-gray-400"
+              >
+                CLEAR SEARCH
+              </AdidasButton>
+            )}
+          </div>
+        )}
+      </div>
+      {/* </ComponentCard> */}
     </div>
   )
 }
