@@ -96,126 +96,138 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* <PageBreadcrumb pageTitle="Products" />
-      <ComponentCard title="All Products"> */}
-      <div className="container mx-auto px-4 py-6 text-gray-700 dark:text-gray-400">
+      <PageBreadcrumb pageTitle="Products" />
+      {/* <ComponentCard title="All Products"> */}
+      <div className="grid grid-cols-12 gap-4 md:gap-6">
+      <div className="col-span-12">
+      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-          <div className="flex items-center gap-3">
-            <div className="flex aspect-square size-10 items-center justify-center text-black dark:text-white">
-              <Package className="size-5" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold uppercase tracking-wide text-black dark:text-white">
-                PRODUCTS
-              </h1>
-              {products.length > 0 && (
-                <p className="text-sm text-gray-700 dark:text-gray-400">
-                  {t2?.showingResults?.replace('{count}', products.length.toString()).replace('{total}', totalCount.toString()) || `Showing ${products.length} of ${totalCount} results `}
-                  {(query || "a") && ` for "${query || "a"}"`}
-                </p>
-              )}
-            </div>
+        <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
+              Products
+            </h3>
+            {products.length > 0 && (
+              <p className="text-sm text-gray-700 dark:text-gray-400">
+                {t2?.showingResults?.replace('{count}', products.length.toString()).replace('{total}', totalCount.toString()) || `Showing ${products.length} of ${totalCount} results `}
+                {(query || "a") && ` for "${query || "a"}"`}
+              </p>
+            )}
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex-1 sm:w-80">
-              <EnhancedSearchField
-                placeholder="Search products..."
-                onSearch={handleSearch}
-                autoFocus={!!query}
-                className="w-full"
-              />
-            </div>
-
-            <div className="flex gap-2">
-              {/* Grid view */}
-              <AdidasButton
-                variant={viewMode === "grid" ? "default" : "outline"}
-                size="icon"
-                onClick={() => setViewMode("grid")}
-                className={cn(
-                  "border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400",
-                  viewMode === "grid" &&
-                    "border-brand-500 ring-2 ring-brand-500/20 text-brand-600 dark:text-brand-400"
-                )}
+          <div className="flex items-center gap-3">
+            {/* <div className="flex flex-col sm:flex-row gap-3"> */}
+            {/* <div className="flex-1 sm:w-80"> */}
+            {/* <div className="flex gap-2"> */}
+            <EnhancedSearchField
+              placeholder="Search products..."
+              onSearch={handleSearch}
+              autoFocus={!!query}
+              className="w-full"
+            />
+            {/* Grid view */}
+            <AdidasButton
+              variant={viewMode === "grid" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("grid")}
+              className={cn(
+                "border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400",
+                viewMode === "grid" &&
+                  "border-brand-500 ring-2 ring-brand-500/20 text-brand-600 dark:text-brand-400"
+              )}
+            >
+              <Grid className="h-4 w-4" />
+            </AdidasButton>
+            {/* List view */}
+            <AdidasButton
+              variant={viewMode === "grid" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("list")}
+              className={cn(
+                "border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400",
+                viewMode === "list" &&
+                  "border-brand-500 ring-2 ring-brand-500/20 text-brand-600 dark:text-brand-400"
+              )}
+            >
+              <List className="h-4 w-4" />
+            </AdidasButton>
+            {/* Filters */}
+            <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+              <svg
+                className="stroke-current fill-white dark:fill-gray-800"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <Grid className="h-4 w-4" />
-              </AdidasButton>
-
-              {/* List view */}
-              <AdidasButton
-                variant={viewMode === "grid" ? "default" : "outline"}
-                size="icon"
-                onClick={() => setViewMode("list")}
-                className={cn(
-                  "border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400",
-                  viewMode === "list" &&
-                    "border-brand-500 ring-2 ring-brand-500/20 text-brand-600 dark:text-brand-400"
-                )}
-              >
-                <List className="h-4 w-4" />
-              </AdidasButton>
-
-              {/* Filters */}
-              <AdidasButton
-                variant="outline"
-                shadow={false}
-                pressEffect={false}
-                showArrow={false}
-                className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400"
-              >
-                <Filter className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">FILTERS</span>
-              </AdidasButton>
-
-              {/* Add product */}
-              <AdidasButton
-                variant="outline"
-                shadow={false}
-                pressEffect={false}
-                showArrow={false}
-                className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] text-gray-700 dark:text-gray-400"
-              >
-                <Link href="/products/new" className="flex items-center">
-                  <Plus className="h-4 w-4 mr-2" />
-                  <span className="hidden sm:inline">ADD PRODUCT</span>
-                </Link>
-              </AdidasButton>
-            </div>
+                <path
+                  d="M2.29004 5.90393H17.7067"
+                  stroke=""
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M17.7075 14.0961H2.29085"
+                  stroke=""
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M12.0826 3.33331C13.5024 3.33331 14.6534 4.48431 14.6534 5.90414C14.6534 7.32398 13.5024 8.47498 12.0826 8.47498C10.6627 8.47498 9.51172 7.32398 9.51172 5.90415C9.51172 4.48432 10.6627 3.33331 12.0826 3.33331Z"
+                  fill=""
+                  stroke=""
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M7.91745 11.525C6.49762 11.525 5.34662 12.676 5.34662 14.0959C5.34661 15.5157 6.49762 16.6667 7.91745 16.6667C9.33728 16.6667 10.4883 15.5157 10.4883 14.0959C10.4883 12.676 9.33728 11.525 7.91745 11.525Z"
+                  fill=""
+                  stroke=""
+                  strokeWidth="1.5"
+                />
+              </svg>
+              Filter
+            </button>
+            {/* Add product */}
+            <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+              See all
+            </button>
           </div>
         </div>
+        
+        <div className="max-w-full overflow-x-auto">
+          {/* Loading Skeleton */}
+          {(status === "pending") && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <Card
+                  key={i}
+                  className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
+                >
+                  <CardContent className="p-4">
+                    <div className="aspect-square bg-muted animate-pulse mb-4" />
+                    <div className="h-4 bg-muted animate-pulse mb-2" />
+                    <div className="h-4 bg-muted animate-pulse w-2/3" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
 
-        {/* Loading Skeleton */}
-        {(status === "pending") && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <Card
-                key={i}
-                className="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
-              >
-                <CardContent className="p-4">
-                  <div className="aspect-square bg-muted animate-pulse mb-4" />
-                  <div className="h-4 bg-muted animate-pulse mb-2" />
-                  <div className="h-4 bg-muted animate-pulse w-2/3" />
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
+          {/* Product Grid */}
+          <InfiniteScrollContainer onBottomReached={handleLoadMore}>
+            <ProductListContainer
+              products={products}
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              viewMode={viewMode}
+            />
+          </InfiniteScrollContainer>
 
-        {/* Product Grid */}
-        <InfiniteScrollContainer onBottomReached={handleLoadMore}>
-          <ProductListContainer
-            products={products}
-            hasNextPage={hasNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-            viewMode={viewMode}
-          />
-        </InfiniteScrollContainer>
-
-        {/* No Results */}
-        {!isFetching && products.length === 0 && (
+          {/* No Results */}
+          {!isFetching && products.length === 0 && (
           <div className="text-center py-12">
             <Search className="h-12 w-12 text-gray-700 dark:text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-400">
@@ -243,6 +255,9 @@ export default function ProductsPage() {
             </Button>
           </div>
         )}
+        </div>
+      </div>
+      </div>
       </div>
       {/* </ComponentCard> */}
     </div>
