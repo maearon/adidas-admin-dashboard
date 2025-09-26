@@ -76,7 +76,7 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
                 className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
               >
                 <ArrowLeft size={16} />
-                {t?.back || "BACK"}
+                {t?.back || "Back"}
               </button>
               <svg
                 className="stroke-current"
