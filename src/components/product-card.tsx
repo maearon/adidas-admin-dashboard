@@ -7,10 +7,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { slugify } from "@/utils/slugify";
 import type { Product } from "@/types/product";
 import { Badge } from "@/components/ui/badge";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Edit, Eye } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Mode } from "@/components/ui/mode-switcher";
+// import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+// import { Edit, Eye } from "lucide-react";
+// import { useRouter } from "next/navigation";
+// import { Mode } from "@/components/ui/mode-switcher";
 
 interface ProductCardProps {
   product: Product;
@@ -21,7 +21,7 @@ export default function ProductCard({
   product,
   viewMode,
 }: ProductCardProps) {
-  const router = useRouter();
+  // const router = useRouter();
 
   const defaultVariant = product.variants?.[0] ?? null;
   const fallbackUrl = `/products/edit/${slugify(
@@ -100,7 +100,7 @@ export default function ProductCard({
                   )}
               </div>
 
-              <div className="flex gap-1">
+              {/* <div className="flex gap-1">
                 <ToggleGroup
                   type="single"
                   onValueChange={(value) => {
@@ -124,7 +124,7 @@ export default function ProductCard({
                     Edit
                   </ToggleGroupItem>
                 </ToggleGroup>
-              </div>
+              </div> */}
             </div>
           </div>
         </CardContent>
