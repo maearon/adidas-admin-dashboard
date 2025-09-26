@@ -42,7 +42,7 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
     crumbs = [{ label: pageTitle, href: `/${pageTitle.toLowerCase()}` }]
   }
 
-  // Xác định tiêu đề h2
+  // Heading hiển thị theo logic
   let heading = ""
   if (pageTitle && items.length === 0) {
     heading = pageTitle
@@ -68,8 +68,9 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
 
       <nav>
         <ol className="flex items-center gap-1.5">
+          {/* Back button */}
           {showBackButton && (
-            <li>
+            <li className="flex items-center gap-1.5">
               <button
                 onClick={handleBack}
                 className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
@@ -97,12 +98,14 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
           )}
 
           {/* Home link */}
-          <li>
+          <li className="flex items-center gap-1.5">
             <Link
-              className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
+              className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
               href="/"
             >
               {t?.home || "Home"}
+            </Link>
+            {crumbs.length > 0 && (
               <svg
                 className="stroke-current"
                 width="17"
@@ -119,7 +122,7 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
                   strokeLinejoin="round"
                 />
               </svg>
-            </Link>
+            )}
           </li>
 
           {/* Render crumbs */}
@@ -127,36 +130,36 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
             const isLast = index === crumbs.length - 1
 
             return (
-              <li key={index}>
+              <li key={index} className="flex items-center gap-1.5">
                 {isLast && useLastItemHighlight ? (
                   <span className="text-sm text-gray-800 dark:text-white/90">
                     {crumb.label}
                   </span>
                 ) : (
-                  <Link
-                    href={crumb.href || "#"}
-                    className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
-                  >
-                    {crumb.label}
-                    {!isLast && (
-                      <svg
-                        className="stroke-current"
-                        width="17"
-                        height="16"
-                        viewBox="0 0 17 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M6.0765 12.667L10.2432 8.50033L6.0765 4.33366"
-                          stroke=""
-                          strokeWidth="1.2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    )}
-                  </Link>
+                  <>
+                    <Link
+                      href={crumb.href || "#"}
+                      className="text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
+                    >
+                      {crumb.label}
+                    </Link>
+                    <svg
+                      className="stroke-current"
+                      width="17"
+                      height="16"
+                      viewBox="0 0 17 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6.0765 12.667L10.2432 8.50033L6.0765 4.33366"
+                        stroke=""
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </>
                 )}
               </li>
             )
