@@ -108,7 +108,7 @@ export default function ProductsPage() {
               Products
             </h3>
             {products.length > 0 && (
-              <p className="text-sm text-gray-700 dark:text-gray-400">
+              <p className="mt-1 font-normal text-gray-500 text-theme-sm dark:text-gray-400">
                 {t2?.showingResults?.replace('{count}', products.length.toString()).replace('{total}', totalCount.toString()) || `Showing ${products.length} of ${totalCount} results `}
                 {(query || "a") && ` for "${query || "a"}"`}
               </p>
@@ -152,7 +152,7 @@ export default function ProductsPage() {
               <List className="h-4 w-4" />
             </AdidasButton>
             {/* Filters */}
-            <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+            {/* <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
               <svg
                 className="stroke-current fill-white dark:fill-gray-800"
                 width="20"
@@ -189,10 +189,14 @@ export default function ProductsPage() {
                 />
               </svg>
               Filter
-            </button>
+            </button> */}
             {/* Add product */}
-            <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-              See all
+            <button 
+              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+              onClick={() => router.push('/products/new')}
+            >
+              <Plus className="h-4 w-4" />
+              Add Product
             </button>
           </div>
         </div>
