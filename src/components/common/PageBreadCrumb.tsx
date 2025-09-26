@@ -79,7 +79,7 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
                 {t?.back || "Back"}
               </button>
               <svg
-                className="stroke-current"
+                className="stroke-current text-black dark:text-white"
                 width="17"
                 height="16"
                 viewBox="0 0 17 16"
@@ -107,7 +107,7 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
             </Link>
             {crumbs.length > 0 && (
               <svg
-                className="stroke-current"
+                className="stroke-current text-black dark:text-white"
                 width="17"
                 height="16"
                 viewBox="0 0 17 16"
@@ -144,7 +144,7 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
                       {crumb.label}
                     </Link>
                     <svg
-                      className="stroke-current"
+                      className="stroke-current text-black dark:text-white"
                       width="17"
                       height="16"
                       viewBox="0 0 17 16"
