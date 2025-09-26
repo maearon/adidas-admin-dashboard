@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import EditProductPageClient from "./EditProductPageClient";
 import { formatSlugTitle } from "@/utils/category-config.auto";
 import { Loading } from "@/components/loading";
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import { getBreadcrumbTrail } from "@/utils/breadcrumb";
 
 interface ProductDetailPageProps {
   params: { slug?: string; variant_code?: string };
@@ -31,8 +33,11 @@ const ProductDetailPage = async (props: ProductDetailPageProps) => {
   return (
     <div className="min-h-screen bg-background">
       <Suspense fallback={<Loading />}>
-        {/* <PageBreadcrumb pageTitle="Edit, View, Create Product" />
-        <ComponentCard title="Edit, View, Create Product"> */}
+        <PageBreadcrumb
+          pageTitle={formatSlugTitle(slug)}
+          items={getBreadcrumbTrail(`products-${mode || "view"}`)}
+        />
+        {/* <ComponentCard title="Edit, View, Create Product"> */}
         <EditProductPageClient
           params={{
             slug,

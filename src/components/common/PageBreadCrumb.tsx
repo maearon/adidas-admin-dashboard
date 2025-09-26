@@ -1,27 +1,108 @@
-import Link from "next/link";
-import React from "react";
+"use client"
 
-interface BreadcrumbProps {
-  pageTitle: string;
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { ArrowLeft } from "lucide-react"
+import { BreadcrumbItem } from "@/types/bread-crumb"
+import { cn } from "@/lib/utils"
+import { useTranslations } from "@/hooks/useTranslations"
+import React from "react"
+
+type BreadcrumbProps = {
+  items?: BreadcrumbItem[]
+  pageTitle?: string
+  className?: string
+  showBackButton?: boolean
+  useLastItemHighlight?: boolean
 }
 
-const PageBreadcrumb: React.FC<BreadcrumbProps> = ({ pageTitle }) => {
+const PageBreadcrumb: React.FC<BreadcrumbProps> = ({
+  items = [],
+  pageTitle = "",
+  className = "",
+  showBackButton = true,
+  useLastItemHighlight = true,
+}) => {
+  const router = useRouter()
+  const t = useTranslations("common")
+
+  function handleBack() {
+    if (window.history.length > 1) {
+      router.back()
+    } else {
+      router.push("/")
+    }
+  }
+
+  let crumbs: BreadcrumbItem[] = []
+
+  if (items.length > 0) {
+    crumbs = items
+  } else if (pageTitle) {
+    crumbs = [{ label: pageTitle, href: `/${pageTitle.toLowerCase()}` }]
+  }
+
+  // Xác định tiêu đề h2
+  let heading = ""
+  if (pageTitle && items.length === 0) {
+    heading = pageTitle
+  } else if (!pageTitle && items.length > 0) {
+    heading = items[items.length - 1].label
+  } else if (pageTitle && items.length > 0) {
+    heading = pageTitle
+  }
+
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-      <h2
-        className="text-xl font-semibold text-gray-800 dark:text-white/90"
-        // x-text="pageName"
-      >
-        {pageTitle}
-      </h2>
+    <div
+      className={cn(
+        "flex flex-wrap items-center justify-between gap-3 mb-6",
+        className
+      )}
+    >
+      {/* Heading hiển thị theo logic */}
+      {heading && (
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-white/90">
+          {heading}
+        </h2>
+      )}
+
       <nav>
         <ol className="flex items-center gap-1.5">
+          {showBackButton && (
+            <li>
+              <button
+                onClick={handleBack}
+                className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
+              >
+                <ArrowLeft size={16} />
+                {t?.back || "BACK"}
+              </button>
+              <svg
+                className="stroke-current"
+                width="17"
+                height="16"
+                viewBox="0 0 17 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6.0765 12.667L10.2432 8.50033L6.0765 4.33366"
+                  stroke=""
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </li>
+          )}
+
+          {/* Home link */}
           <li>
             <Link
-              className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400"
+              className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
               href="/"
             >
-              Home
+              {t?.home || "Home"}
               <svg
                 className="stroke-current"
                 width="17"
@@ -40,13 +121,50 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({ pageTitle }) => {
               </svg>
             </Link>
           </li>
-          <li className="text-sm text-gray-800 dark:text-white/90">
-            {pageTitle}
-          </li>
+
+          {/* Render crumbs */}
+          {crumbs.map((crumb, index) => {
+            const isLast = index === crumbs.length - 1
+
+            return (
+              <li key={index}>
+                {isLast && useLastItemHighlight ? (
+                  <span className="text-sm text-gray-800 dark:text-white/90">
+                    {crumb.label}
+                  </span>
+                ) : (
+                  <Link
+                    href={crumb.href || "#"}
+                    className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white"
+                  >
+                    {crumb.label}
+                    {!isLast && (
+                      <svg
+                        className="stroke-current"
+                        width="17"
+                        height="16"
+                        viewBox="0 0 17 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.0765 12.667L10.2432 8.50033L6.0765 4.33366"
+                          stroke=""
+                          strokeWidth="1.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
+                  </Link>
+                )}
+              </li>
+            )
+          })}
         </ol>
       </nav>
     </div>
-  );
-};
+  )
+}
 
-export default PageBreadcrumb;
+export default PageBreadcrumb
