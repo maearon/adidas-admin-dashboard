@@ -3,10 +3,7 @@ import { getAccessToken, getRefreshToken, setTokens, clearTokens } from "@/lib/t
 import type { Nullable } from "@/types/common"
 
 // Base URL config
-const BASE_URL =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3000/api"
-    : process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_RAILS_API_URL || "https://adidas-microservices.onrender.com/api"
+const BASE_URL = "https://adidas-microservices-fkgu.onrender.com"
 
 // CSRF & credentials setup
 axios.defaults.xsrfCookieName = "CSRF-TOKEN"
