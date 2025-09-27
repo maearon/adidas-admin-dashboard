@@ -269,7 +269,7 @@ export function EnhancedProductForm({
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Sneakers">Shoes</SelectItem>
+                    <SelectItem value="Shoes">Shoes</SelectItem>
                     <SelectItem value="Sneakers">Sneakers</SelectItem>
                     <SelectItem value="Cleats">Cleats</SelectItem>
                     <SelectItem value="Sandals">Sandals</SelectItem>
@@ -281,7 +281,7 @@ export function EnhancedProductForm({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="status">Franchise</Label>
+                <Label htmlFor="franchise">Franchise</Label>
                 <Select
                   value={watch("franchise")}
                   onValueChange={(value) => setValue("franchise", value)}
@@ -291,7 +291,7 @@ export function EnhancedProductForm({
                     <SelectValue placeholder="Select franchise" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="active">Tubular</SelectItem>
+                    <SelectItem value="Tubular">Tubular</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
