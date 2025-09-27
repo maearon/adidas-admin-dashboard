@@ -16,7 +16,6 @@ import { ImageUploadField } from "./image-upload-field"
 import { MultiImageUpload } from "./multi-image-upload"
 import { productSchema, type ProductFormData } from "@/lib/validations/product"
 import { Badge } from "@/components/ui/badge"
-import { Switch } from "@/components/ui/switch"
 
 interface EnhancedProductFormProps {
   initialData?: ProductFormData
@@ -28,7 +27,7 @@ interface EnhancedProductFormProps {
 export function EnhancedProductForm({
   initialData,
   onSubmit,
-  mode: initialMode = "create",
+  mode: initialMode = "view",
   loading = false,
 }: EnhancedProductFormProps) {
   const [mode, setMode] = useState<Mode>(initialMode)
