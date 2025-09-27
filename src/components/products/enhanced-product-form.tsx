@@ -15,18 +15,23 @@ import { ModeSwitcher, type Mode } from "@/components/ui/mode-switcher"
 import { ImageUploadField } from "./image-upload-field"
 import { MultiImageUpload } from "./multi-image-upload"
 import { productSchema, type ProductFormData } from "@/lib/validations/product"
+import { Badge } from "@/components/ui/badge"
+import { Switch } from "@/components/ui/switch"
 
 interface EnhancedProductFormProps {
   initialData?: ProductFormData
   onSubmit: (data: ProductFormData) => Promise<void>
   mode?: Mode
+  loading?: boolean
 }
 
-export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode = "view" }: EnhancedProductFormProps) {
-  const modeParam: Mode = initialMode === "view" || initialMode === "edit" || initialMode === "create"
-    ? (initialMode as Mode)
-    : "view"
-  const [mode, setMode] = useState<Mode>(modeParam)
+export function EnhancedProductForm({
+  initialData,
+  onSubmit,
+  mode: initialMode = "create",
+  loading = false,
+}: EnhancedProductFormProps) {
+  const [mode, setMode] = useState<Mode>(initialMode)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const {
@@ -42,18 +47,31 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
     defaultValues: initialData || {
       name: "",
       slug: "",
+      model_number: "",
       description: "",
+      description_h5: "",
+      description_p: "",
       category: "",
       sport: "",
       brand: "Adidas",
-      status: "draft",
+      gender: "Unisex",
+      status: "active",
+      product_type: "",
+      activity: "",
+      material: "",
+      collection: "",
+      franchise: "",
+      care: "",
+      specifications: "",
+      is_featured: false,
+      badge: "",
       variants: [
         {
           variant_code: "",
-          size: "",
           color: "",
           price: 0,
-          stock_quantity: 0,
+          compare_at_price: 0,
+          stock: 0,
           sku: "",
         },
       ],
@@ -67,7 +85,7 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
 
   const watchName = watch("name")
 
-  // Auto-generate slug from name
+  // Auto-generate slug and model_number from name
   useEffect(() => {
     if (watchName && mode === "create") {
       const slug = watchName
@@ -75,6 +93,13 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "")
       setValue("slug", slug)
+
+      const modelNumber =
+        watchName
+          .toUpperCase()
+          .replace(/[^A-Z0-9]+/g, "")
+          .substring(0, 10) + Date.now().toString().slice(-3)
+      setValue("model_number", modelNumber)
     }
   }, [watchName, setValue, mode])
 
@@ -105,7 +130,8 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
         <ModeSwitcher mode={mode} onModeChange={setMode} />
       </div>
 
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+      <form id="product-form" onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+        {/* Basic Information */}
         <Card>
           <CardHeader>
             <CardTitle>Basic Information</CardTitle>
@@ -113,31 +139,67 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Product Name</Label>
+                <Label htmlFor="name">Product Name *</Label>
                 <Input id="name" {...register("name")} disabled={isReadOnly} placeholder="Enter product name" />
                 {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="slug">Slug</Label>
-                <Input id="slug" {...register("slug")} disabled={isReadOnly} placeholder="product-slug" />
-                {errors.slug && <p className="text-sm text-red-500">{errors.slug.message}</p>}
+                <Label htmlFor="model_number">Model Number *</Label>
+                <Input id="model_number" {...register("model_number")} disabled={isReadOnly} placeholder="MODEL123" />
+                {errors.model_number && <p className="text-sm text-red-500">{errors.model_number.message}</p>}
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                {...register("description")}
-                disabled={isReadOnly}
-                placeholder="Enter product description"
-                rows={4}
-              />
-              {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
+              <Label htmlFor="slug">Slug</Label>
+              <Input id="slug" {...register("slug")} disabled={isReadOnly} placeholder="product-slug" />
+              {errors.slug && <p className="text-sm text-red-500">{errors.slug.message}</p>}
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="description_h5">Short Description</Label>
+              <Textarea
+                id="description_h5"
+                {...register("description_h5")}
+                disabled={isReadOnly}
+                placeholder="Brief product description"
+                rows={2}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description_p">Full Description</Label>
+              <Textarea
+                id="description_p"
+                {...register("description_p")}
+                disabled={isReadOnly}
+                placeholder="Detailed product description"
+                rows={4}
+              />
+            </div>
+
+            {/* Product Details */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="brand">Brand</Label>
+                <Select
+                  value={watch("brand")}
+                  onValueChange={(value) => setValue("brand", value)}
+                  disabled={isReadOnly}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select brand" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Adidas">Adidas</SelectItem>
+                    <SelectItem value="Nike">Nike</SelectItem>
+                    <SelectItem value="Puma">Puma</SelectItem>
+                    <SelectItem value="Reebok">Reebok</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
                 <Select
@@ -149,12 +211,11 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="shoes">Shoes</SelectItem>
-                    <SelectItem value="clothing">Clothing</SelectItem>
-                    <SelectItem value="accessories">Accessories</SelectItem>
+                    <SelectItem value="Shoes">Shoes</SelectItem>
+                    <SelectItem value="Apparel">Apparel</SelectItem>
+                    <SelectItem value="Accessories">Accessories</SelectItem>
                   </SelectContent>
                 </Select>
-                {errors.category && <p className="text-sm text-red-500">{errors.category.message}</p>}
               </div>
 
               <div className="space-y-2">
@@ -168,20 +229,62 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
                     <SelectValue placeholder="Select sport" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="football">Football</SelectItem>
-                    <SelectItem value="basketball">Basketball</SelectItem>
-                    <SelectItem value="running">Running</SelectItem>
-                    <SelectItem value="training">Training</SelectItem>
+                    <SelectItem value="Running">Running</SelectItem>
+                    <SelectItem value="Soccer">Soccer</SelectItem>
+                    <SelectItem value="Basketball">Basketball</SelectItem>
+                    <SelectItem value="Tennis">Tennis</SelectItem>
+                    <SelectItem value="Training">Training</SelectItem>
                   </SelectContent>
                 </Select>
-                {errors.sport && <p className="text-sm text-red-500">{errors.sport.message}</p>}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="gender">Gender</Label>
+                <Select
+                  value={watch("gender")}
+                  onValueChange={(value) => setValue("gender", value)}
+                  disabled={isReadOnly}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select gender" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Men">Men</SelectItem>
+                    <SelectItem value="Women">Women</SelectItem>
+                    <SelectItem value="Unisex">Unisex</SelectItem>
+                    <SelectItem value="Kids">Kids</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="product_type">Product Type</Label>
+                <Select
+                  value={watch("product_type")}
+                  onValueChange={(value) => setValue("product_type", value)}
+                  disabled={isReadOnly}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Sneakers">Sneakers</SelectItem>
+                    <SelectItem value="Cleats">Cleats</SelectItem>
+                    <SelectItem value="Sandals">Sandals</SelectItem>
+                    <SelectItem value="Hoodie">Hoodie</SelectItem>
+                    <SelectItem value="Pants">Pants</SelectItem>
+                    <SelectItem value="Shorts">Shorts</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="status">Status</Label>
                 <Select
                   value={watch("status")}
-                  onValueChange={(value) => setValue("status", value as "active" | "inactive" | "draft")}
+                  onValueChange={(value) => setValue("status", value as "active" | "inactive")}
                   disabled={isReadOnly}
                 >
                   <SelectTrigger>
@@ -190,13 +293,68 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
                   <SelectContent>
                     <SelectItem value="active">Active</SelectItem>
                     <SelectItem value="inactive">Inactive</SelectItem>
-                    <SelectItem value="draft">Draft</SelectItem>
                   </SelectContent>
                 </Select>
-                {/* {errors.status && <p className="text-sm text-red-500">{errors.status.message}</p>} */}
               </div>
             </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="material">Material</Label>
+                <Input
+                  id="material"
+                  {...register("material")}
+                  disabled={isReadOnly}
+                  placeholder="e.g., Leather, Mesh, Cotton"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="collection">Collection</Label>
+                <Input
+                  id="collection"
+                  {...register("collection")}
+                  disabled={isReadOnly}
+                  placeholder="e.g., Ultraboost, Gazelle"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="is_featured"
+                checked={watch("is_featured")}
+                onCheckedChange={(checked) => setValue("is_featured", checked)}
+                disabled={isReadOnly}
+              />
+              <Label htmlFor="is_featured">Featured Product</Label>
+            </div>
+
+            {/* Additional Information */}
+            <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="care">Care Instructions</Label>
+              <Textarea
+                id="care"
+                {...register("care")}
+                disabled={isReadOnly}
+                placeholder="Care instructions for the product"
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="specifications">Specifications</Label>
+              <Textarea
+                id="specifications"
+                {...register("specifications")}
+                disabled={isReadOnly}
+                placeholder="Technical specifications"
+                rows={3}
+              />
+            </div>
+            </div>
+            
             <Separator />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -218,6 +376,7 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
           </CardContent>
         </Card>
 
+        {/* Product Variants */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
@@ -230,10 +389,10 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
                   onClick={() =>
                     append({
                       variant_code: "",
-                      size: "",
                       color: "",
                       price: 0,
-                      stock_quantity: 0,
+                      compare_at_price: 0,
+                      stock: 0,
                       sku: "",
                     })
                   }
@@ -246,11 +405,16 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
           </CardHeader>
           <CardContent className="space-y-6">
             {fields.map((field, index) => (
-              <div key={field.id} className="border rounded-lg p-4 space-y-4">
+              <div key={field.id} className="border rounded-lg p-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-medium">Variant {index + 1}</h4>
+                  <h4 className="font-medium flex items-center gap-2">
+                    Variant {index + 1}
+                    {watch(`variants.${index}.color`) && (
+                      <Badge variant="secondary">{watch(`variants.${index}.color`)}</Badge>
+                    )}
+                  </h4>
                   {!isReadOnly && fields.length > 1 && (
-                    <Button type="button" variant="destructive" className="text-gray-700 dark:text-white" size="sm" onClick={() => remove(index)}>
+                    <Button type="button" variant="destructive" size="sm" onClick={() => remove(index)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   )}
@@ -265,13 +429,13 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
                     )}
                   </div>
 
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label>Size</Label>
                     <Input {...register(`variants.${index}.size`)} disabled={isReadOnly} placeholder="42" />
                     {errors.variants?.[index]?.size && (
                       <p className="text-sm text-red-500">{errors.variants[index]?.size?.message}</p>
                     )}
-                  </div>
+                  </div> */}
 
                   <div className="space-y-2">
                     <Label>Color</Label>
@@ -280,11 +444,16 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
                       <p className="text-sm text-red-500">{errors.variants[index]?.color?.message}</p>
                     )}
                   </div>
+
+                  <div className="space-y-2">
+                    <Label>SKU</Label>
+                    <Input {...register(`variants.${index}.sku`)} disabled={isReadOnly} placeholder="ADI-001-42-BLK" />
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
-                    <Label>Price</Label>
+                    <Label>Price ($)</Label>
                     <Input
                       type="number"
                       step="0.01"
@@ -298,23 +467,26 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Stock Quantity</Label>
+                    <Label>Compare Price ($)</Label>
                     <Input
                       type="number"
-                      {...register(`variants.${index}.stock_quantity`, { valueAsNumber: true })}
+                      step="0.01"
+                      {...register(`variants.${index}.compare_at_price`, { valueAsNumber: true })}
                       disabled={isReadOnly}
-                      placeholder="100"
+                      placeholder="129.99"
                     />
-                    {errors.variants?.[index]?.stock_quantity && (
-                      <p className="text-sm text-red-500">{errors.variants[index]?.stock_quantity?.message}</p>
-                    )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label>SKU</Label>
-                    <Input {...register(`variants.${index}.sku`)} disabled={isReadOnly} placeholder="ADI-001-42-BLK" />
-                    {errors.variants?.[index]?.sku && (
-                      <p className="text-sm text-red-500">{errors.variants[index]?.sku?.message}</p>
+                    <Label>Stock Quantity</Label>
+                    <Input
+                      type="number"
+                      {...register(`variants.${index}.stock`, { valueAsNumber: true })}
+                      disabled={isReadOnly}
+                      placeholder="100"
+                    />
+                    {errors.variants?.[index]?.stock && (
+                      <p className="text-sm text-red-500">{errors.variants[index]?.stock?.message}</p>
                     )}
                   </div>
                 </div>
@@ -354,12 +526,12 @@ export function EnhancedProductForm({ initialData, onSubmit, mode: initialMode =
         </Card>
 
         {!isReadOnly && (
-          <div className="flex justify-end gap-4">
+          <div className="flex justify-end gap-4 pt-6">
             <Button type="button" variant="outline" onClick={() => reset()}>
               Reset
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
+            <Button type="submit" disabled={isSubmitting || loading} className="min-w-[120px]">
+              {(isSubmitting || loading) ? (
                 "Saving..."
               ) : (
                 <>
