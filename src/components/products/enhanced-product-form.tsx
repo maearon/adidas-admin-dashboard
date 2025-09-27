@@ -46,7 +46,7 @@ export function EnhancedProductForm({
     resolver: zodResolver(productSchema),
     defaultValues: initialData || {
       name: "",
-      slug: "",
+      // slug: "",
       model_number: "",
       description: "",
       description_h5: "",
@@ -55,15 +55,15 @@ export function EnhancedProductForm({
       sport: "",
       brand: "Adidas",
       gender: "Unisex",
-      status: "active",
+      // status: "active",
       product_type: "",
       activity: "",
-      material: "",
-      collection: "",
+      // material: "",
+      // collection: "",
       franchise: "",
       care: "",
       specifications: "",
-      is_featured: false,
+      // is_featured: false,
       badge: "",
       variants: [
         {
@@ -72,7 +72,7 @@ export function EnhancedProductForm({
           price: 0,
           compare_at_price: 0,
           stock: 0,
-          sku: "",
+          // sku: "",
         },
       ],
     },
@@ -88,18 +88,18 @@ export function EnhancedProductForm({
   // Auto-generate slug and model_number from name
   useEffect(() => {
     if (watchName && mode === "create") {
-      const slug = watchName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)/g, "")
-      setValue("slug", slug)
+      // const slug = watchName
+      //   .toLowerCase()
+      //   .replace(/[^a-z0-9]+/g, "-")
+      //   .replace(/(^-|-$)/g, "")
+      // setValue("slug", slug)
 
-      const modelNumber =
-        watchName
-          .toUpperCase()
-          .replace(/[^A-Z0-9]+/g, "")
-          .substring(0, 10) + Date.now().toString().slice(-3)
-      setValue("model_number", modelNumber)
+      // const modelNumber =
+      //   watchName
+      //     .toUpperCase()
+      //     .replace(/[^A-Z0-9]+/g, "")
+      //     .substring(0, 10) + Date.now().toString().slice(-3)
+      // setValue("model_number", modelNumber)
     }
   }, [watchName, setValue, mode])
 
@@ -151,11 +151,11 @@ export function EnhancedProductForm({
               </div>
             </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="slug">Slug</Label>
               <Input id="slug" {...register("slug")} disabled={isReadOnly} placeholder="product-slug" />
               {errors.slug && <p className="text-sm text-red-500">{errors.slug.message}</p>}
-            </div>
+            </div> */}
 
             <div className="space-y-2">
               <Label htmlFor="description_h5">Short Description</Label>
@@ -270,6 +270,7 @@ export function EnhancedProductForm({
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="Sneakers">Shoes</SelectItem>
                     <SelectItem value="Sneakers">Sneakers</SelectItem>
                     <SelectItem value="Cleats">Cleats</SelectItem>
                     <SelectItem value="Sandals">Sandals</SelectItem>
@@ -281,6 +282,22 @@ export function EnhancedProductForm({
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="status">Franchise</Label>
+                <Select
+                  value={watch("franchise")}
+                  onValueChange={(value) => setValue("franchise", value)}
+                  disabled={isReadOnly}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select franchise" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Tubular</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* <div className="space-y-2">
                 <Label htmlFor="status">Status</Label>
                 <Select
                   value={watch("status")}
@@ -295,10 +312,10 @@ export function EnhancedProductForm({
                     <SelectItem value="inactive">Inactive</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="material">Material</Label>
                 <Input
@@ -318,9 +335,9 @@ export function EnhancedProductForm({
                   placeholder="e.g., Ultraboost, Gazelle"
                 />
               </div>
-            </div>
+            </div> */}
 
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <Switch
                 id="is_featured"
                 checked={watch("is_featured")}
@@ -328,7 +345,7 @@ export function EnhancedProductForm({
                 disabled={isReadOnly}
               />
               <Label htmlFor="is_featured">Featured Product</Label>
-            </div>
+            </div> */}
 
             {/* Additional Information */}
             <div className="grid grid-cols-1 gap-4">
@@ -372,7 +389,9 @@ export function EnhancedProductForm({
                 disabled={isReadOnly}
               />
             </div>
-            {errors.status && <p className="text-sm text-red-500">{errors.status.message}</p>}
+            {(Object.keys(errors).length > 0) && (
+              <p className="text-sm text-red-500">Please check product information</p>
+            )}
           </CardContent>
         </Card>
 
@@ -393,7 +412,7 @@ export function EnhancedProductForm({
                       price: 0,
                       compare_at_price: 0,
                       stock: 0,
-                      sku: "",
+                      // sku: "",
                     })
                   }
                 >
@@ -445,10 +464,10 @@ export function EnhancedProductForm({
                     )}
                   </div>
 
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label>SKU</Label>
                     <Input {...register(`variants.${index}.sku`)} disabled={isReadOnly} placeholder="ADI-001-42-BLK" />
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
