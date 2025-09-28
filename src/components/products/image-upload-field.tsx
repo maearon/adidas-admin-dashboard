@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import { useDropzone } from "react-dropzone"
 import { Upload } from "lucide-react"
 import { ImagePreview } from "@/components/ui/image-preview"
@@ -20,16 +20,26 @@ export function ImageUploadField({
   accept = "image/*",
   disabled = false,
 }: ImageUploadFieldProps) {
-  const [preview, setPreview] = useState<string | null>(typeof value === "string" ? value : null)
+  // 👉 build preview ổn định
+  const preview = useMemo(() => {
+    if (!value) return null
+    return typeof value === "string" ? value : URL.createObjectURL(value)
+  }, [value])
+
+  // 👉 cleanup URL nếu là File
+  useEffect(() => {
+    return () => {
+      if (value instanceof File && preview) {
+        URL.revokeObjectURL(preview)
+      }
+    }
+  }, [value, preview])
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       const file = acceptedFiles[0]
       if (file) {
         onChange(file)
-        const reader = new FileReader()
-        reader.onload = () => setPreview(reader.result as string)
-        reader.readAsDataURL(file)
       }
     },
     [onChange],
@@ -44,7 +54,6 @@ export function ImageUploadField({
 
   const handleRemove = () => {
     onChange(null)
-    setPreview(null)
   }
 
   if (preview) {
@@ -74,7 +83,9 @@ export function ImageUploadField({
       >
         <input {...getInputProps()} />
         <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
-        <p className="text-sm text-gray-600">{isDragActive ? "Drop image here" : "Click or drag image to upload"}</p>
+        <p className="text-sm text-gray-600">
+          {isDragActive ? "Drop image here" : "Click or drag image to upload"}
+        </p>
       </div>
     </div>
   )

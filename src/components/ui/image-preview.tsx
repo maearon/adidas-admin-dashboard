@@ -25,12 +25,12 @@ export function ImagePreview({ src, alt, onRemove, className = "" }: ImagePrevie
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
             <Button size="sm" variant="destructive" className="h-8 w-8 p-0">
-              <Eye className="h-4 w-4" />
+              <Eye className="h-4 w-4 text-white" />
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-3xl">
             <DialogHeader>
-              <DialogTitle>{alt}</DialogTitle>
+              <DialogTitle className="text-gray-400">{alt}</DialogTitle>
             </DialogHeader>
             <div className="flex justify-center">
               <img src={src || "/placeholder.svg"} alt={alt} className="max-w-full max-h-[70vh] object-contain" />
@@ -40,7 +40,7 @@ export function ImagePreview({ src, alt, onRemove, className = "" }: ImagePrevie
 
         {onRemove && (
           <Button size="sm" variant="destructive" className="h-8 w-8 p-0" onClick={onRemove}>
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-4 w-4 text-white" />
           </Button>
         )}
       </div>

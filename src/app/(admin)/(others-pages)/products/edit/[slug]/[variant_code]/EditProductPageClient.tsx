@@ -52,6 +52,14 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
       formData.append("product[care]", data.care || "")
       formData.append("product[specifications]", data.specifications || "")
       formData.append("product[badge]", data.badge || "")
+      // 🖼️ Upload hình ảnh
+      if (data.main_image instanceof File) {
+        formData.append(`product[image]`, data.main_image)
+      }
+      if (data.hover_image instanceof File) {
+        formData.append(`product[hover_image]`, data.hover_image)
+      }
+
 
       data.variants.forEach((variant, index) => {
         if (variant.id) {
@@ -95,7 +103,7 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
 
         // 👇 cập nhật URL theo slug và variant_code mới
         router.replace(
-          `/admin/products/edit/${newSlug}/${newVariantCode}.html?mode=edit`
+          `/products/edit/${newSlug}/${newVariantCode}.html?mode=edit`
         )
 
         // 👇 làm mới dữ liệu trong form

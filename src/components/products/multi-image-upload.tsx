@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useState, useEffect } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import { useDropzone } from "react-dropzone"
 import { Upload } from "lucide-react"
 import { ImagePreview } from "@/components/ui/image-preview"
@@ -22,34 +22,32 @@ export function MultiImageUpload({
   accept = "image/*",
   disabled = false,
 }: MultiImageUploadProps) {
-  const [previews, setPreviews] = useState<string[]>([])
-
-  useEffect(() => {
-    const newPreviews: string[] = []
-
-    value.forEach((item) => {
-      if (typeof item === "string") {
-        newPreviews.push(item)
-      } else if (item instanceof File) {
-        const reader = new FileReader()
-        reader.onload = () => {
-          newPreviews.push(reader.result as string)
-          setPreviews([...newPreviews])
-        }
-        reader.readAsDataURL(item)
-      }
-    })
-
-    if (newPreviews.length > 0) {
-      setPreviews(newPreviews)
-    }
+  // 👉 tạo previews (string cho URL, object URL cho File)
+  const previews = useMemo(() => {
+    return value.map((item) =>
+      typeof item === "string" ? item : URL.createObjectURL(item),
+    )
   }, [value])
 
+  // 👉 cleanup object URLs để tránh memory leak
+  useEffect(() => {
+    return () => {
+      previews.forEach((preview, idx) => {
+        if (value[idx] instanceof File) {
+          URL.revokeObjectURL(preview)
+        }
+      })
+    }
+  }, [previews, value])
+
+  // 👉 thêm file mới
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       const remainingSlots = maxFiles - value.length
       const filesToAdd = acceptedFiles.slice(0, remainingSlots)
-      onChange([...value, ...filesToAdd])
+      if (filesToAdd.length > 0) {
+        onChange([...value, ...filesToAdd])
+      }
     },
     [value, onChange, maxFiles],
   )
@@ -61,6 +59,7 @@ export function MultiImageUpload({
     disabled: disabled || value.length >= maxFiles,
   })
 
+  // 👉 xóa file theo index
   const handleRemove = (index: number) => {
     const newValue = value.filter((_, i) => i !== index)
     onChange(newValue)
@@ -70,6 +69,7 @@ export function MultiImageUpload({
     <div className="space-y-4">
       <label className="text-sm font-medium">{label}</label>
 
+      {/* Grid preview */}
       {previews.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {previews.map((preview, index) => (
@@ -83,6 +83,7 @@ export function MultiImageUpload({
         </div>
       )}
 
+      {/* Dropzone */}
       {value.length < maxFiles && (
         <div
           {...getRootProps()}
@@ -95,7 +96,9 @@ export function MultiImageUpload({
           <input {...getInputProps()} />
           <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
           <p className="text-sm text-gray-600">
-            {isDragActive ? "Drop images here" : `Click or drag images to upload (${value.length}/${maxFiles})`}
+            {isDragActive
+              ? "Drop images here"
+              : `Click or drag images to upload (${value.length}/${maxFiles})`}
           </p>
         </div>
       )}

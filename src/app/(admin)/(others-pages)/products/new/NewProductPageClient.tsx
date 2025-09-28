@@ -35,6 +35,13 @@ export default function NewProductPageClient() {
       formData.append("product[care]", data.care || "")
       formData.append("product[specifications]", data.specifications || "")
       formData.append("product[badge]", data.badge || "")
+      // 🖼️ Upload hình ảnh
+      if (data.main_image instanceof File) {
+        formData.append(`product[image]`, data.main_image)
+      }
+      if (data.hover_image instanceof File) {
+        formData.append(`product[hover_image]`, data.hover_image)
+      }
 
       // 🧩 Gửi variants
       data.variants.forEach((variant, index) => {
@@ -77,7 +84,7 @@ export default function NewProductPageClient() {
 
         // 🔁 Redirect sang trang edit (hoặc view tuỳ ý)
         router.replace(
-          `/admin/products/edit/${newSlug}/${newVariantCode}.html?mode=edit`
+          `/products/edit/${newSlug}/${newVariantCode}.html?mode=edit`
         )
       } else {
         toast.error("❌ Failed to create product!")

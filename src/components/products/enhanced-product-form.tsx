@@ -31,7 +31,7 @@ export function EnhancedProductForm({
   loading = false,
 }: EnhancedProductFormProps) {
   const [mode, setMode] = useState<Mode>(initialMode)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmittingState, setIsSubmittingState] = useState(false)
 
   const {
     register,
@@ -39,7 +39,7 @@ export function EnhancedProductForm({
     handleSubmit,
     watch,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting, isDirty },
     reset,
   } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
@@ -105,7 +105,7 @@ export function EnhancedProductForm({
   const handleFormSubmit = async (data: ProductFormData) => {
     if (mode === "view") return
 
-    setIsSubmitting(true)
+    setIsSubmittingState(true)
     try {
       await onSubmit(data)
       if (mode === "create") {
@@ -114,7 +114,7 @@ export function EnhancedProductForm({
     } catch (error) {
       console.error("Form submission error:", error)
     } finally {
-      setIsSubmitting(false)
+      setIsSubmittingState(false)
     }
   }
 
@@ -129,7 +129,14 @@ export function EnhancedProductForm({
         <ModeSwitcher mode={mode} onModeChange={setMode} />
       </div>
 
-      <form id="product-form" onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+      <form
+        id="product-form"
+        onSubmit={(e) => {
+          e.preventDefault(); // Ngăn reload mặc định
+          handleSubmit(handleFormSubmit)(e);
+        }}
+        className="space-y-6"
+      >
         {/* Basic Information */}
         <Card>
           <CardHeader>
@@ -433,7 +440,7 @@ export function EnhancedProductForm({
                   </h4>
                   {!isReadOnly && fields.length > 1 && (
                     <Button type="button" variant="destructive" size="sm" onClick={() => remove(index)}>
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-4 w-4 text-gray-700 dark:text-gray-400" />
                     </Button>
                   )}
                 </div>
@@ -530,7 +537,13 @@ export function EnhancedProductForm({
                 <MultiImageUpload
                   label="Additional Images"
                   value={watch(`variants.${index}.additional_images`) || []}
-                  onChange={(files) => setValue(`variants.${index}.additional_images`, files)}
+                  onChange={(files) =>
+                    setValue(`variants.${index}.additional_images`, files, {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                      shouldValidate: false,
+                    })
+                  }
                   disabled={isReadOnly}
                   maxFiles={10}
                 />
@@ -548,8 +561,8 @@ export function EnhancedProductForm({
             <Button type="button" variant="outline" onClick={() => reset()}>
               Reset
             </Button>
-            <Button type="submit" disabled={isSubmitting || loading} className="min-w-[120px]">
-              {(isSubmitting || loading) ? (
+            <Button type="submit" disabled={!isDirty || (isSubmitting && isSubmittingState && loading)} className="min-w-[120px]">
+              {(isSubmitting && isSubmittingState && loading) ? (
                 "Saving..."
               ) : (
                 <>
