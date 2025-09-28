@@ -6,6 +6,8 @@ import type { ProductFormData } from "@/lib/validations/product"
 import { Loading } from "@/components/loading"
 import { useProductDetail, useUpdateProduct } from "@/api/hooks/useProducts"
 import { useState } from "react"
+import { slugify } from "@/utils/slugify"
+import { toast } from "sonner"
 
 interface EditProductPageProps {
   params: {
@@ -18,34 +20,12 @@ interface EditProductPageProps {
 export default function EditProductPageClient({ params }: EditProductPageProps) {
   const { slug, variant_code, mode: modeParam } = params
   const router = useRouter()
-  const mode = (modeParam === "create" || modeParam === "edit") ? modeParam : undefined;
-
-  // useEffect(() => {
-  //   if (slug && variantCode) {
-  //     fetchProduct()
-  //   }
-  // }, [slug, variantCode])
-
-  // const fetchProduct = async () => {
-  //   try {
-  //     const response = await fetch(`/api/admin/products/${slug}/${variantCode}`)
-  //     if (!response.ok) throw new Error("Failed to fetch product")
-
-  //     const product = await response.json()
-  //     setProductData(product)
-  //   } catch (error) {
-  //     console.error("Error fetching product:", error)
-  //     toast.error("Failed to load product data")
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
+  const mode = (modeParam === "create" || modeParam === "edit") ? modeParam : undefined
 
   const {
     data: productData,
     isLoading,
-    // error,
-    // refetch,
+    refetch, // 👈 thêm refetch để làm mới data sau khi update
   } = useProductDetail(slug, variant_code)
 
   const variant = productData?.variants?.find((v) => v.variant_code === variant_code)
@@ -59,7 +39,6 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
 
       // Add basic product data
       formData.append("product[name]", data.name)
-      // formData.append("product[slug]", data.slug)
       formData.append("product[model_number]", data.model_number)
       formData.append("product[description_h5]", data.description_h5 || "")
       formData.append("product[description_p]", data.description_p || "")
@@ -67,15 +46,11 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
       formData.append("product[sport]", data.sport || "")
       formData.append("product[brand]", data.brand)
       formData.append("product[gender]", data.gender || "Unisex")
-      // formData.append("product[status]", data.status)
       formData.append("product[product_type]", data.product_type || "")
       formData.append("product[activity]", data.activity || "")
-      // formData.append("product[material]", data.material || "")
-      // formData.append("product[collection]", data.collection || "")
       formData.append("product[franchise]", data.franchise || "")
       formData.append("product[care]", data.care || "")
       formData.append("product[specifications]", data.specifications || "")
-      // formData.append("product[is_featured]", data.is_featured.toString())
       formData.append("product[badge]", data.badge || "")
 
       data.variants.forEach((variant, index) => {
@@ -90,7 +65,6 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
           (variant.compare_at_price || 0).toString(),
         )
         formData.append(`product[variants_attributes][${index}][stock]`, variant.stock.toString())
-        // formData.append(`product[variants_attributes][${index}][sku]`, variant.sku)
 
         // Images
         if (variant.main_image instanceof File) {
@@ -113,13 +87,25 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
         formData,
       })
 
-      if (result?.variants[0].variant_code) {
-        router.push(`/admin/products/${result.variants[0].variant_code}`)
+      if (result?.success && result.data) {
+        const newSlug = slugify(result.data.name)
+        const newVariantCode = result.data.variants?.[0]?.variant_code
+
+        toast.success("✅ Product updated successfully!")
+
+        // 👇 cập nhật URL theo slug và variant_code mới
+        router.replace(
+          `/admin/products/edit/${newSlug}/${newVariantCode}.html?mode=edit`
+        )
+
+        // 👇 làm mới dữ liệu trong form
+        await refetch()
       } else {
-        router.push("/admin/products")
+        toast.error("❌ Product update failed!")
       }
     } catch (error) {
       console.error("Error updating product:", error)
+      toast.error("Failed to update product. Please try again.")
     }
   }
 

@@ -7,6 +7,7 @@ import { Loading } from "@/components/loading"
 import { useState } from "react"
 import { useCreateProduct } from "@/api/hooks/useProducts"
 import { toast } from "sonner"
+import { slugify } from "@/utils/slugify"
 
 export default function NewProductPageClient() {
   const router = useRouter()
@@ -17,12 +18,10 @@ export default function NewProductPageClient() {
     setIsSubmitting(true)
 
     try {
-      // Create FormData for Rails API
       const formData = new FormData()
 
-      // Add basic product data
+      // 🧱 Gửi các field product
       formData.append("product[name]", data.name)
-      // formData.append("product[slug]", data.slug)
       formData.append("product[model_number]", data.model_number)
       formData.append("product[description_h5]", data.description_h5 || "")
       formData.append("product[description_p]", data.description_p || "")
@@ -30,17 +29,14 @@ export default function NewProductPageClient() {
       formData.append("product[sport]", data.sport || "")
       formData.append("product[brand]", data.brand)
       formData.append("product[gender]", data.gender || "Unisex")
-      // formData.append("product[status]", data.status)
       formData.append("product[product_type]", data.product_type || "")
       formData.append("product[activity]", data.activity || "")
-      // formData.append("product[material]", data.material || "")
-      // formData.append("product[collection]", data.collection || "")
       formData.append("product[franchise]", data.franchise || "")
       formData.append("product[care]", data.care || "")
       formData.append("product[specifications]", data.specifications || "")
-      // formData.append("product[is_featured]", data.is_featured.toString())
       formData.append("product[badge]", data.badge || "")
 
+      // 🧩 Gửi variants
       data.variants.forEach((variant, index) => {
         if (variant.id) {
           formData.append(`product[variants_attributes][${index}][id]`, variant.id)
@@ -53,9 +49,8 @@ export default function NewProductPageClient() {
           (variant.compare_at_price || 0).toString(),
         )
         formData.append(`product[variants_attributes][${index}][stock]`, variant.stock.toString())
-        // formData.append(`product[variants_attributes][${index}][sku]`, variant.sku)
 
-        // Images
+        // 🖼️ Upload hình ảnh
         if (variant.main_image instanceof File) {
           formData.append(`product[variants_attributes][${index}][avatar]`, variant.main_image)
         }
@@ -71,14 +66,21 @@ export default function NewProductPageClient() {
         }
       })
 
+      // 🚀 Gửi request tạo sản phẩm
       const result = await createProduct.mutateAsync(formData)
 
-      if (result?.variants[0].variant_code) {
-        toast.success("Product created successfully!")
-        router.push(`/admin/products/${result?.id}`)
+      if (result?.success && result?.data) {
+        toast.success("✅ Product created successfully!")
+
+        const newSlug = slugify(result.data.name)
+        const newVariantCode = result.data.variants?.[0]?.variant_code
+
+        // 🔁 Redirect sang trang edit (hoặc view tuỳ ý)
+        router.replace(
+          `/admin/products/edit/${newSlug}/${newVariantCode}.html?mode=edit`
+        )
       } else {
-        toast.success("Product created successfully!")
-        router.push("/admin/products")
+        toast.error("❌ Failed to create product!")
       }
     } catch (error) {
       console.error("Error creating product:", error)
@@ -88,10 +90,9 @@ export default function NewProductPageClient() {
     }
   }
 
-  // Initialize with empty form data for new product
+  // 🧱 initialData rỗng cho form create
   const initialData: ProductFormData = {
     name: "",
-    // slug: "",
     model_number: "",
     description_h5: "",
     description_p: "",
@@ -99,15 +100,11 @@ export default function NewProductPageClient() {
     category: "",
     sport: "",
     gender: "Unisex",
-    // status: "active",
     product_type: "",
     activity: "",
-    // material: "",
-    // collection: "",
     franchise: "",
     care: "",
     specifications: "",
-    // is_featured: false,
     badge: "",
     variants: [
       {
@@ -116,7 +113,6 @@ export default function NewProductPageClient() {
         price: 0,
         compare_at_price: 0,
         stock: 0,
-        // sku: "",
       },
     ],
   }
@@ -131,19 +127,6 @@ export default function NewProductPageClient() {
     )
   }
 
-  if (!initialData) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-6">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
-            <p className="text-muted-foreground">The requested product could not be found.</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-6">
@@ -151,7 +134,7 @@ export default function NewProductPageClient() {
           initialData={initialData}
           onSubmit={handleSubmit}
           mode="create"
-          loading={createProduct.isPending}
+          loading={isSubmitting}
         />
       </div>
     </div>
