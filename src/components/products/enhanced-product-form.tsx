@@ -532,7 +532,7 @@ export function EnhancedProductForm({
                   value={watch(`variants.${index}.additional_images`) || []}
                   onChange={(files) => setValue(`variants.${index}.additional_images`, files)}
                   disabled={isReadOnly}
-                  maxFiles={5}
+                  maxFiles={10}
                 />
               </div>
             ))}
