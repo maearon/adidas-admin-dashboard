@@ -28,7 +28,7 @@ export function ImagePreview({ src, alt, onRemove, className = "" }: ImagePrevie
               <Eye className="h-4 w-4 text-white" />
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-3xl">
+          <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="max-w-3xl">
             <DialogHeader>
               <DialogTitle className="text-gray-400">{alt}</DialogTitle>
             </DialogHeader>
