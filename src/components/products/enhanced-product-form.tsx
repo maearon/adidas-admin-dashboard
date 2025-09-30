@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Plus, Trash2, Save } from "lucide-react"
+import { Plus, Trash2, Save, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -107,7 +107,6 @@ export function EnhancedProductForm({
     if (isClicked === false) return
     if (mode === "view") return
 
-    setIsSubmittingState(true)
     try {
       await onSubmit(data)
       if (mode === "create") {
@@ -571,12 +570,15 @@ export function EnhancedProductForm({
               onClick={() => 
                 {
                   setIsClicked(true)
-                  reset()
+                  setIsSubmittingState(true)
                 }
               }
             >
               {(isSubmitting && isSubmittingState && loading) ? (
-                "Saving..."
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
               ) : (
                 <>
                   <Save className="h-4 w-4 mr-2" />
