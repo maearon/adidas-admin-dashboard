@@ -120,6 +120,7 @@ export function EnhancedProductForm({
   const handleFormSubmit = async (data: ProductFormData) => {
     // if (isClicked === false) return
     if (mode === "view") return
+    if (data === initialData) return
 
     setIsSubmittingState(true)
     try {
