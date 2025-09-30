@@ -35,7 +35,7 @@ export function LoadingDots() {
     return () => clearInterval(interval)
   }, [])
 
-  return <span>{dots}</span>
+  return <>{dots}</>
 }
 
 export function EnhancedProductForm({
