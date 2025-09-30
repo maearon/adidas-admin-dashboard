@@ -24,6 +24,20 @@ interface EnhancedProductFormProps {
   loading?: boolean
 }
 
+export function LoadingDots() {
+  const [dots, setDots] = useState(".")
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDots(prev => (prev.length >= 3 ? "." : prev + "."))
+    }, 500) // đổi tốc độ tại đây (ms)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  return <span>{dots}</span>
+}
+
 export function EnhancedProductForm({
   initialData,
   onSubmit,
@@ -32,7 +46,7 @@ export function EnhancedProductForm({
 }: EnhancedProductFormProps) {
   const [mode, setMode] = useState<Mode>(initialMode)
   const [isSubmittingState, setIsSubmittingState] = useState(false)
-  const [isClicked, setIsClicked] = useState(false)
+  // const [isClicked, setIsClicked] = useState(false)
 
   const {
     register,
@@ -104,9 +118,10 @@ export function EnhancedProductForm({
   }, [watchName, setValue, mode])
 
   const handleFormSubmit = async (data: ProductFormData) => {
-    if (isClicked === false) return
+    // if (isClicked === false) return
     if (mode === "view") return
 
+    setIsSubmittingState(true)
     try {
       await onSubmit(data)
       if (mode === "create") {
@@ -116,7 +131,7 @@ export function EnhancedProductForm({
       console.error("Form submission error:", error)
     } finally {
       setIsSubmittingState(false)
-      setIsClicked(false)
+      // setIsClicked(false)
     }
   }
 
@@ -565,19 +580,13 @@ export function EnhancedProductForm({
             </Button>
             <Button 
               type="submit" 
-              disabled={isClicked || !isDirty || (isSubmitting && isSubmittingState && loading)} 
+              disabled={!isDirty || (isSubmitting && isSubmittingState && loading)} 
               className="min-w-[120px]"
-              onClick={() => 
-                {
-                  setIsClicked(true)
-                  setIsSubmittingState(true)
-                }
-              }
             >
               {(isSubmitting && isSubmittingState && loading) ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  Saving<LoadingDots />
                 </>
               ) : (
                 <>
