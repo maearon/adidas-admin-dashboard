@@ -32,6 +32,7 @@ export function EnhancedProductForm({
 }: EnhancedProductFormProps) {
   const [mode, setMode] = useState<Mode>(initialMode)
   const [isSubmittingState, setIsSubmittingState] = useState(false)
+  const [isClicked, setIsClicked] = useState(false)
 
   const {
     register,
@@ -103,6 +104,7 @@ export function EnhancedProductForm({
   }, [watchName, setValue, mode])
 
   const handleFormSubmit = async (data: ProductFormData) => {
+    if (isClicked === false) return
     if (mode === "view") return
 
     setIsSubmittingState(true)
@@ -115,6 +117,7 @@ export function EnhancedProductForm({
       console.error("Form submission error:", error)
     } finally {
       setIsSubmittingState(false)
+      setIsClicked(false)
     }
   }
 
@@ -561,7 +564,17 @@ export function EnhancedProductForm({
             <Button type="button" variant="outline" onClick={() => reset()}>
               Reset
             </Button>
-            <Button type="submit" disabled={!isDirty || (isSubmitting && isSubmittingState && loading)} className="min-w-[120px]">
+            <Button 
+              type="submit" 
+              disabled={isClicked || !isDirty || (isSubmitting && isSubmittingState && loading)} 
+              className="min-w-[120px]"
+              onClick={() => 
+                {
+                  setIsClicked(true)
+                  reset()
+                }
+              }
+            >
               {(isSubmitting && isSubmittingState && loading) ? (
                 "Saving..."
               ) : (
