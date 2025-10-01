@@ -77,7 +77,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-gray-700 dark:text-gray-400">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
