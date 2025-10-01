@@ -48,6 +48,7 @@ export function EnhancedProductForm({
   const [mode, setMode] = useState<Mode>(initialMode)
   const [isSubmittingState, setIsSubmittingState] = useState(false)
   const [isReordering, setIsReordering] = useState(false)
+  const [isImageChanging, setIsImageChanging] = useState(false)
   // const [isClicked, setIsClicked] = useState(false)
 
   const {
@@ -152,9 +153,61 @@ export function EnhancedProductForm({
     // if (isClicked === false) return
     if (mode === "view") return
     if (!isFormDirty) return
+    if (isImageChanging) return // Ngăn submit khi đang thay đổi ảnh
 
     setIsSubmittingState(true)
     try {
+      // Xử lý reordering images trước khi submit
+      if (initialData?.id && mode === "edit") {
+        for (let i = 0; i < data.variants.length; i++) {
+          const variant = data.variants[i]
+          if (variant.id && variant.additional_images && variant.additional_images.length > 0) {
+            try {
+              // Extract image IDs from the new order (for existing images)
+              const imageOrder = variant.additional_images
+                .map((item, index) => {
+                  if (typeof item === 'string') {
+                    // Extract ID from URL if it's an existing image
+                    // Try multiple patterns to extract ID
+                    const patterns = [
+                      /\/(\d+)\//,  // /123/
+                      /\/\d+\/(\d+)\//,  // /123/456/
+                      /images\/(\d+)\//,  // images/123/
+                      /variants\/(\d+)\/images\/(\d+)\//,  // variants/123/images/456/
+                    ]
+                    
+                    for (const pattern of patterns) {
+                      const match = item.match(pattern)
+                      if (match) {
+                        return match[match.length - 1] // Get the last captured group
+                      }
+                    }
+                    
+                    // Fallback to index if no ID found
+                    return index.toString()
+                  }
+                  return index.toString()
+                })
+
+              console.log('Reordering images for variant:', {
+                variantId: variant.id,
+                imageOrder,
+                originalImages: variant.additional_images
+              })
+
+              await rubyService.reorderVariantImages(
+                initialData.id,
+                variant.id,
+                imageOrder
+              )
+            } catch (error) {
+              console.error(`Failed to reorder images for variant ${i}:`, error)
+              // Continue with form submission even if reorder fails
+            }
+          }
+        }
+      }
+
       await onSubmit(data)
       if (mode === "create") {
         reset()
@@ -169,38 +222,24 @@ export function EnhancedProductForm({
 
   const isReadOnly = mode === "view"
 
-  // 👉 Handle image reordering
-  const handleImageReorder = useCallback(async (variantIndex: number, newOrder: (File | string)[]) => {
-    if (!initialData?.id || isReordering) return
-
-    const variant = watch(`variants.${variantIndex}`)
-    if (!variant?.id) return
-
-    setIsReordering(true)
-    try {
-      // Extract image IDs from the new order (for existing images)
-      const imageOrder = newOrder
-        .map((item, index) => {
-          if (typeof item === 'string') {
-            // Extract ID from URL if it's an existing image
-            const match = item.match(/\/(\d+)\//)
-            return match ? match[1] : index.toString()
-          }
-          return index.toString()
-        })
-
-      await rubyService.reorderVariantImages(
-        initialData.id,
-        variant.id,
-        imageOrder
-      )
-    } catch (error) {
-      console.error('Failed to reorder images:', error)
-      // Optionally show a toast notification
-    } finally {
-      setIsReordering(false)
-    }
-  }, [initialData?.id, isReordering, watch])
+  // 👉 Handle image reordering - chỉ cập nhật local state, không gọi API ngay
+  const handleImageReorder = useCallback((variantIndex: number, newOrder: (File | string)[]) => {
+    console.log('Image reorder triggered:', { variantIndex, newOrder })
+    setIsImageChanging(true)
+    
+    // Chỉ cập nhật local state, không gọi API ngay lập tức
+    setValue(`variants.${variantIndex}.additional_images`, newOrder, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: false,
+    })
+    
+    // Reset flag sau một khoảng thời gian ngắn
+    setTimeout(() => {
+      setIsImageChanging(false)
+      console.log('Image changing flag reset')
+    }, 2000) // Tăng thời gian để đảm bảo không bị submit
+  }, [setValue])
 
   return (
     <div className="space-y-6 text-gray-700 dark:text-gray-400">
@@ -215,9 +254,11 @@ export function EnhancedProductForm({
         id="product-form"
         onSubmit={(e) => {
           e.preventDefault(); // Ngăn reload mặc định
+          e.stopPropagation(); // Ngăn event bubbling
           handleSubmit(handleFormSubmit)(e);
         }}
         className="space-y-6"
+        noValidate
       >
         {/* Basic Information */}
         <Card>
@@ -627,16 +668,9 @@ export function EnhancedProductForm({
                     })
                   }}
                   onReorder={(newOrder) => {
-                    setValue(`variants.${index}.additional_images`, newOrder, {
-                      shouldDirty: true,
-                      shouldTouch: true,
-                      shouldValidate: false,
-                    })
                     handleImageReorder(index, newOrder)
                   }}
-                  productId={initialData?.id}
-                  variantId={watch(`variants.${index}.id`)}
-                  disabled={isReadOnly || isReordering}
+                  disabled={isReadOnly}
                   maxFiles={10}
                 />
               </div>
@@ -655,13 +689,18 @@ export function EnhancedProductForm({
             </Button>
             <Button 
               type="submit" 
-              disabled={!isFormDirty || (isSubmitting && isSubmittingState && loading)} 
+              disabled={!isFormDirty || (isSubmitting && isSubmittingState && loading) || isImageChanging} 
               className="min-w-[120px]"
             >
               {(isSubmitting && isSubmittingState && loading) ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   {"Saving"}<LoadingDots />
+                </>
+              ) : isImageChanging ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {"Updating Images..."}
                 </>
               ) : (
                 <>

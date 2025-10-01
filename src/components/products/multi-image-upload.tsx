@@ -60,10 +60,16 @@ export function MultiImageUpload({
       const remainingSlots = maxFiles - value.length
       const filesToAdd = acceptedFiles.slice(0, remainingSlots)
       if (filesToAdd.length > 0) {
-        onChange([...value, ...filesToAdd])
+        const newValue = [...value, ...filesToAdd]
+        onChange(newValue)
+        
+        // Call onReorder callback nếu có (để cập nhật form state)
+        if (onReorder) {
+          onReorder(newValue)
+        }
       }
     },
-    [value, onChange, maxFiles],
+    [value, onChange, maxFiles, onReorder],
   )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -77,6 +83,11 @@ export function MultiImageUpload({
   const handleRemove = (index: number) => {
     const newValue = value.filter((_, i) => i !== index)
     onChange(newValue)
+    
+    // Call onReorder callback nếu có (để cập nhật form state)
+    if (onReorder) {
+      onReorder(newValue)
+    }
   }
 
   // 👉 Drag & Drop handlers
@@ -109,9 +120,10 @@ export function MultiImageUpload({
     const draggedData = newValue.splice(draggedItem.index, 1)[0]
     newValue.splice(dropIndex, 0, draggedData)
     
+    // Cập nhật local state trước
     onChange(newValue)
     
-    // Call onReorder callback if provided
+    // Call onReorder callback nếu có (chỉ để cập nhật form state)
     if (onReorder) {
       onReorder(newValue)
     }

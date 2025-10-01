@@ -42,3 +42,4 @@ describe('EnhancedProductForm', () => {
     expect(nameInput).toBeDisabled()
   })
 })
+
