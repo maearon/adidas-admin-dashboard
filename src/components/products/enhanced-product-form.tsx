@@ -3,12 +3,12 @@
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Plus, Trash2, Save, Loader2 } from "lucide-react"
+import { Plus, Trash2, Save, Loader2, ChevronDownIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import Label from "@/components/form/Label"
+import Select from "@/components/form/Select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { ModeSwitcher, type Mode } from "@/components/ui/mode-switcher"
@@ -312,195 +312,162 @@ export function EnhancedProductForm({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="brand">Brand</Label>
-                <Select
-                  value={watch("brand")}
-                  onValueChange={(value) => setValue("brand", value)}
-                  disabled={isReadOnly}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select brand" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Adidas">Adidas</SelectItem>
-                    <SelectItem value="Nike">Nike</SelectItem>
-                    <SelectItem value="Puma">Puma</SelectItem>
-                    <SelectItem value="Reebok">Reebok</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="relative">
+                  <Select
+                    value={watch("brand")}
+                    onChange={val => setValue("brand", val)}
+                    disabled={isReadOnly}
+                    options={[
+                      { value: "Adidas", label: "Adidas" },
+                      { value: "Nike", label: "Nike" },
+                      { value: "Puma", label: "Puma" },
+                      { value: "Reebok", label: "Reebok" },
+                    ]}
+                    placeholder="Select brand"
+                    className="w-full"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 dark:text-gray-400">
+                    <ChevronDownIcon />
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
-                <Select
-                  value={watch("category")}
-                  onValueChange={(value) => setValue("category", value)}
-                  disabled={isReadOnly}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Shoes">Shoes</SelectItem>
-                    <SelectItem value="Apparel">Apparel</SelectItem>
-                    <SelectItem value="Accessories">Accessories</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="relative">
+                  <Select
+                    value={watch("category")}
+                    onChange={val => setValue("category", val)}
+                    disabled={isReadOnly}
+                    options={[
+                      { value: "Shoes", label: "Shoes" },
+                      { value: "Apparel", label: "Apparel" },
+                      { value: "Accessories", label: "Accessories" },
+                    ]}
+                    placeholder="Select category"
+                    className="w-full"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 dark:text-gray-400">
+                    <ChevronDownIcon />
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="sport">Sport</Label>
-                <Select
-                  value={watch("sport")}
-                  onValueChange={(value) => setValue("sport", value)}
-                  disabled={isReadOnly}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select sport" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Running">Running</SelectItem>
-                    <SelectItem value="Soccer">Soccer</SelectItem>
-                    <SelectItem value="Basketball">Basketball</SelectItem>
-                    <SelectItem value="Tennis">Tennis</SelectItem>
-                    <SelectItem value="Training">Training</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="relative">
+                  <Select
+                    value={watch("sport")}
+                    onChange={val => setValue("sport", val)}
+                    disabled={isReadOnly}
+                    options={[
+                      { value: "Running", label: "Running" },
+                      { value: "Soccer", label: "Soccer" },
+                      { value: "Basketball", label: "Basketball" },
+                      { value: "Tennis", label: "Tennis" },
+                      { value: "Training", label: "Training" },
+                    ]}
+                    placeholder="Select sport"
+                    className="w-full"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 dark:text-gray-400">
+                    <ChevronDownIcon />
+                  </span>
+                </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="gender">Gender</Label>
-                <Select
-                  value={watch("gender")}
-                  onValueChange={(value) => setValue("gender", value)}
-                  disabled={isReadOnly}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Men">Men</SelectItem>
-                    <SelectItem value="Women">Women</SelectItem>
-                    <SelectItem value="Unisex">Unisex</SelectItem>
-                    <SelectItem value="Kids">Kids</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="relative">
+                  <Select
+                    value={watch("gender")}
+                    onChange={val => setValue("gender", val)}
+                    disabled={isReadOnly}
+                    options={[
+                      { value: "Men", label: "Men" },
+                      { value: "Women", label: "Women" },
+                      { value: "Unisex", label: "Unisex" },
+                      { value: "Kids", label: "Kids" },
+                    ]}
+                    placeholder="Select gender"
+                    className="w-full"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 dark:text-gray-400">
+                    <ChevronDownIcon />
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="product_type">Product Type</Label>
-                <Select
-                  value={watch("product_type")}
-                  onValueChange={(value) => setValue("product_type", value)}
-                  disabled={isReadOnly}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Shoes">Shoes</SelectItem>
-                    <SelectItem value="Sneakers">Sneakers</SelectItem>
-                    <SelectItem value="Cleats">Cleats</SelectItem>
-                    <SelectItem value="Sandals">Sandals</SelectItem>
-                    <SelectItem value="Hoodie">Hoodie</SelectItem>
-                    <SelectItem value="Pants">Pants</SelectItem>
-                    <SelectItem value="Shorts">Shorts</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="relative">
+                  <Select
+                    value={watch("product_type")}
+                    onChange={val => setValue("product_type", val)}
+                    disabled={isReadOnly}
+                    options={[
+                      { value: "Shoes", label: "Shoes" },
+                      { value: "Sneakers", label: "Sneakers" },
+                      { value: "Cleats", label: "Cleats" },
+                      { value: "Sandals", label: "Sandals" },
+                      { value: "Hoodie", label: "Hoodie" },
+                      { value: "Pants", label: "Pants" },
+                      { value: "Shorts", label: "Shorts" },
+                    ]}
+                    placeholder="Select type"
+                    className="w-full"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 dark:text-gray-400">
+                    <ChevronDownIcon />
+                  </span>
+                </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="franchise">Franchise</Label>
-                <Select
-                  value={watch("franchise")}
-                  onValueChange={(value) => setValue("franchise", value)}
-                  disabled={isReadOnly}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select franchise" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Tubular">Tubular</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="relative">
+                  <Select
+                    value={watch("franchise")}
+                    onChange={val => setValue("franchise", val)}
+                    disabled={isReadOnly}
+                    options={[{ value: "Tubular", label: "Tubular" }]}
+                    placeholder="Select franchise"
+                    className="w-full"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 dark:text-gray-400">
+                    <ChevronDownIcon />
+                  </span>
+                </div>
               </div>
-
-              {/* <div className="space-y-2">
-                <Label htmlFor="status">Status</Label>
-                <Select
-                  value={watch("status")}
-                  onValueChange={(value) => setValue("status", value as "active" | "inactive")}
-                  disabled={isReadOnly}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="inactive">Inactive</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div> */}
             </div>
-
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="material">Material</Label>
-                <Input
-                  id="material"
-                  {...register("material")}
-                  disabled={isReadOnly}
-                  placeholder="e.g., Leather, Mesh, Cotton"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="collection">Collection</Label>
-                <Input
-                  id="collection"
-                  {...register("collection")}
-                  disabled={isReadOnly}
-                  placeholder="e.g., Ultraboost, Gazelle"
-                />
-              </div>
-            </div> */}
-
-            {/* <div className="flex items-center space-x-2">
-              <Switch
-                id="is_featured"
-                checked={watch("is_featured")}
-                onCheckedChange={(checked) => setValue("is_featured", checked)}
-                disabled={isReadOnly}
-              />
-              <Label htmlFor="is_featured">Featured Product</Label>
-            </div> */}
 
             {/* Additional Information */}
             <div className="grid grid-cols-1 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="care">Care Instructions</Label>
-              <Textarea
-                id="care"
-                {...register("care")}
-                disabled={isReadOnly}
-                placeholder="Care instructions for the product"
-                rows={3}
-              />
+              <div className="space-y-2">
+                <Label htmlFor="care">Care Instructions</Label>
+                <Textarea
+                  id="care"
+                  {...register("care")}
+                  disabled={isReadOnly}
+                  placeholder="Care instructions for the product"
+                  rows={3}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="specifications">Specifications</Label>
+                <Textarea
+                  id="specifications"
+                  {...register("specifications")}
+                  disabled={isReadOnly}
+                  placeholder="Technical specifications"
+                  rows={3}
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="specifications">Specifications</Label>
-              <Textarea
-                id="specifications"
-                {...register("specifications")}
-                disabled={isReadOnly}
-                placeholder="Technical specifications"
-                rows={3}
-              />
-            </div>
-            </div>
-            
             <Separator />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -541,7 +508,6 @@ export function EnhancedProductForm({
                       price: 0,
                       compare_at_price: 0,
                       stock: 0,
-                      // sku: "",
                     })
                   }
                 >
@@ -577,14 +543,6 @@ export function EnhancedProductForm({
                     )}
                   </div>
 
-                  {/* <div className="space-y-2">
-                    <Label>Size</Label>
-                    <Input {...register(`variants.${index}.size`)} disabled={isReadOnly} placeholder="42" />
-                    {errors.variants?.[index]?.size && (
-                      <p className="text-sm text-red-500">{errors.variants[index]?.size?.message}</p>
-                    )}
-                  </div> */}
-
                   <div className="space-y-2">
                     <Label>Color</Label>
                     <Input {...register(`variants.${index}.color`)} disabled={isReadOnly} placeholder="Black" />
@@ -592,26 +550,21 @@ export function EnhancedProductForm({
                       <p className="text-sm text-red-500">{errors.variants[index]?.color?.message}</p>
                     )}
                   </div>
+                  </div>
 
-                  {/* <div className="space-y-2">
-                    <Label>SKU</Label>
-                    <Input {...register(`variants.${index}.sku`)} disabled={isReadOnly} placeholder="ADI-001-42-BLK" />
-                  </div> */}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label>Price ($)</Label>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      {...register(`variants.${index}.price`, { valueAsNumber: true })}
-                      disabled={isReadOnly}
-                      placeholder="99.99"
-                    />
-                    {errors.variants?.[index]?.price && (
-                      <p className="text-sm text-red-500">{errors.variants[index]?.price?.message}</p>
-                    )}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label>Price ($)</Label>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        {...register(`variants.${index}.price`, { valueAsNumber: true })}
+                        disabled={isReadOnly}
+                        placeholder="99.99"
+                      />
+                      {errors.variants?.[index]?.price && (
+                        <p className="text-sm text-red-500">{errors.variants[index]?.price?.message}</p>
+                      )}
                   </div>
 
                   <div className="space-y-2">
@@ -687,20 +640,20 @@ export function EnhancedProductForm({
             <Button type="button" variant="outline" onClick={() => reset()}>
               Reset
             </Button>
-            <Button 
-              type="submit" 
-              disabled={!isFormDirty || (isSubmitting && isSubmittingState && loading) || isImageChanging} 
+            <Button
+              type="submit"
+              disabled={!isFormDirty || (isSubmitting && isSubmittingState && loading) || isImageChanging}
               className="min-w-[120px]"
             >
               {(isSubmitting && isSubmittingState && loading) ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {"Saving"}<LoadingDots />
+                  Saving<LoadingDots />
                 </>
               ) : isImageChanging ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {"Updating Images..."}
+                  Updating Images<LoadingDots />
                 </>
               ) : (
                 <>
