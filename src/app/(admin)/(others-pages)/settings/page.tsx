@@ -11,8 +11,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 import { Store, Bell, Shield, Palette, Truck, CreditCard, Save, RefreshCw } from "lucide-react"
+import { useTranslations } from "@/hooks/useTranslations"
+import { ThemeSelector } from "@/components/settings/ThemeSelector"
+import { LanguageSelector } from "@/components/settings/LanguageSelector"
+import { CurrencySelector } from "@/components/settings/CurrencySelector"
 
 export default function SettingsPage() {
+  const t = useTranslations("settings")
   const [settings, setSettings] = useState({
     // Store Settings
     storeName: "Adidas Vietnam",
@@ -64,17 +69,17 @@ export default function SettingsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight uppercase">Settings</h1>
-          <p className="text-muted-foreground">Manage your store configuration and preferences.</p>
+          <h1 className="text-3xl font-bold tracking-tight uppercase">{t?.title}</h1>
+          <p className="text-muted-foreground">{t?.subtitle}</p>
         </div>
         <div className="flex gap-2">
           <AdidasButton className="border-2 border-foreground">
             <RefreshCw className="mr-2 h-4 w-4" />
-            Reset
+            {t?.reset}
           </AdidasButton>
           <AdidasButton onClick={handleSave} className="border-2 border-foreground">
             <Save className="mr-2 h-4 w-4" />
-            Save Changes
+            {t?.saveChanges}
           </AdidasButton>
         </div>
       </div>
@@ -84,27 +89,27 @@ export default function SettingsPage() {
         <TabsList className="grid w-full grid-cols-6 border-2 border-foreground">
           <TabsTrigger value="store" className="flex items-center gap-2">
             <Store className="h-4 w-4" />
-            Store
+            {t?.tabs?.store}
           </TabsTrigger>
           <TabsTrigger value="notifications" className="flex items-center gap-2">
             <Bell className="h-4 w-4" />
-            Notifications
+            {t?.tabs?.notifications}
           </TabsTrigger>
           <TabsTrigger value="appearance" className="flex items-center gap-2">
             <Palette className="h-4 w-4" />
-            Appearance
+            {t?.tabs?.appearance}
           </TabsTrigger>
           <TabsTrigger value="security" className="flex items-center gap-2">
             <Shield className="h-4 w-4" />
-            Security
+            {t?.tabs?.security}
           </TabsTrigger>
           <TabsTrigger value="shipping" className="flex items-center gap-2">
             <Truck className="h-4 w-4" />
-            Shipping
+            {t?.tabs?.shipping}
           </TabsTrigger>
           <TabsTrigger value="payment" className="flex items-center gap-2">
             <CreditCard className="h-4 w-4" />
-            Payment
+            {t?.tabs?.payment}
           </TabsTrigger>
         </TabsList>
 
@@ -112,13 +117,13 @@ export default function SettingsPage() {
         <TabsContent value="store">
           <Card className="border-2 border-foreground">
             <CardHeader>
-              <CardTitle className="uppercase tracking-wide">Store Information</CardTitle>
-              <CardDescription>Basic information about your store.</CardDescription>
+              <CardTitle className="uppercase tracking-wide">{t?.store?.title}</CardTitle>
+              <CardDescription>{t?.store?.description}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="storeName">Store Name</Label>
+                  <Label htmlFor="storeName">{t?.store?.storeName}</Label>
                   <Input
                     id="storeName"
                     value={settings.storeName}
@@ -127,7 +132,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="storeEmail">Store Email</Label>
+                  <Label htmlFor="storeEmail">{t?.store?.storeEmail}</Label>
                   <Input
                     id="storeEmail"
                     type="email"
@@ -137,7 +142,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="storePhone">Store Phone</Label>
+                  <Label htmlFor="storePhone">{t?.store?.storePhone}</Label>
                   <Input
                     id="storePhone"
                     value={settings.storePhone}
@@ -146,7 +151,7 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="storeAddress">Store Address</Label>
+                  <Label htmlFor="storeAddress">{t?.store?.storeAddress}</Label>
                   <Input
                     id="storeAddress"
                     value={settings.storeAddress}
@@ -156,7 +161,7 @@ export default function SettingsPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="storeDescription">Store Description</Label>
+                <Label htmlFor="storeDescription">{t?.store?.storeDescription}</Label>
                 <Textarea
                   id="storeDescription"
                   value={settings.storeDescription}
@@ -173,14 +178,14 @@ export default function SettingsPage() {
         <TabsContent value="notifications">
           <Card className="border-2 border-foreground">
             <CardHeader>
-              <CardTitle className="uppercase tracking-wide">Notification Preferences</CardTitle>
-              <CardDescription>Configure how you want to receive notifications.</CardDescription>
+              <CardTitle className="uppercase tracking-wide">{t?.notifications?.title}</CardTitle>
+              <CardDescription>{t?.notifications?.description}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="emailNotifications">Email Notifications</Label>
+                    <Label htmlFor="emailNotifications">{t?.notifications?.emailNotifications}</Label>
                     <p className="text-sm text-muted-foreground">Receive notifications via email</p>
                   </div>
                   <Switch
@@ -192,7 +197,7 @@ export default function SettingsPage() {
                 <Separator />
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="smsNotifications">SMS Notifications</Label>
+                    <Label htmlFor="smsNotifications">{t?.notifications?.smsNotifications}</Label>
                     <p className="text-sm text-muted-foreground">Receive notifications via SMS</p>
                   </div>
                   <Switch
@@ -204,7 +209,7 @@ export default function SettingsPage() {
                 <Separator />
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="pushNotifications">Push Notifications</Label>
+                    <Label htmlFor="pushNotifications">{t?.notifications?.pushNotifications}</Label>
                     <p className="text-sm text-muted-foreground">Receive browser push notifications</p>
                   </div>
                   <Switch
@@ -216,7 +221,7 @@ export default function SettingsPage() {
                 <Separator />
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="orderNotifications">Order Notifications</Label>
+                    <Label htmlFor="orderNotifications">{t?.notifications?.orderNotifications}</Label>
                     <p className="text-sm text-muted-foreground">Get notified about new orders</p>
                   </div>
                   <Switch
@@ -228,7 +233,7 @@ export default function SettingsPage() {
                 <Separator />
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="inventoryAlerts">Inventory Alerts</Label>
+                    <Label htmlFor="inventoryAlerts">{t?.notifications?.inventoryAlerts}</Label>
                     <p className="text-sm text-muted-foreground">Get alerts for low stock items</p>
                   </div>
                   <Switch
@@ -246,54 +251,19 @@ export default function SettingsPage() {
         <TabsContent value="appearance">
           <Card className="border-2 border-foreground">
             <CardHeader>
-              <CardTitle className="uppercase tracking-wide">Appearance & Localization</CardTitle>
-              <CardDescription>Customize the look and feel of your admin panel.</CardDescription>
+              <CardTitle className="uppercase tracking-wide">{t?.appearance?.title}</CardTitle>
+              <CardDescription>{t?.appearance?.description}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <ThemeSelector />
+                <LanguageSelector />
+                <CurrencySelector 
+                  value={settings.currency} 
+                  onChange={(value) => handleSettingChange("currency", value)} 
+                />
                 <div className="space-y-2">
-                  <Label htmlFor="theme">Theme</Label>
-                  <Select value={settings.theme} onValueChange={(value) => handleSettingChange("theme", value)}>
-                    <SelectTrigger className="border-2 border-foreground">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="border-2 border-foreground">
-                      <SelectItem value="light">Light</SelectItem>
-                      <SelectItem value="dark">Dark</SelectItem>
-                      <SelectItem value="system">System</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="language">Language</Label>
-                  <Select value={settings.language} onValueChange={(value) => handleSettingChange("language", value)}>
-                    <SelectTrigger className="border-2 border-foreground">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="border-2 border-foreground">
-                      <SelectItem value="vi">🇻🇳 Tiếng Việt</SelectItem>
-                      <SelectItem value="en">🇺🇸 English</SelectItem>
-                      <SelectItem value="zh">🇨🇳 中文</SelectItem>
-                      <SelectItem value="ja">🇯🇵 日本語</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="currency">Currency</Label>
-                  <Select value={settings.currency} onValueChange={(value) => handleSettingChange("currency", value)}>
-                    <SelectTrigger className="border-2 border-foreground">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="border-2 border-foreground">
-                      <SelectItem value="VND">VND (₫)</SelectItem>
-                      <SelectItem value="USD">USD ($)</SelectItem>
-                      <SelectItem value="EUR">EUR (€)</SelectItem>
-                      <SelectItem value="JPY">JPY (¥)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="timezone">Timezone</Label>
+                  <Label htmlFor="timezone">{t?.appearance?.timezone}</Label>
                   <Select value={settings.timezone} onValueChange={(value) => handleSettingChange("timezone", value)}>
                     <SelectTrigger className="border-2 border-foreground">
                       <SelectValue />
