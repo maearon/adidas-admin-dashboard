@@ -225,7 +225,7 @@ export default function SettingsPageClientContent() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <ThemeSelector />
                 <LanguageSelector />
-                <CurrencySelector 
+                {/* <CurrencySelector 
                   value={settings.currency} 
                   onChange={(value) => handleSettingChange("currency", value)} 
                 />
@@ -242,7 +242,7 @@ export default function SettingsPageClientContent() {
                       <SelectItem value="Europe/London">London (GMT+0)</SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
+                </div> */}
               </div>
             </CardContent>
           </Card>
