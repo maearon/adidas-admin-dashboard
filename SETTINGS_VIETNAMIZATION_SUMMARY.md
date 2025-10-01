@@ -135,3 +135,4 @@
 
 ## Kết quả
 Trang Settings giờ đây hoàn toàn được việt hóa và có đầy đủ tính năng thay đổi theme, ngôn ngữ và tiền tệ thực tế, tương tự như AppHeader đã triển khai.
+

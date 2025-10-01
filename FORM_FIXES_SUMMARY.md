@@ -143,3 +143,4 @@ end
 - Button state sẽ thay đổi khi đang update images
 - Network tab sẽ hiển thị API calls khi submit
 - Backend logs sẽ hiển thị reorder success/failure
+

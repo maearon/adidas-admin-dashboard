@@ -35,3 +35,4 @@ export function CurrencySelector({ value = "USD", onChange }: CurrencySelectorPr
     </div>
   )
 }
+

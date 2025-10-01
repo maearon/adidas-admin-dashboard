@@ -93,3 +93,4 @@ describe('MultiImageUpload', () => {
     expect(removeButtons).toHaveLength(0)
   })
 })
+
