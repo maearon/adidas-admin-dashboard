@@ -254,6 +254,27 @@ const rubyService = {
       throw error
     }
   },
+
+  // ✅ Sắp xếp lại thứ tự ảnh của variant
+  reorderVariantImages: async (
+    productId: string,
+    variantId: string,
+    imageOrder: string[]
+  ): Promise<WithStatus<{ success: boolean; message: string } | undefined> | undefined> => {
+    try {
+      const { data } = await api.patch<WithStatus<{ success: boolean; message: string }>>(
+        `/api/admin/products/${productId}/reorder_images`,
+        {
+          variant_id: variantId,
+          image_order: imageOrder,
+        }
+      )
+      return data
+    } catch (error: unknown) {
+      handleNetworkError(error)
+      throw error
+    }
+  },
 }
 
 export default rubyService

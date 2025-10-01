@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus, Trash2, Save, Loader2 } from "lucide-react"
@@ -16,6 +16,7 @@ import { ImageUploadField } from "./image-upload-field"
 import { MultiImageUpload } from "./multi-image-upload"
 import { productSchema, type ProductFormData } from "@/lib/validations/product"
 import { Badge } from "@/components/ui/badge"
+import rubyService from "@/api/services/rubyService"
 
 interface EnhancedProductFormProps {
   initialData?: ProductFormData
@@ -46,6 +47,7 @@ export function EnhancedProductForm({
 }: EnhancedProductFormProps) {
   const [mode, setMode] = useState<Mode>(initialMode)
   const [isSubmittingState, setIsSubmittingState] = useState(false)
+  const [isReordering, setIsReordering] = useState(false)
   // const [isClicked, setIsClicked] = useState(false)
 
   const {
@@ -92,6 +94,35 @@ export function EnhancedProductForm({
     },
   })
 
+  // 👉 Enhanced isDirty detection
+  const currentFormData = watch()
+  const isFormDirty = useMemo(() => {
+    if (!initialData) return isDirty
+
+    // Deep comparison for complex objects
+    const compareObjects = (obj1: any, obj2: any): boolean => {
+      if (obj1 === obj2) return true
+      if (!obj1 || !obj2) return false
+      if (typeof obj1 !== typeof obj2) return false
+      
+      if (Array.isArray(obj1) && Array.isArray(obj2)) {
+        if (obj1.length !== obj2.length) return false
+        return obj1.every((item, index) => compareObjects(item, obj2[index]))
+      }
+      
+      if (typeof obj1 === 'object') {
+        const keys1 = Object.keys(obj1)
+        const keys2 = Object.keys(obj2)
+        if (keys1.length !== keys2.length) return false
+        return keys1.every(key => compareObjects(obj1[key], obj2[key]))
+      }
+      
+      return obj1 === obj2
+    }
+
+    return !compareObjects(currentFormData, initialData)
+  }, [currentFormData, initialData, isDirty])
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "variants",
@@ -120,7 +151,7 @@ export function EnhancedProductForm({
   const handleFormSubmit = async (data: ProductFormData) => {
     // if (isClicked === false) return
     if (mode === "view") return
-    if (data === initialData) return
+    if (!isFormDirty) return
 
     setIsSubmittingState(true)
     try {
@@ -137,6 +168,39 @@ export function EnhancedProductForm({
   }
 
   const isReadOnly = mode === "view"
+
+  // 👉 Handle image reordering
+  const handleImageReorder = useCallback(async (variantIndex: number, newOrder: (File | string)[]) => {
+    if (!initialData?.id || isReordering) return
+
+    const variant = watch(`variants.${variantIndex}`)
+    if (!variant?.id) return
+
+    setIsReordering(true)
+    try {
+      // Extract image IDs from the new order (for existing images)
+      const imageOrder = newOrder
+        .map((item, index) => {
+          if (typeof item === 'string') {
+            // Extract ID from URL if it's an existing image
+            const match = item.match(/\/(\d+)\//)
+            return match ? match[1] : index.toString()
+          }
+          return index.toString()
+        })
+
+      await rubyService.reorderVariantImages(
+        initialData.id,
+        variant.id,
+        imageOrder
+      )
+    } catch (error) {
+      console.error('Failed to reorder images:', error)
+      // Optionally show a toast notification
+    } finally {
+      setIsReordering(false)
+    }
+  }, [initialData?.id, isReordering, watch])
 
   return (
     <div className="space-y-6 text-gray-700 dark:text-gray-400">
@@ -555,14 +619,24 @@ export function EnhancedProductForm({
                 <MultiImageUpload
                   label="Additional Images"
                   value={watch(`variants.${index}.additional_images`) || []}
-                  onChange={(files) =>
+                  onChange={(files) => {
                     setValue(`variants.${index}.additional_images`, files, {
                       shouldDirty: true,
                       shouldTouch: true,
                       shouldValidate: false,
                     })
-                  }
-                  disabled={isReadOnly}
+                  }}
+                  onReorder={(newOrder) => {
+                    setValue(`variants.${index}.additional_images`, newOrder, {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                      shouldValidate: false,
+                    })
+                    handleImageReorder(index, newOrder)
+                  }}
+                  productId={initialData?.id}
+                  variantId={watch(`variants.${index}.id`)}
+                  disabled={isReadOnly || isReordering}
                   maxFiles={10}
                 />
               </div>
@@ -581,7 +655,7 @@ export function EnhancedProductForm({
             </Button>
             <Button 
               type="submit" 
-              disabled={!isDirty || (isSubmitting && isSubmittingState && loading)} 
+              disabled={!isFormDirty || (isSubmitting && isSubmittingState && loading)} 
               className="min-w-[120px]"
             >
               {(isSubmitting && isSubmittingState && loading) ? (
