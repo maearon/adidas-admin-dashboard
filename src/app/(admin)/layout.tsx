@@ -6,7 +6,7 @@ import AdminLayoutClient from "./AdminLayoutClient";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "👕Admin Dashboard' adidas US | adidas US👕 admin Dashboard",
+    title: "👕Admin Dashboard' adidas US %s | adidas US👕 admin Dashboard",
     description: "This is Next.js Signin Page TailAdmin Dashboard Shop the latest shoes, clothing, and accessories at adidas US.",
   };
 }

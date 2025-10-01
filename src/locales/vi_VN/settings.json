@@ -1,6 +1,6 @@
 {
   "title": "Cài đặt",
-  "subtitle": "Quản lý cấu hình cửa hàng và tùy chọn cá nhân.",
+  "subtitle": "Quản lý cấu hình cửa hàng và tùy chọn cá nhân",
   "reset": "Đặt lại",
   "saveChanges": "Lưu thay đổi",
   "tabs": {
@@ -13,7 +13,7 @@
   },
   "store": {
     "title": "Thông tin cửa hàng",
-    "description": "Cấu hình chi tiết cửa hàng và thông tin liên hệ.",
+    "description": "Cấu hình chi tiết cửa hàng và thông tin liên hệ",
     "storeName": "Tên cửa hàng",
     "storeDescription": "Mô tả cửa hàng", 
     "storeEmail": "Email cửa hàng",
@@ -22,7 +22,7 @@
   },
   "notifications": {
     "title": "Cài đặt thông báo",
-    "description": "Chọn cách bạn muốn được thông báo về các sự kiện quan trọng.",
+    "description": "Chọn cách bạn muốn được thông báo về các sự kiện quan trọng",
     "emailNotifications": "Thông báo Email",
     "smsNotifications": "Thông báo SMS",
     "pushNotifications": "Thông báo Push",
@@ -31,7 +31,7 @@
   },
   "appearance": {
     "title": "Cài đặt giao diện",
-    "description": "Tùy chỉnh giao diện và cảm nhận của bảng quản trị.",
+    "description": "Tùy chỉnh giao diện và cảm nhận của bảng quản trị",
     "theme": "Chủ đề",
     "language": "Ngôn ngữ",
     "currency": "Tiền tệ",
@@ -53,21 +53,21 @@
   },
   "security": {
     "title": "Cài đặt bảo mật",
-    "description": "Quản lý bảo mật tài khoản và tùy chọn xác thực.",
+    "description": "Quản lý bảo mật tài khoản và tùy chọn xác thực",
     "twoFactorAuth": "Xác thực hai yếu tố",
     "sessionTimeout": "Thời gian hết phiên (phút)",
     "passwordExpiry": "Hết hạn mật khẩu (ngày)"
   },
   "shipping": {
     "title": "Cài đặt vận chuyển",
-    "description": "Cấu hình phí vận chuyển và tùy chọn giao hàng.",
+    "description": "Cấu hình phí vận chuyển và tùy chọn giao hàng",
     "freeShippingThreshold": "Ngưỡng miễn phí vận chuyển",
     "standardShippingCost": "Phí vận chuyển tiêu chuẩn",
     "expressShippingCost": "Phí vận chuyển nhanh"
   },
   "payment": {
     "title": "Cài đặt thanh toán", 
-    "description": "Quản lý phương thức thanh toán và chính sách hoàn tiền.",
+    "description": "Quản lý phương thức thanh toán và chính sách hoàn tiền",
     "paymentMethods": "Phương thức thanh toán",
     "autoRefund": "Tự động hoàn tiền",
     "refundPeriod": "Thời gian hoàn tiền (ngày)",
@@ -78,4 +78,3 @@
     }
   }
 }
-

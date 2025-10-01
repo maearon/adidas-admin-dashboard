@@ -1,6 +1,6 @@
 {
   "title": "Settings",
-  "subtitle": "Manage your store configuration and preferences.",
+  "subtitle": "Manage your store configuration and preferences",
   "reset": "Reset",
   "saveChanges": "Save Changes",
   "tabs": {
@@ -13,7 +13,7 @@
   },
   "store": {
     "title": "Store Information",
-    "description": "Configure your store details and contact information.",
+    "description": "Configure your store details and contact information",
     "storeName": "Store Name",
     "storeDescription": "Store Description", 
     "storeEmail": "Store Email",
@@ -22,7 +22,7 @@
   },
   "notifications": {
     "title": "Notification Settings",
-    "description": "Choose how you want to be notified about important events.",
+    "description": "Choose how you want to be notified about important events",
     "emailNotifications": "Email Notifications",
     "smsNotifications": "SMS Notifications",
     "pushNotifications": "Push Notifications",
@@ -31,7 +31,7 @@
   },
   "appearance": {
     "title": "Appearance Settings",
-    "description": "Customize the look and feel of your admin panel.",
+    "description": "Customize the look and feel of your admin panel",
     "theme": "Theme",
     "language": "Language",
     "currency": "Currency",
@@ -53,21 +53,21 @@
   },
   "security": {
     "title": "Security Settings",
-    "description": "Manage your account security and authentication preferences.",
+    "description": "Manage your account security and authentication preferences",
     "twoFactorAuth": "Two-Factor Authentication",
     "sessionTimeout": "Session Timeout (minutes)",
     "passwordExpiry": "Password Expiry (days)"
   },
   "shipping": {
     "title": "Shipping Settings",
-    "description": "Configure shipping rates and delivery options.",
+    "description": "Configure shipping rates and delivery options",
     "freeShippingThreshold": "Free Shipping Threshold",
     "standardShippingCost": "Standard Shipping Cost",
     "expressShippingCost": "Express Shipping Cost"
   },
   "payment": {
     "title": "Payment Settings", 
-    "description": "Manage payment methods and refund policies.",
+    "description": "Manage payment methods and refund policies",
     "paymentMethods": "Payment Methods",
     "autoRefund": "Auto Refund",
     "refundPeriod": "Refund Period (days)",
@@ -78,4 +78,3 @@
     }
   }
 }
-
