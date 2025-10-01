@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface Option {
   value: string;
@@ -10,6 +10,7 @@ interface SelectProps {
   placeholder?: string;
   onChange: (value: string) => void;
   className?: string;
+  value?: string; // controlled value
   defaultValue?: string;
 }
 
@@ -18,15 +19,25 @@ const Select: React.FC<SelectProps> = ({
   placeholder = "Select an option",
   onChange,
   className = "",
+  value,
   defaultValue = "",
 }) => {
   // Manage the selected value
   const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
 
+  // Nếu có value prop (controlled), đồng bộ state theo prop
+  useEffect(() => {
+    if (value !== undefined) {
+      setSelectedValue(value)
+    }
+  }, [value])
+
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setSelectedValue(value);
-    onChange(value); // Trigger parent handler
+    const val = e.target.value;
+    if (value === undefined) {
+      setSelectedValue(val); // chỉ setState nếu uncontrolled
+    }
+    onChange(val); // Trigger parent handler
   };
 
   return (
