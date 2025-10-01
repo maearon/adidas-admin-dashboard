@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AdidasButton } from "@/components/ui/adidas-button"
 import { Input } from "@/components/ui/input"
@@ -18,6 +18,18 @@ import { CurrencySelector } from "@/components/settings/CurrencySelector"
 
 export default function SettingsPage() {
   const t = useTranslations("settings")
+
+  // --- Tab state with persistence ---
+  const [activeTab, setActiveTab] = useState("appearance")
+  useEffect(() => {
+    const saved = localStorage.getItem("settings-tab")
+    if (saved) setActiveTab(saved)
+  }, [])
+  const handleTabChange = (val: string) => {
+    setActiveTab(val)
+    localStorage.setItem("settings-tab", val)
+  }
+
   const [settings, setSettings] = useState({
     // Store Settings
     storeName: "Adidas Vietnam",
@@ -61,7 +73,7 @@ export default function SettingsPage() {
 
   const handleSave = () => {
     console.log("Saving settings:", settings)
-    // Here you would typically send the settings to your API
+    // Gửi settings lên API ở đây
   }
 
   return (
@@ -85,7 +97,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Settings Tabs */}
-      <Tabs defaultValue="store" className="space-y-6">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
         <TabsList className="grid w-full grid-cols-6 border-2 border-foreground">
           <TabsTrigger
             value="store"
@@ -94,7 +106,6 @@ export default function SettingsPage() {
             <Store className="h-4 w-4" />
             {t?.tabs?.store}
           </TabsTrigger>
-
           <TabsTrigger
             value="notifications"
             className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-brand-500 data-[state=active]:bg-brand-50 dark:data-[state=active]:bg-brand-900/20"
@@ -102,7 +113,6 @@ export default function SettingsPage() {
             <Bell className="h-4 w-4" />
             {t?.tabs?.notifications}
           </TabsTrigger>
-
           <TabsTrigger
             value="appearance"
             className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-brand-500 data-[state=active]:bg-brand-50 dark:data-[state=active]:bg-brand-900/20"
@@ -110,7 +120,6 @@ export default function SettingsPage() {
             <Palette className="h-4 w-4" />
             {t?.tabs?.appearance}
           </TabsTrigger>
-
           <TabsTrigger
             value="security"
             className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-brand-500 data-[state=active]:bg-brand-50 dark:data-[state=active]:bg-brand-900/20"
@@ -118,7 +127,6 @@ export default function SettingsPage() {
             <Shield className="h-4 w-4" />
             {t?.tabs?.security}
           </TabsTrigger>
-
           <TabsTrigger
             value="shipping"
             className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-brand-500 data-[state=active]:bg-brand-50 dark:data-[state=active]:bg-brand-900/20"
@@ -126,7 +134,6 @@ export default function SettingsPage() {
             <Truck className="h-4 w-4" />
             {t?.tabs?.shipping}
           </TabsTrigger>
-
           <TabsTrigger
             value="payment"
             className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-brand-500 data-[state=active]:bg-brand-50 dark:data-[state=active]:bg-brand-900/20"
