@@ -40,5 +40,7 @@
   "filterBy": "Filter by",
   "viewAs": "View as",
   "grid": "Grid",
-  "list": "List"
+  "list": "List",
+  "noProductsFound": "No products found",
+  "tryAdjustingFilters": "Try adjusting your filters or search terms"
 }

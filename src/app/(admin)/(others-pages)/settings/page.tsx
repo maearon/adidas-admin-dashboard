@@ -87,27 +87,50 @@ export default function SettingsPage() {
       {/* Settings Tabs */}
       <Tabs defaultValue="store" className="space-y-6">
         <TabsList className="grid w-full grid-cols-6 border-2 border-foreground">
-          <TabsTrigger value="store" className="flex items-center gap-2">
+          <TabsTrigger
+            value="store"
+            className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-brand-500 data-[state=active]:bg-brand-50 dark:data-[state=active]:bg-brand-900/20"
+          >
             <Store className="h-4 w-4" />
             {t?.tabs?.store}
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex items-center gap-2">
+
+          <TabsTrigger
+            value="notifications"
+            className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-brand-500 data-[state=active]:bg-brand-50 dark:data-[state=active]:bg-brand-900/20"
+          >
             <Bell className="h-4 w-4" />
             {t?.tabs?.notifications}
           </TabsTrigger>
-          <TabsTrigger value="appearance" className="flex items-center gap-2">
+
+          <TabsTrigger
+            value="appearance"
+            className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-brand-500 data-[state=active]:bg-brand-50 dark:data-[state=active]:bg-brand-900/20"
+          >
             <Palette className="h-4 w-4" />
             {t?.tabs?.appearance}
           </TabsTrigger>
-          <TabsTrigger value="security" className="flex items-center gap-2">
+
+          <TabsTrigger
+            value="security"
+            className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-brand-500 data-[state=active]:bg-brand-50 dark:data-[state=active]:bg-brand-900/20"
+          >
             <Shield className="h-4 w-4" />
             {t?.tabs?.security}
           </TabsTrigger>
-          <TabsTrigger value="shipping" className="flex items-center gap-2">
+
+          <TabsTrigger
+            value="shipping"
+            className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-brand-500 data-[state=active]:bg-brand-50 dark:data-[state=active]:bg-brand-900/20"
+          >
             <Truck className="h-4 w-4" />
             {t?.tabs?.shipping}
           </TabsTrigger>
-          <TabsTrigger value="payment" className="flex items-center gap-2">
+
+          <TabsTrigger
+            value="payment"
+            className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-brand-500 data-[state=active]:bg-brand-50 dark:data-[state=active]:bg-brand-900/20"
+          >
             <CreditCard className="h-4 w-4" />
             {t?.tabs?.payment}
           </TabsTrigger>
