@@ -5,6 +5,7 @@ import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
 import SettingsPageClientTab from "./SettingsPageClientTab";
 import { useTranslations } from "@/hooks/useTranslations";
+import SettingsPageClientContent from "./SettingsPageClientContent";
 
 // Dynamically import the ReactApexChart component
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
@@ -139,12 +140,13 @@ export default function SettingsPageClient() {
 
       <div className="max-w-full overflow-x-auto custom-scrollbar">
         <div className="min-w-[1000px] xl:min-w-full">
-          <ReactApexChart
+          <SettingsPageClientContent />
+          {/* <ReactApexChart
             options={options}
             series={series}
             type="area"
             height={310}
-          />
+          /> */}
         </div>
       </div>
     </div>

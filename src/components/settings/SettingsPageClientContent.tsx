@@ -14,7 +14,7 @@ import { ThemeSelector } from "@/components/settings/ThemeSelector"
 import { LanguageSelector } from "@/components/settings/LanguageSelector"
 import { CurrencySelector } from "@/components/settings/CurrencySelector"
 
-export default function SettingsPage() {
+export default function SettingsPageClientContent() {
   const t = useTranslations("settings")
 
   // --- Tab state with persistence ---
