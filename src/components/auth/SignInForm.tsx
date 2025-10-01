@@ -1,6 +1,5 @@
 "use client";
 // import Checkbox from "@/components/form/input/Checkbox";
-import { Checkbox } from "@/components/ui/checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import { LoadingButton } from "@/components/loading-button";
@@ -23,6 +22,7 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import Switch from "@/components/form/switch/Switch";
 
 const signInSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email" }),
@@ -236,16 +236,13 @@ export default function SignInForm() {
                         render={({ field }) => (
                           <FormItem>
                             <FormControl>
-                              {/* <Checkbox checked={isChecked} onChange={setIsChecked} /> */}
-                              <Checkbox
-                                id="keepLoggedIn"
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
+                              <Switch
+                                label={t?.keepMeLoggedIn || "Keep me logged in"}
+                                // dùng field.value và field.onChange để controlled
+                                defaultChecked={field.value}
+                                onChange={field.onChange}
                               />
                             </FormControl>
-                            <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
-                              {t?.keepMeLoggedIn || "Keep me logged in"}
-                            </span>
                           </FormItem>
                         )}
                       />
