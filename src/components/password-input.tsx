@@ -21,13 +21,9 @@ export function PasswordInput({
         type="button"
         onClick={() => setShowPassword(!showPassword)}
         title={showPassword ? "Hide password" : "Show password"}
-        className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 transform"
+        className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-foreground dark:text-gray-400"
       >
-        {showPassword ? (
-          <EyeOffIcon className="size-5 fill-gray-500 dark:fill-gray-400" />
-        ) : (
-          <EyeIcon className="size-5 fill-gray-500 dark:fill-gray-400" />
-        )}
+        {showPassword ? <EyeOffIcon className="size-5" /> : <EyeIcon className="size-5" />}
       </button>
     </div>
   );
