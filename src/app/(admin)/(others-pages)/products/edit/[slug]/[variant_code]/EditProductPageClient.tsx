@@ -102,7 +102,7 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
         toast.success("✅ Product updated successfully!")
 
         // 👇 cập nhật URL theo slug và variant_code mới
-        router.replace(
+        router.push(
           `/products/edit/${newSlug}/${newVariantCode}.html?mode=view`
         )
 

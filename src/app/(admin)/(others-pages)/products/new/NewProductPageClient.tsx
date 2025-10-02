@@ -83,7 +83,7 @@ export default function NewProductPageClient() {
         const newVariantCode = result.data.variants?.[0]?.variant_code
 
         // 🔁 Redirect sang trang edit (hoặc view tuỳ ý)
-        router.replace(
+        router.push(
           `/products/edit/${newSlug}/${newVariantCode}.html?mode=view`
         )
       } else {
