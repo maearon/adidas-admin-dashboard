@@ -36,7 +36,7 @@ export default function AuthLayout({
               </div>
             </div>
           </div>
-          <div className="fixed bottom-6 right-6 z-50 hidden sm:flex-col gap-3">
+          <div className="fixed bottom-6 right-6 z-50 hidden sm:flex sm:flex-col gap-3">
             <LanguageTogglerTwo />
             <ThemeTogglerTwo />
           </div>
