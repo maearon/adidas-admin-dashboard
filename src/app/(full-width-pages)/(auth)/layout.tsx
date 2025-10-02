@@ -1,4 +1,5 @@
 import GridShape from "@/components/common/GridShape";
+import LanguageTogglerTwo from "@/components/common/LanguageTogglerTwo";
 import ThemeTogglerTwo from "@/components/common/ThemeTogglerTwo";
 
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -36,6 +37,7 @@ export default function AuthLayout({
             </div>
           </div>
           <div className="fixed bottom-6 right-6 z-50 hidden sm:block">
+            <LanguageTogglerTwo />
             <ThemeTogglerTwo />
           </div>
         </div>
