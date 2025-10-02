@@ -1,12 +1,21 @@
 "use client";
+import { User } from "@/lib/auth";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { LogOut } from "./Logout";
 
-export default function UserDropdown() {
+interface UserDropdownProps {
+  user: User;
+}
+
+function getFirstName(name?: string) {
+  if (!name) return "";
+  return name.trim().split(" ")[0];
+}
+
+export default function UserDropdown({ user }: UserDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
 function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -27,12 +36,12 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
           <Image
             width={44}
             height={44}
-            src="/images/user/owner.jpg"
-            alt="User"
+            src={user.image || "/images/user/owner.jpg"}
+            alt={user.name || "User"}
           />
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm">Musharof</span>
+        <span className="block mr-1 font-medium text-theme-sm">{getFirstName(user.name) || "Manh"}</span>
 
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
@@ -61,10 +70,10 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-            Musharof Chowdhury
+            {user.name || "Manh Nguyen"}
           </span>
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-            randomuser@pimjo.com
+            {user.email || "manhng132@gmail.com"}
           </span>
         </div>
 

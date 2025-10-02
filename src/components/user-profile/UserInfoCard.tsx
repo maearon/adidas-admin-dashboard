@@ -45,7 +45,7 @@ export default function UserInfoCard() {
                 Email address
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                randomuser@pimjo.com
+                manhng132@gmail.com
               </p>
             </div>
 
@@ -158,7 +158,7 @@ export default function UserInfoCard() {
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Email Address</Label>
-                    <Input type="text" defaultValue="randomuser@pimjo.com" />
+                    <Input type="text" defaultValue="manhng132@gmail.com" />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
