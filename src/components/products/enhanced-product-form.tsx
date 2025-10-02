@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus, Trash2, Save, Loader2, ChevronDownIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import TextArea from "@/components/form/input/TextArea";
 import Label from "@/components/form/Label"
 import Select from "@/components/form/Select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -288,7 +288,7 @@ export function EnhancedProductForm({
 
             <div className="space-y-2">
               <Label htmlFor="description_h5">Short Description</Label>
-              <Textarea
+              <TextArea
                 id="description_h5"
                 {...register("description_h5")}
                 disabled={isReadOnly}
@@ -299,7 +299,7 @@ export function EnhancedProductForm({
 
             <div className="space-y-2">
               <Label htmlFor="description_p">Full Description</Label>
-              <Textarea
+              <TextArea
                 id="description_p"
                 {...register("description_p")}
                 disabled={isReadOnly}
@@ -447,7 +447,7 @@ export function EnhancedProductForm({
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="care">Care Instructions</Label>
-                <Textarea
+                <TextArea
                   id="care"
                   {...register("care")}
                   disabled={isReadOnly}
@@ -458,7 +458,7 @@ export function EnhancedProductForm({
 
               <div className="space-y-2">
                 <Label htmlFor="specifications">Specifications</Label>
-                <Textarea
+                <TextArea
                   id="specifications"
                   {...register("specifications")}
                   disabled={isReadOnly}
