@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { LogOut } from "./Logout";
+import { UserIcon } from "@/icons";
 
 interface UserDropdownProps {
   user: User;
@@ -33,15 +34,19 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle"
       >
         <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          <Image
-            width={44}
-            height={44}
-            src={user?.image ?? "/images/user/owner.jpg"}
-            alt={user?.name ?? "User"}
-          />
+          {user?.image ? (
+              <Image
+                width={44}
+                height={44}
+                src={user?.image || "/images/user/owner.jpg"}
+                alt={user?.name || "User"}
+              />
+            ) : (
+              <UserIcon className="h-11 w-11 text-gray-700 dark:text-gray-400" />
+            )}
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm">{getFirstName(user?.name) ?? "Manh"}</span>
+        <span className="block mr-1 font-medium text-theme-sm">{getFirstName(user?.name || "Manh Nguyen") || "Manh"}</span>
 
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
