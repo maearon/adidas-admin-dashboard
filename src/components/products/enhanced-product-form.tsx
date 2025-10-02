@@ -16,7 +16,12 @@ import { ImageUploadField } from "./image-upload-field"
 import { MultiImageUpload } from "./multi-image-upload"
 import { productSchema, type ProductFormData } from "@/lib/validations/product"
 import { Badge } from "@/components/ui/badge"
-import rubyService from "@/api/services/rubyService"
+// import rubyService from "@/api/services/rubyService"
+import { 
+  // ToastContainer, 
+  toast 
+} from 'react-toastify'
+import { useTranslations } from "@/hooks/useTranslations"
 
 interface EnhancedProductFormProps {
   initialData?: ProductFormData
@@ -45,6 +50,7 @@ export function EnhancedProductForm({
   mode: initialMode = "view",
   loading = false,
 }: EnhancedProductFormProps) {
+  const t = useTranslations("productEdit")
   const [mode, setMode] = useState<Mode>(initialMode)
   const [isSubmittingState, setIsSubmittingState] = useState(false)
   const [isReordering, setIsReordering] = useState(false)
@@ -195,11 +201,12 @@ export function EnhancedProductForm({
                 originalImages: variant.additional_images
               })
 
-              await rubyService.reorderVariantImages(
-                initialData.id,
-                variant.id,
-                imageOrder
-              )
+              // await rubyService.reorderVariantImages(
+              //   initialData.id,
+              //   variant.id,
+              //   imageOrder
+              // )
+              toast.warn(t?.reorderNotAvailable || "⚠️ Backend hiện chưa hỗ trợ sắp xếp lại thứ tự ảnh. Thay đổi này chỉ hiển thị tạm thời.")
             } catch (error) {
               console.error(`Failed to reorder images for variant ${i}:`, error)
               // Continue with form submission even if reorder fails
