@@ -206,7 +206,11 @@ export function EnhancedProductForm({
               //   variant.id,
               //   imageOrder
               // )
-              toast(t?.reorderNotAvailable || "⚠️ Backend does not currently support reordering images. This change is temporary only")
+              setIsReordering(true)
+              if (isReordering) {
+                toast(t?.reorderNotAvailable || "⚠️ Backend does not currently support reordering images. This change is temporary only")
+                setIsReordering(false)
+              }
             } catch (error) {
               console.error(`Failed to reorder images for variant ${i}:`, error)
               // Continue with form submission even if reorder fails
@@ -223,6 +227,7 @@ export function EnhancedProductForm({
       console.error("Form submission error:", error)
     } finally {
       setIsSubmittingState(false)
+      reset()
       // setIsClicked(false)
     }
   }
