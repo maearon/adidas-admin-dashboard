@@ -3,9 +3,10 @@
 
 import React from "react";
 import { useSidebar } from "@/context/SidebarContext";
-import AppHeader from "@/layout/AppHeaderClient";
+import AppHeader from "@/layout/AppHeader";
 import AppSidebar from "@/layout/AppSidebar";
 import Backdrop from "@/layout/Backdrop";
+import { ToastProvider } from "@/components/ToastProvider";
 
 export default function AdminLayoutClient({
   children,
@@ -33,6 +34,7 @@ export default function AdminLayoutClient({
         <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
           {children}
         </div>
+        <ToastProvider />
       </div>
     </div>
   );
