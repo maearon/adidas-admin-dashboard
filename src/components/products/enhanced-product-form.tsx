@@ -226,11 +226,6 @@ export function EnhancedProductForm({
       }
 
       await onSubmit(data)
-      if (mode === "create") {
-        reset() // tạo xong thì clear form
-      } else {
-        reset(data) // update xong thì reset với dữ liệu vừa submit
-      }
     } catch (error) {
       console.error("Form submission error:", error)
     } finally {

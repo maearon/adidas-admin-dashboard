@@ -103,7 +103,7 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
 
         // 👇 cập nhật URL theo slug và variant_code mới
         router.replace(
-          `/products/edit/${newSlug}/${newVariantCode}.html?mode=edit`
+          `/products/edit/${newSlug}/${newVariantCode}.html?mode=view`
         )
 
         // 👇 làm mới dữ liệu trong form

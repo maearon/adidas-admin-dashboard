@@ -84,7 +84,7 @@ export default function NewProductPageClient() {
 
         // 🔁 Redirect sang trang edit (hoặc view tuỳ ý)
         router.replace(
-          `/products/edit/${newSlug}/${newVariantCode}.html?mode=edit`
+          `/products/edit/${newSlug}/${newVariantCode}.html?mode=view`
         )
       } else {
         toast.error("❌ Failed to create product!")
