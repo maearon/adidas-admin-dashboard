@@ -206,7 +206,7 @@ export function EnhancedProductForm({
               //   variant.id,
               //   imageOrder
               // )
-              toast.warn(t?.reorderNotAvailable || "⚠️ Backend hiện chưa hỗ trợ sắp xếp lại thứ tự ảnh. Thay đổi này chỉ hiển thị tạm thời.")
+              toast(t?.reorderNotAvailable || "⚠️ Backend does not currently support reordering images. This change is temporary only")
             } catch (error) {
               console.error(`Failed to reorder images for variant ${i}:`, error)
               // Continue with form submission even if reorder fails
