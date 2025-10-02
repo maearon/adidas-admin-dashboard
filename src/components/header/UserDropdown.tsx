@@ -36,12 +36,12 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
           <Image
             width={44}
             height={44}
-            src={user.image || "/images/user/owner.jpg"}
-            alt={user.name || "User"}
+            src={user?.image ?? "/images/user/owner.jpg"}
+            alt={user?.name ?? "User"}
           />
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm">{getFirstName(user.name) || "Manh"}</span>
+        <span className="block mr-1 font-medium text-theme-sm">{getFirstName(user?.name) ?? "Manh"}</span>
 
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
@@ -70,10 +70,10 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-            {user.name || "Manh Nguyen"}
+            {user?.name ?? "Manh Nguyen"}
           </span>
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-            {user.email || "manhng132@gmail.com"}
+            {user?.email ?? "manhng132@gmail.com"}
           </span>
         </div>
 
