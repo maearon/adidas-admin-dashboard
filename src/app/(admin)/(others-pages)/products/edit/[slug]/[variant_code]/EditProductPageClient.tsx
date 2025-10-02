@@ -7,7 +7,7 @@ import { Loading } from "@/components/loading"
 import { useProductDetail, useUpdateProduct } from "@/api/hooks/useProducts"
 import { useState } from "react"
 import { slugify } from "@/utils/slugify"
-import { toast } from "sonner"
+import { toast } from 'react-toastify'
 
 interface EditProductPageProps {
   params: {
@@ -99,12 +99,15 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
         const newSlug = slugify(result.data.name)
         const newVariantCode = result.data.variants?.[0]?.variant_code
 
-        toast.success("✅ Product updated successfully!")
+        toast("✅ Product updated successfully!")
 
         // 👇 cập nhật URL theo slug và variant_code mới
-        router.push(
-          `/products/edit/${newSlug}/${newVariantCode}.html?mode=view`
-        )
+        // router.push(
+        //   `/products/edit/${newSlug}/${newVariantCode}.html?mode=view`
+        // )
+        setTimeout(() => {
+          window.location.href = `/products/edit/${newSlug}/${newVariantCode}.html?mode=edit`;
+        }, 50);
 
         // 👇 làm mới dữ liệu trong form
         await refetch()

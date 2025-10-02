@@ -6,7 +6,7 @@ import type { ProductFormData } from "@/lib/validations/product"
 import { Loading } from "@/components/loading"
 import { useState } from "react"
 import { useCreateProduct } from "@/api/hooks/useProducts"
-import { toast } from "sonner"
+import { toast } from 'react-toastify'
 import { slugify } from "@/utils/slugify"
 
 export default function NewProductPageClient() {
@@ -77,15 +77,18 @@ export default function NewProductPageClient() {
       const result = await createProduct.mutateAsync(formData)
 
       if (result?.success && result?.data) {
-        toast.success("✅ Product created successfully!")
+        toast("✅ Product created successfully!")
 
         const newSlug = slugify(result.data.name)
         const newVariantCode = result.data.variants?.[0]?.variant_code
 
         // 🔁 Redirect sang trang edit (hoặc view tuỳ ý)
-        router.push(
-          `/products/edit/${newSlug}/${newVariantCode}.html?mode=view`
-        )
+        // router.push(
+        //   `/products/edit/${newSlug}/${newVariantCode}.html?mode=view`
+        // )
+        setTimeout(() => {
+          window.location.href = `/products/edit/${newSlug}/${newVariantCode}.html?mode=edit`;
+        }, 50);
       } else {
         toast.error("❌ Failed to create product!")
       }
