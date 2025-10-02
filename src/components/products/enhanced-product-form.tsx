@@ -206,17 +206,17 @@ export function EnhancedProductForm({
               //   variant.id,
               //   imageOrder
               // )
-              setIsReordering(true)
+              // setIsReordering(true)
 
-              if (!toast.isActive("reorder-warning")) {
-                toast(
-                  t?.reorderNotAvailable ||
-                    "⚠️ Backend does not currently support reordering images. This change is temporary only",
-                  { toastId: "reorder-warning" }
-                )
-              }
+              // if (!toast.isActive("reorder-warning")) {
+              //   toast(
+              //     t?.reorderNotAvailable ||
+              //       "⚠️ Backend does not currently support reordering images. This change is temporary only",
+              //     { toastId: "reorder-warning" }
+              //   )
+              // }
 
-              setIsReordering(false)
+              // setIsReordering(false)
             } catch (error) {
               console.error(`Failed to reorder images for variant ${i}:`, error)
               // Continue with form submission even if reorder fails
