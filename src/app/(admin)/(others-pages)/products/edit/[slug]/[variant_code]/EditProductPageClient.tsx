@@ -99,7 +99,7 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
         const newSlug = slugify(result.data.name)
         const newVariantCode = result.data.variants?.[0]?.variant_code
 
-        toast("✅ Product updated successfully!")
+        // toast("✅ Product updated successfully!")
 
         // 👇 cập nhật URL theo slug và variant_code mới
         // router.push(

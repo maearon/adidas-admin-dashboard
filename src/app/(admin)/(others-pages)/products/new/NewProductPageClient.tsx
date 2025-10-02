@@ -77,7 +77,7 @@ export default function NewProductPageClient() {
       const result = await createProduct.mutateAsync(formData)
 
       if (result?.success && result?.data) {
-        toast("✅ Product created successfully!")
+        // toast("✅ Product created successfully!")
 
         const newSlug = slugify(result.data.name)
         const newVariantCode = result.data.variants?.[0]?.variant_code
