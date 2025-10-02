@@ -5,7 +5,7 @@ import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus, Trash2, Save, Loader2, ChevronDownIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import Input from '@/components/form/input/InputField';
 import TextArea from "@/components/form/input/TextArea";
 import Label from "@/components/form/Label"
 import Select from "@/components/form/Select"
