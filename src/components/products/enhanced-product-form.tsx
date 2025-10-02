@@ -207,10 +207,16 @@ export function EnhancedProductForm({
               //   imageOrder
               // )
               setIsReordering(true)
-              if (isReordering) {
-                toast(t?.reorderNotAvailable || "⚠️ Backend does not currently support reordering images. This change is temporary only")
-                setIsReordering(false)
+
+              if (!toast.isActive("reorder-warning")) {
+                toast(
+                  t?.reorderNotAvailable ||
+                    "⚠️ Backend does not currently support reordering images. This change is temporary only",
+                  { toastId: "reorder-warning" }
+                )
               }
+
+              setIsReordering(false)
             } catch (error) {
               console.error(`Failed to reorder images for variant ${i}:`, error)
               // Continue with form submission even if reorder fails
@@ -221,13 +227,14 @@ export function EnhancedProductForm({
 
       await onSubmit(data)
       if (mode === "create") {
-        reset()
+        reset() // tạo xong thì clear form
+      } else {
+        reset(data) // update xong thì reset với dữ liệu vừa submit
       }
     } catch (error) {
       console.error("Form submission error:", error)
     } finally {
       setIsSubmittingState(false)
-      reset()
       // setIsClicked(false)
     }
   }
