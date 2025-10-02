@@ -1,4 +1,6 @@
 // app/admin/AdminLayoutClient.tsx (Client Component)
+"use client";
+
 import React from "react";
 import { useSidebar } from "@/context/SidebarContext";
 import AppHeader from "@/layout/AppHeader";
