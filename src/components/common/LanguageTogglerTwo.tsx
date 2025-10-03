@@ -13,9 +13,9 @@ export default function LanguageTogglerTwo() {
       className="inline-flex size-14 items-center justify-center rounded-full bg-brand-500 text-white transition-colors hover:bg-brand-600"
     >
       {locale === "en_US" ? (
-        <Globe className="w-5 h-5" />
-      ) : (
         <Languages className="w-5 h-5" />
+      ) : (
+        <Globe className="w-5 h-5" />
       )}
     </button>
   );
