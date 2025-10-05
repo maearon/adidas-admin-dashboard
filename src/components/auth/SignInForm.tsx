@@ -23,18 +23,19 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import Switch from "@/components/form/switch/Switch";
+import { AuthTranslations } from "@/types/auth"
 
-const signInSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email" }),
-  password: z.string().min(1, { message: "Password is required" }),
+const validationSchema = (t: AuthTranslations) => z.object({
+  email: z.string().email({ message: (t?.validation?.emailInvalid || "Please enter a valid email") }),
+  password: z.string().min(1, { message: (t?.validation?.passwordRequired || "Password is required") }),
   // rememberMe: z.boolean().default(true),
   rememberMe: z.boolean().optional(),
 });
 
-type SignInValues = z.infer<typeof signInSchema>;
-
 export default function SignInForm() {
   const t = useTranslations("auth");
+  const signInSchema = validationSchema(t);
+  type SignInValues = z.infer<typeof signInSchema>;
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
