@@ -90,6 +90,9 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
         }
       })
 
+      // Add translations if available
+      // Translations are saved separately via API, but we can include them here if needed
+
       const result = await updateProduct.mutateAsync({
         id: variant_code,
         formData,

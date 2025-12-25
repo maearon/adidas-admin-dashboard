@@ -22,6 +22,7 @@ import {
   toast 
 } from 'react-toastify'
 import { useTranslations } from "@/hooks/useTranslations"
+import { ProductTranslationsEditor, type TranslationData } from "./ProductTranslationsEditor"
 
 interface EnhancedProductFormProps {
   initialData?: ProductFormData
@@ -55,7 +56,42 @@ export function EnhancedProductForm({
   const [isSubmittingState, setIsSubmittingState] = useState(false)
   const [isReordering, setIsReordering] = useState(false)
   const [isImageChanging, setIsImageChanging] = useState(false)
+  const [showTranslations, setShowTranslations] = useState(false)
+  const [translations, setTranslations] = useState<Record<string, TranslationData>>({})
+  const [loadingTranslations, setLoadingTranslations] = useState(false)
   // const [isClicked, setIsClicked] = useState(false)
+
+  // Load existing translations when product ID is available
+  useEffect(() => {
+    const loadTranslations = async () => {
+      if (!initialData?.id) return
+
+      setLoadingTranslations(true)
+      try {
+        const railsApiUrl = process.env.NEXT_PUBLIC_RAILS_API_URL || "http://localhost:3000/api"
+        const response = await fetch(`${railsApiUrl}/admin/products/${initialData.id}/translations`, {
+          credentials: "include",
+        })
+
+        if (response.ok) {
+          const result = await response.json()
+          if (result.translations) {
+            const translationsMap: Record<string, TranslationData> = {}
+            result.translations.forEach((t: any) => {
+              translationsMap[t.locale] = t.data
+            })
+            setTranslations(translationsMap)
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load translations:", error)
+      } finally {
+        setLoadingTranslations(false)
+      }
+    }
+
+    loadTranslations()
+  }, [initialData?.id])
 
   const {
     register,
@@ -648,6 +684,50 @@ export function EnhancedProductForm({
             )}
           </CardContent>
         </Card>
+
+        {/* Translations Editor */}
+        {initialData?.id && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Product Translations</CardTitle>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowTranslations(!showTranslations)}
+                >
+                  {showTranslations ? "Hide" : "Show"} Translations
+                </Button>
+              </div>
+            </CardHeader>
+            {showTranslations && (
+              <CardContent>
+                {loadingTranslations ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="h-6 w-6 animate-spin" />
+                    <span className="ml-2">Loading translations...</span>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {["en", "vi"].map((locale) => (
+                      <ProductTranslationsEditor
+                        key={locale}
+                        productId={initialData.id}
+                        locale={locale}
+                        initialData={translations[locale]}
+                        onSave={async (data) => {
+                          setTranslations({ ...translations, [locale]: data })
+                          toast.success(`Translation for ${locale.toUpperCase()} saved!`)
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            )}
+          </Card>
+        )}
 
         {!isReadOnly && (
           <div className="flex justify-end gap-4 pt-6">
