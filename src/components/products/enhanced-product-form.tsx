@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo, useCallback } from "react"
+import { useState, useEffect, useMemo, useCallback, useRef } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus, Trash2, Save, Loader2, ChevronDownIcon } from "lucide-react"
@@ -28,7 +28,7 @@ import api from "@/api/client"
 interface EnhancedProductFormProps {
   initialData?: ProductFormData
   variantCode?: string
-  onSubmit: (data: ProductFormData) => Promise<void>
+  onSubmit: (data: ProductFormData, translations: Record<string, TranslationData>) => Promise<void>
   mode?: Mode
   loading?: boolean
 }
@@ -61,6 +61,8 @@ export function EnhancedProductForm({
   const [isImageChanging, setIsImageChanging] = useState(false)
   const [showTranslations, setShowTranslations] = useState(false)
   const [translations, setTranslations] = useState<Record<string, TranslationData>>({})
+  const [initialTranslations, setInitialTranslations] = useState<Record<string, TranslationData>>({})
+  const translationsRef = useRef<Record<string, TranslationData>>({})
   const [loadingTranslations, setLoadingTranslations] = useState(false)
   // const [isClicked, setIsClicked] = useState(false)
 
@@ -82,6 +84,8 @@ export function EnhancedProductForm({
             translationsMap[t.locale] = t.data
           })
           setTranslations(translationsMap)
+          setInitialTranslations(translationsMap)
+          translationsRef.current = translationsMap
         }
       } catch (error) {
         console.error("Failed to load translations:", error)
@@ -139,8 +143,13 @@ export function EnhancedProductForm({
 
   // 👉 Enhanced isDirty detection
   const currentFormData = watch()
+  const translationsDirty = useMemo(
+    () => JSON.stringify(translations) !== JSON.stringify(initialTranslations),
+    [translations, initialTranslations]
+  )
+
   const isFormDirty = useMemo(() => {
-    if (!initialData) return isDirty
+    if (!initialData) return isDirty || translationsDirty
 
     // Deep comparison for complex objects
     const compareObjects = (obj1: any, obj2: any): boolean => {
@@ -163,8 +172,8 @@ export function EnhancedProductForm({
       return obj1 === obj2
     }
 
-    return !compareObjects(currentFormData, initialData)
-  }, [currentFormData, initialData, isDirty])
+    return !compareObjects(currentFormData, initialData) || translationsDirty
+  }, [currentFormData, initialData, isDirty, translationsDirty])
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -190,6 +199,11 @@ export function EnhancedProductForm({
       // setValue("model_number", modelNumber)
     }
   }, [watchName, setValue, mode])
+
+  const syncTranslations = useCallback((locale: string, data: TranslationData) => {
+    translationsRef.current = { ...translationsRef.current, [locale]: data }
+    setTranslations({ ...translationsRef.current })
+  }, [])
 
   const handleFormSubmit = async (data: ProductFormData) => {
     // if (isClicked === false) return
@@ -261,7 +275,7 @@ export function EnhancedProductForm({
         }
       }
 
-      await onSubmit(data)
+      await onSubmit(data, translationsRef.current)
     } catch (error) {
       console.error("Form submission error:", error)
     } finally {
@@ -715,10 +729,9 @@ export function EnhancedProductForm({
                         key={locale}
                         productId={resolvedVariantCode}
                         locale={locale}
-                        initialData={translations[locale]}
-                        onSaved={(data) =>
-                          setTranslations((prev) => ({ ...prev, [locale]: data }))
-                        }
+                        value={translations[locale] ?? { description: { descTitle: "", descText: "" }, details: [], highlights: [], sectionOrder: undefined }}
+                        onChange={(data) => syncTranslations(locale, data)}
+                        onSaved={(data) => syncTranslations(locale, data)}
                       />
                     ))}
                   </div>

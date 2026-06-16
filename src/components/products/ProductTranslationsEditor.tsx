@@ -48,10 +48,10 @@ export interface TranslationData {
 }
 
 interface ProductTranslationsEditorProps {
-  /** variant_code, ví dụ JP5593 */
   productId: number | string
   locale: string
-  initialData?: TranslationData
+  value: TranslationData
+  onChange: (data: TranslationData) => void
   onSaved?: (data: TranslationData) => void
   onCancel?: () => void
 }
@@ -127,18 +127,13 @@ function SortableSectionItem({
 export function ProductTranslationsEditor({
   productId,
   locale,
-  initialData,
+  value,
+  onChange,
   onSaved,
   onCancel,
 }: ProductTranslationsEditorProps) {
-  const [data, setData] = useState<TranslationData>(
-    initialData || {
-      description: { descTitle: "", descText: "" },
-      details: [],
-      highlights: [],
-      sectionOrder: [...DEFAULT_SECTION_ORDER],
-    }
-  )
+  const data = value
+  const updateData = (next: TranslationData) => onChange(next)
   const [jsonMode, setJsonMode] = useState(false)
   const [jsonText, setJsonText] = useState("")
   const [jsonError, setJsonError] = useState<string | null>(null)
@@ -170,13 +165,13 @@ export function ProductTranslationsEditor({
         ...section,
         order: index,
       }))
-      setData({ ...data, sectionOrder: updatedOrder })
+      updateData({ ...data, sectionOrder: updatedOrder })
     }
   }
 
   const toggleSection = (type: SectionType) => {
     if (!data.sectionOrder) return
-    setData({
+    updateData({
       ...data,
       sectionOrder: data.sectionOrder.map((s) =>
         s.type === type ? { ...s, enabled: !s.enabled } : s
@@ -185,7 +180,7 @@ export function ProductTranslationsEditor({
   }
 
   const addDetail = () => {
-    setData({
+    updateData({
       ...data,
       details: [...(data.details || []), ""],
     })
@@ -195,19 +190,19 @@ export function ProductTranslationsEditor({
     if (!data.details) return
     const newDetails = [...data.details]
     newDetails[index] = value
-    setData({ ...data, details: newDetails })
+    updateData({ ...data, details: newDetails })
   }
 
   const removeDetail = (index: number) => {
     if (!data.details) return
-    setData({
+    updateData({
       ...data,
       details: data.details.filter((_, i) => i !== index),
     })
   }
 
   const addHighlight = () => {
-    setData({
+    updateData({
       ...data,
       highlights: [...(data.highlights || []), { title: "", text: "" }],
     })
@@ -217,12 +212,12 @@ export function ProductTranslationsEditor({
     if (!data.highlights) return
     const newHighlights = [...data.highlights]
     newHighlights[index] = { ...newHighlights[index], [field]: value }
-    setData({ ...data, highlights: newHighlights })
+    updateData({ ...data, highlights: newHighlights })
   }
 
   const removeHighlight = (index: number) => {
     if (!data.highlights) return
-    setData({
+    updateData({
       ...data,
       highlights: data.highlights.filter((_, i) => i !== index),
     })
@@ -285,7 +280,7 @@ export function ProductTranslationsEditor({
     setJsonError(null)
     const validated = validateJson(value)
     if (validated) {
-      setData(validated)
+      updateData(validated)
     }
   }
 
@@ -299,12 +294,12 @@ export function ProductTranslationsEditor({
         return
       }
       dataToSave = validated
-      setData(validated)
+      updateData(validated)
     }
 
     if (!dataToSave.sectionOrder || dataToSave.sectionOrder.length === 0) {
       dataToSave = { ...dataToSave, sectionOrder: [...DEFAULT_SECTION_ORDER] }
-      setData(dataToSave)
+      updateData(dataToSave)
     }
 
     const payload: TranslationData = {
@@ -436,7 +431,7 @@ export function ProductTranslationsEditor({
                     id="descTitle"
                     value={data.description?.descTitle || ""}
                     onChange={(e) =>
-                      setData({
+                      updateData({
                         ...data,
                         description: { ...data.description, descTitle: e.target.value },
                       })
@@ -450,7 +445,7 @@ export function ProductTranslationsEditor({
                     id="descText"
                     value={data.description?.descText || ""}
                     onChange={(e) =>
-                      setData({
+                      updateData({
                         ...data,
                         description: { ...data.description, descText: e.target.value },
                       })

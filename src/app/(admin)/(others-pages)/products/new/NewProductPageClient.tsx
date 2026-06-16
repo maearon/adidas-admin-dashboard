@@ -14,7 +14,7 @@ export default function NewProductPageClient() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const createProduct = useCreateProduct()
 
-  const handleSubmit = async (data: ProductFormData) => {
+  const handleSubmit = async (data: ProductFormData, _translations?: Record<string, unknown>) => {
     setIsSubmitting(true)
 
     try {

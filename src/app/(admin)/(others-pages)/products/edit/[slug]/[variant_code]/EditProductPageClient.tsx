@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation"
 import { EnhancedProductForm } from "@/components/products/enhanced-product-form"
 import type { ProductFormData } from "@/lib/validations/product"
+import { appendTranslationsToFormData } from "@/lib/append-translations-to-form-data"
+import type { TranslationData } from "@/components/products/ProductTranslationsEditor"
 import { Loading } from "@/components/loading"
 import { useProductDetail, useUpdateProduct } from "@/api/hooks/useProducts"
 import { useState } from "react"
@@ -20,7 +22,7 @@ interface EditProductPageProps {
 export default function EditProductPageClient({ params }: EditProductPageProps) {
   const { slug, variant_code, mode: modeParam } = params
   const router = useRouter()
-  const mode = (modeParam === "create" || modeParam === "edit") ? modeParam : undefined
+  const mode = modeParam === "edit" ? "edit" : modeParam === "create" ? "create" : "view"
 
   const {
     data: productData,
@@ -33,7 +35,7 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
   const displayColor = hoveredColor || variant?.color
   const updateProduct = useUpdateProduct()
 
-  const handleSubmit = async (data: ProductFormData) => {
+  const handleSubmit = async (data: ProductFormData, translations: Record<string, TranslationData>) => {
     try {
       const formData = new FormData()
 
@@ -90,8 +92,7 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
         }
       })
 
-      // Add translations if available
-      // Translations are saved separately via API, but we can include them here if needed
+      appendTranslationsToFormData(formData, translations)
 
       const result = await updateProduct.mutateAsync({
         id: variant_code,
