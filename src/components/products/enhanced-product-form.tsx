@@ -23,9 +23,11 @@ import {
 } from 'react-toastify'
 import { useTranslations } from "@/hooks/useTranslations"
 import { ProductTranslationsEditor, type TranslationData } from "./ProductTranslationsEditor"
+import api from "@/api/client"
 
 interface EnhancedProductFormProps {
   initialData?: ProductFormData
+  variantCode?: string
   onSubmit: (data: ProductFormData) => Promise<void>
   mode?: Mode
   loading?: boolean
@@ -47,6 +49,7 @@ export function LoadingDots() {
 
 export function EnhancedProductForm({
   initialData,
+  variantCode,
   onSubmit,
   mode: initialMode = "view",
   loading = false,
@@ -61,27 +64,24 @@ export function EnhancedProductForm({
   const [loadingTranslations, setLoadingTranslations] = useState(false)
   // const [isClicked, setIsClicked] = useState(false)
 
-  // Load existing translations when product ID is available
+  const resolvedVariantCode =
+    variantCode || initialData?.variants?.[0]?.variant_code || ""
+
   useEffect(() => {
     const loadTranslations = async () => {
-      if (!initialData?.id) return
+      if (!resolvedVariantCode) return
 
       setLoadingTranslations(true)
       try {
-        const railsApiUrl = process.env.NEXT_PUBLIC_RAILS_API_URL || "http://localhost:3000/api"
-        const response = await fetch(`${railsApiUrl}/admin/products/${initialData.id}/translations`, {
-          credentials: "include",
-        })
-
-        if (response.ok) {
-          const result = await response.json()
-          if (result.translations) {
-            const translationsMap: Record<string, TranslationData> = {}
-            result.translations.forEach((t: any) => {
-              translationsMap[t.locale] = t.data
-            })
-            setTranslations(translationsMap)
-          }
+        const { data: result } = await api.get<{ translations: Array<{ locale: string; data: TranslationData }> }>(
+          `/api/admin/products/${resolvedVariantCode}/translations`
+        )
+        if (result?.translations) {
+          const translationsMap: Record<string, TranslationData> = {}
+          result.translations.forEach((t) => {
+            translationsMap[t.locale] = t.data
+          })
+          setTranslations(translationsMap)
         }
       } catch (error) {
         console.error("Failed to load translations:", error)
@@ -91,7 +91,7 @@ export function EnhancedProductForm({
     }
 
     loadTranslations()
-  }, [initialData?.id])
+  }, [resolvedVariantCode])
 
   const {
     register,
@@ -686,7 +686,7 @@ export function EnhancedProductForm({
         </Card>
 
         {/* Translations Editor */}
-        {initialData?.id && (
+        {resolvedVariantCode && (
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -713,13 +713,12 @@ export function EnhancedProductForm({
                     {["en", "vi"].map((locale) => (
                       <ProductTranslationsEditor
                         key={locale}
-                        productId={initialData.id}
+                        productId={resolvedVariantCode}
                         locale={locale}
                         initialData={translations[locale]}
-                        onSave={async (data) => {
-                          setTranslations({ ...translations, [locale]: data })
-                          toast.success(`Translation for ${locale.toUpperCase()} saved!`)
-                        }}
+                        onSaved={(data) =>
+                          setTranslations((prev) => ({ ...prev, [locale]: data }))
+                        }
                       />
                     ))}
                   </div>

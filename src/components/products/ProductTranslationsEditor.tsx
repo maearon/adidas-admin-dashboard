@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { GripVertical, Plus, Trash2, Save, AlertCircle, CheckCircle2, Code2 } from "lucide-react"
 import { toast } from "react-toastify"
+import api from "@/api/client"
 import {
   DndContext,
   closestCenter,
@@ -47,10 +48,11 @@ export interface TranslationData {
 }
 
 interface ProductTranslationsEditorProps {
+  /** variant_code, ví dụ JP5593 */
   productId: number | string
   locale: string
   initialData?: TranslationData
-  onSave?: (data: TranslationData) => Promise<void>
+  onSaved?: (data: TranslationData) => void
   onCancel?: () => void
 }
 
@@ -126,7 +128,7 @@ export function ProductTranslationsEditor({
   productId,
   locale,
   initialData,
-  onSave,
+  onSaved,
   onCancel,
 }: ProductTranslationsEditorProps) {
   const [data, setData] = useState<TranslationData>(
@@ -288,46 +290,43 @@ export function ProductTranslationsEditor({
   }
 
   const handleSave = async () => {
+    let dataToSave = data
+
     if (jsonMode) {
       const validated = validateJson(jsonText)
       if (!validated) {
         toast.error("Please fix JSON errors before saving")
         return
       }
+      dataToSave = validated
       setData(validated)
     }
 
-    // Ensure sectionOrder exists
-    if (!data.sectionOrder || data.sectionOrder.length === 0) {
-      setData({ ...data, sectionOrder: [...DEFAULT_SECTION_ORDER] })
+    if (!dataToSave.sectionOrder || dataToSave.sectionOrder.length === 0) {
+      dataToSave = { ...dataToSave, sectionOrder: [...DEFAULT_SECTION_ORDER] }
+      setData(dataToSave)
+    }
+
+    const payload: TranslationData = {
+      ...dataToSave,
+      details: dataToSave.details?.filter((d) => d.trim() !== "") ?? [],
+      highlights:
+        dataToSave.highlights?.filter((h) => h.title.trim() || h.text.trim()) ?? [],
     }
 
     setIsSaving(true)
     try {
-      if (onSave) {
-        await onSave(data)
-      } else {
-        // Default save via Rails API
-        const railsApiUrl = process.env.NEXT_PUBLIC_RAILS_API_URL || "http://localhost:3000/api"
-        const response = await fetch(`${railsApiUrl}/admin/products/${productId}/update_translations`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ locale, data }),
-        })
+      const { data: result } = await api.post<{ success: boolean; message?: string }>(
+        `/api/admin/products/${productId}/update_translations`,
+        { locale, data: payload }
+      )
 
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}))
-          throw new Error(errorData.message || `Failed to save translation (${response.status})`)
-        }
-
-        const result = await response.json()
-        if (result.success) {
-          toast.success(`Translation for ${locale.toUpperCase()} saved successfully!`)
-        } else {
-          throw new Error(result.message || "Failed to save translation")
-        }
+      if (!result?.success) {
+        throw new Error(result?.message || "Failed to save translation")
       }
+
+      onSaved?.(payload)
+      toast.success(`Translation ${locale.toUpperCase()} saved to database`)
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to save translation")
     } finally {

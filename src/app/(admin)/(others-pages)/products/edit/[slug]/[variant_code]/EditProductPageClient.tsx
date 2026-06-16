@@ -151,6 +151,7 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
       <div className="container mx-auto px-4 py-6">
         <EnhancedProductForm
           initialData={productData}
+          variantCode={variant_code}
           onSubmit={handleSubmit}
           mode={mode}
           loading={updateProduct.isPending}
