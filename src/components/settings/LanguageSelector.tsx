@@ -17,6 +17,7 @@ export function LanguageSelector() {
   const options = [
     { value: "en_US", label: t?.appearance?.languageOptions?.en_US ?? "English" },
     { value: "vi_VN", label: t?.appearance?.languageOptions?.vi_VN ?? "Tiếng Việt" },
+    { value: "ja_JP", label: t?.appearance?.languageOptions?.ja_JP ?? "日本語" },
   ]
 
   // xử lý khi user chọn option

@@ -18,6 +18,7 @@ import {
 } from "lucide-react"
 import { CloudinaryImage } from "@/components/image/cloudinary-image"
 import { railsApi } from "@/lib/api/rails-client"
+import { interpolate, useTranslations } from "@/hooks/useTranslations"
 
 interface DashboardStats {
   total_revenue: number
@@ -31,6 +32,7 @@ interface DashboardStats {
 }
 
 export default function AdminDashboard() {
+  const t = useTranslations("admin")
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [period, setPeriod] = useState("30_days")
@@ -61,36 +63,36 @@ export default function AdminDashboard() {
 
   const statCards = [
     {
-      title: "Total Revenue",
+      title: t?.dashboard?.totalRevenue ?? "Total Revenue",
       value: `$${stats?.total_revenue?.toLocaleString() || "0"}`,
       change: "+20.1%",
       trend: "up",
       icon: DollarSign,
-      description: "from last month",
+      description: t?.dashboard?.fromLastMonth ?? "from last month",
     },
     {
-      title: "Total Orders",
+      title: t?.dashboard?.totalOrders ?? "Total Orders",
       value: stats?.total_orders?.toLocaleString() || "0",
       change: "+180.1%",
       trend: "up",
       icon: ShoppingCart,
-      description: "from last month",
+      description: t?.dashboard?.fromLastMonth ?? "from last month",
     },
     {
-      title: "Total Products",
+      title: t?.dashboard?.totalProducts ?? "Total Products",
       value: stats?.total_products?.toLocaleString() || "0",
       change: "+19%",
       trend: "up",
       icon: Package,
-      description: "active products",
+      description: t?.dashboard?.activeProducts ?? "active products",
     },
     {
-      title: "Active Users",
+      title: t?.dashboard?.activeUsers ?? "Active Users",
       value: stats?.active_users?.toLocaleString() || "0",
       change: "+201",
       trend: "up",
       icon: Users,
-      description: "online now",
+      description: t?.dashboard?.onlineNow ?? "online now",
     },
   ]
 
@@ -99,28 +101,28 @@ export default function AdminDashboard() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight uppercase adidas-heading">Dashboard</h1>
-          <p className="text-gray-600 mt-2 font-medium">Welcome back! Here's what's happening with your store today.</p>
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight uppercase adidas-heading">{t?.dashboard?.title ?? "Dashboard"}</h1>
+          <p className="text-gray-600 mt-2 font-medium">{t?.dashboard?.welcome}</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
           <Select value={period} onValueChange={setPeriod}>
             <SelectTrigger className="w-full sm:w-[180px] rounded-xl border-gray-200">
-              <SelectValue placeholder="Select period" />
+              <SelectValue placeholder={t?.dashboard?.selectPeriod ?? "Select period"} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="today">Today</SelectItem>
-              <SelectItem value="7_days">Last 7 days</SelectItem>
-              <SelectItem value="30_days">Last 30 days</SelectItem>
-              <SelectItem value="12_months">Last 12 months</SelectItem>
+              <SelectItem value="today">{t?.dashboard?.today ?? "Today"}</SelectItem>
+              <SelectItem value="7_days">{t?.dashboard?.last7 ?? "Last 7 days"}</SelectItem>
+              <SelectItem value="30_days">{t?.dashboard?.last30 ?? "Last 30 days"}</SelectItem>
+              <SelectItem value="12_months">{t?.dashboard?.last12 ?? "Last 12 months"}</SelectItem>
             </SelectContent>
           </Select>
           <AdidasButton theme="white" shadow={true} pressEffect={true} onClick={loadDashboardStats}>
             <RefreshCw className="mr-2 h-4 w-4" />
-            Refresh
+            {t?.common?.refresh ?? "Refresh"}
           </AdidasButton>
           <AdidasButton theme="black" shadow={true} pressEffect={true} className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
-            Quick Add
+            {t?.dashboard?.quickAdd ?? "Quick Add"}
           </AdidasButton>
         </div>
       </div>
@@ -156,9 +158,11 @@ export default function AdminDashboard() {
         {/* Recent Orders */}
         <Card className="col-span-1 lg:col-span-4 card-adidas">
           <CardHeader className="border-b-2 border-black">
-            <CardTitle className="uppercase tracking-wide font-bold text-lg">Recent Orders</CardTitle>
+            <CardTitle className="uppercase tracking-wide font-bold text-lg">{t?.dashboard?.recentOrders}</CardTitle>
             <CardDescription className="font-medium">
-              You have {stats?.recent_orders?.length || 0} new orders this week.
+              {interpolate(t?.dashboard?.newOrdersThisWeek ?? "You have {count} new orders this week.", {
+                count: stats?.recent_orders?.length || 0,
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent className="p-0">
@@ -196,7 +200,7 @@ export default function AdminDashboard() {
               )) || (
                 <div className="p-8 text-center text-gray-500">
                   <ShoppingCart className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                  <p>No recent orders</p>
+                  <p>{t?.dashboard?.noRecentOrders}</p>
                 </div>
               )}
             </div>
@@ -206,8 +210,8 @@ export default function AdminDashboard() {
         {/* Top Products */}
         <Card className="col-span-1 lg:col-span-3 card-adidas">
           <CardHeader className="border-b-2 border-black">
-            <CardTitle className="uppercase tracking-wide font-bold text-lg">Top Products</CardTitle>
-            <CardDescription className="font-medium">Best performing products this month.</CardDescription>
+            <CardTitle className="uppercase tracking-wide font-bold text-lg">{t?.dashboard?.topProducts}</CardTitle>
+            <CardDescription className="font-medium">{t?.dashboard?.topProductsHint}</CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             <div className="divide-y-2 divide-gray-100">

@@ -1,40 +1,35 @@
 // src/lib/constants/localeOptions.ts
 
-// Định dạng chuẩn BCP 47: "en_US", "vi_VN"
-export type SupportedLocale = 
+export type SupportedLocale =
   | "en_US"
   | "vi_VN"
-// | "en_UK"; // mở rộng sau nếu cần
+  | "ja_JP"
 
-// Hiển thị ngôn ngữ (map code → tên hiển thị)
 export const localeDisplayMap: Record<SupportedLocale, string> = {
   en_US: "English (US)",
   vi_VN: "Tiếng Việt",
-  // en_UK: "English (UK)",
-};
+  ja_JP: "日本語",
+}
 
-// Hiển thị quốc gia (map code → tên quốc gia)
 export const countryDisplayMap: Record<SupportedLocale, string> = {
   en_US: "United States",
   vi_VN: "Việt Nam",
-  // en_UK: "United Kingdom",
-};
+  ja_JP: "日本",
+}
 
-// Map country slug → locale
 export const countryToLocaleMap: Record<string, SupportedLocale> = {
   "united-states": "en_US",
   "viet-nam": "vi_VN",
-  // "united-kingdom": "en_UK",
-};
-
-export interface LocaleOption {
-  label: string;
-  value: SupportedLocale;
-  flagShow: string; // icon nhỏ cho menu
-  flag: string;     // icon lớn, nếu cần
+  japan: "ja_JP",
 }
 
-// Tạo danh sách option dựa trên localeDisplayMap
+export interface LocaleOption {
+  label: string
+  value: SupportedLocale
+  flagShow: string
+  flag: string
+}
+
 export const localeOptions: LocaleOption[] = [
   {
     label: localeDisplayMap.en_US,
@@ -48,4 +43,10 @@ export const localeOptions: LocaleOption[] = [
     flagShow: "/flag/vn-show.svg",
     flag: "/flag/vn.svg",
   },
-];
+  {
+    label: localeDisplayMap.ja_JP,
+    value: "ja_JP",
+    flagShow: "/flag/jp-show.svg",
+    flag: "/flag/jp.svg",
+  },
+]

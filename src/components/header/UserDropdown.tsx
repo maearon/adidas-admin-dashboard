@@ -6,6 +6,7 @@ import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { LogOut } from "./Logout";
 import { UserIcon } from "@/icons";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface UserDropdownProps {
   user: User;
@@ -18,6 +19,7 @@ function getFirstName(name?: string) {
 
 export default function UserDropdown({ user }: UserDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const t = useTranslations("admin");
 
 function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
   e.stopPropagation();
@@ -101,7 +103,7 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
                   fill=""
                 />
               </svg>
-              Edit profile
+              {t?.userMenu?.editProfile ?? "Edit profile"}
             </DropdownItem>
           </li>
           <li>
@@ -126,7 +128,7 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
                   fill=""
                 />
               </svg>
-              Account settings
+              {t?.userMenu?.accountSettings ?? "Account settings"}
             </DropdownItem>
           </li>
           <li>
@@ -151,7 +153,7 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
                   fill=""
                 />
               </svg>
-              Support
+              {t?.userMenu?.support ?? "Support"}
             </DropdownItem>
           </li>
         </ul>

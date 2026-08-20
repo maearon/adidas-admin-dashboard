@@ -1,0 +1,81 @@
+{
+  "title": "設定",
+  "subtitle": "ストア設定と環境設定を管理",
+  "reset": "リセット",
+  "saveChanges": "変更を保存",
+  "tabs": {
+    "store": "ストア",
+    "notifications": "通知",
+    "appearance": "外観",
+    "security": "セキュリティ",
+    "shipping": "配送",
+    "payment": "支払い"
+  },
+  "store": {
+    "title": "ストア情報",
+    "description": "店舗情報と連絡先を設定",
+    "storeName": "ストア名",
+    "storeDescription": "ストア説明",
+    "storeEmail": "ストアメール",
+    "storePhone": "電話番号",
+    "storeAddress": "住所"
+  },
+  "notifications": {
+    "title": "通知設定",
+    "description": "重要な出来事の通知方法を選択",
+    "emailNotifications": "メール通知",
+    "smsNotifications": "SMS通知",
+    "pushNotifications": "プッシュ通知",
+    "orderNotifications": "注文通知",
+    "inventoryAlerts": "在庫アラート"
+  },
+  "appearance": {
+    "title": "外観設定",
+    "description": "管理画面の見た目をカスタマイズ",
+    "theme": "テーマ",
+    "language": "言語",
+    "currency": "通貨",
+    "timezone": "タイムゾーン",
+    "themeOptions": {
+      "light": "ライト",
+      "dark": "ダーク",
+      "system": "システム"
+    },
+    "languageOptions": {
+      "en_US": "English (US)",
+      "vi_VN": "Tiếng Việt (VN)",
+      "ja_JP": "日本語"
+    },
+    "currencyOptions": {
+      "USD": "米ドル ($)",
+      "VND": "ベトナムドン (₫)",
+      "EUR": "ユーロ (€)"
+    }
+  },
+  "security": {
+    "title": "セキュリティ設定",
+    "description": "アカウントのセキュリティと認証を管理",
+    "twoFactorAuth": "二要素認証",
+    "sessionTimeout": "セッションタイムアウト（分）",
+    "passwordExpiry": "パスワード有効期限（日）"
+  },
+  "shipping": {
+    "title": "配送設定",
+    "description": "送料と配送オプションを設定",
+    "freeShippingThreshold": "送料無料の条件",
+    "standardShippingCost": "通常送料",
+    "expressShippingCost": "速達送料"
+  },
+  "payment": {
+    "title": "支払い設定",
+    "description": "支払い方法と返金ポリシーを管理",
+    "paymentMethods": "支払い方法",
+    "autoRefund": "自動返金",
+    "refundPeriod": "返金期間（日）",
+    "paymentMethodOptions": {
+      "credit_card": "クレジットカード",
+      "bank_transfer": "銀行振込",
+      "cod": "代金引換"
+    }
+  }
+}

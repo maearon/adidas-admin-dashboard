@@ -19,9 +19,11 @@ export function useLanguage() {
   };
 
   const toggleLanguage = () => {
-    const next = locale === "en_US" ? "vi_VN" : "en_US";
-    setLanguage(next);
-  };
+    const order: SupportedLocale[] = ["en_US", "vi_VN", "ja_JP"]
+    const idx = order.indexOf(locale)
+    const next = order[(idx + 1) % order.length]
+    setLanguage(next)
+  }
 
   return {
     locale,

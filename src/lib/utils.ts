@@ -13,7 +13,7 @@ export function normalizeLocale(input?: string | null): SupportedLocale {
   const mapping: { patterns: string[]; locale: SupportedLocale }[] = [
     { patterns: ["en", "en-us", "us"], locale: "en_US" },
     { patterns: ["vi", "vi-vn", "vn"], locale: "vi_VN" },
-    // { patterns: ["uk", "gb", "en-uk"], locale: "en_UK" }, // mở rộng sau
+    { patterns: ["ja", "ja-jp", "jp", "jpn"], locale: "ja_JP" },
   ]
 
   for (const { patterns, locale } of mapping) {

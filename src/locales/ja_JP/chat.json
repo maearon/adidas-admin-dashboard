@@ -1,0 +1,15 @@
+{
+  "chat": "チャット",
+  "online": "オンライン",
+  "connecting": "接続中...",
+  "typeMessage": "メッセージを入力...",
+  "connectingPlaceholder": "接続中...",
+  "typing": "入力中...",
+  "systemMessage": "[システムメッセージ]",
+  "adminMessage": "[管理者メッセージ]",
+  "userMessage": "[ユーザーメッセージ]",
+  "userEmail": "ユーザーメール:",
+  "userName": "ユーザー名:",
+  "gemini": "Gemini",
+  "admin": "管理者"
+}

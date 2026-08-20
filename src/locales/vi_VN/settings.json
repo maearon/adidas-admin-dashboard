@@ -43,7 +43,8 @@
     },
     "languageOptions": {
       "en_US": "English (US)",
-      "vi_VN": "Tiếng Việt (VN)"
+      "vi_VN": "Tiếng Việt (VN)",
+      "ja_JP": "日本語"
     },
     "currencyOptions": {
       "USD": "Đô la Mỹ ($)",

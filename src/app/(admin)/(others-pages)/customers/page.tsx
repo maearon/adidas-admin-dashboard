@@ -17,6 +17,7 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, MoreHorizontal, Eye, Mail, Phone, Users, UserPlus, Download, RefreshCw } from "lucide-react"
 import { useUsers } from "@/hooks/useUsers"
+import { useTranslations } from "@/hooks/useTranslations"
 // import { User } from "@/lib/auth"
 import Image from "next/image";
 
@@ -34,6 +35,7 @@ import Image from "next/image";
 // }
 
 export default function CustomersPage() {
+  const t = useTranslations("admin")
   const { 
     users: customers, 
     // total, 
@@ -130,21 +132,21 @@ export default function CustomersPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight uppercase">Customers</h1>
-          <p className="text-muted-foreground">Manage customer accounts and relationships.</p>
+          <h1 className="text-3xl font-bold tracking-tight uppercase">{t?.customers?.title}</h1>
+          <p className="text-muted-foreground">{t?.customers?.subtitle}</p>
         </div>
         <div className="flex gap-2">
           <AdidasButton className="border-2 border-foreground">
             <UserPlus className="mr-2 h-4 w-4" />
-            Add Customer
+            {t?.customers?.addCustomer}
           </AdidasButton>
           <AdidasButton className="border-2 border-foreground">
             <Download className="mr-2 h-4 w-4" />
-            Export
+            {t?.common?.export}
           </AdidasButton>
           <AdidasButton className="border-2 border-foreground">
             <RefreshCw className="mr-2 h-4 w-4" />
-            Refresh
+            {t?.common?.refresh}
           </AdidasButton>
         </div>
       </div>
@@ -153,7 +155,7 @@ export default function CustomersPage() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card className="border-2 border-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Customers</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.customers?.totalCustomers}</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -162,7 +164,7 @@ export default function CustomersPage() {
         </Card>
         <Card className="border-2 border-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.customers?.active}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">2,234</div>
@@ -170,7 +172,7 @@ export default function CustomersPage() {
         </Card>
         <Card className="border-2 border-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">New This Month</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.customers?.newThisMonth}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">89</div>

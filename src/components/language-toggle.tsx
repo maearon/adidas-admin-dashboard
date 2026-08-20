@@ -4,17 +4,20 @@ import { useState } from "react"
 import { Globe } from "lucide-react"
 import { AdidasButton } from "@/components/ui/adidas-button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useLanguage } from "@/hooks/useLanguage"
+import { useTranslations } from "@/hooks/useTranslations"
+import { SupportedLocale } from "@/lib/constants/localeOptions"
 
-const languages = [
-  { code: "en", name: "English", flag: "🇺🇸" },
-  { code: "vi", name: "Tiếng Việt", flag: "🇻🇳" },
-  { code: "fr", name: "Français", flag: "🇫🇷" },
-  { code: "de", name: "Deutsch", flag: "🇩🇪" },
-  { code: "es", name: "Español", flag: "🇪🇸" },
+const languages: { code: SupportedLocale; flag: string }[] = [
+  { code: "en_US", flag: "🇺🇸" },
+  { code: "vi_VN", flag: "🇻🇳" },
+  { code: "ja_JP", flag: "🇯🇵" },
 ]
 
 export function LanguageToggle() {
-  const [currentLanguage, setCurrentLanguage] = useState(languages[0])
+  const { locale, setLanguage } = useLanguage()
+  const t = useTranslations("admin")
+  const [open, setOpen] = useState(false)
 
   return (
     <DropdownMenu>
@@ -27,11 +30,14 @@ export function LanguageToggle() {
         {languages.map((language) => (
           <DropdownMenuItem
             key={language.code}
-            onClick={() => setCurrentLanguage(language)}
-            className={`cursor-pointer ${currentLanguage.code === language.code ? "bg-muted" : ""}`}
+            onClick={() => {
+              setLanguage(language.code)
+              setOpen(!open)
+            }}
+            className={`cursor-pointer ${locale === language.code ? "bg-muted" : ""}`}
           >
             <span className="mr-2">{language.flag}</span>
-            {language.name}
+            {t?.language?.[language.code] ?? language.code}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

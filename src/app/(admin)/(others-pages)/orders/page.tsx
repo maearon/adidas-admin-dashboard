@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, MoreHorizontal, Eye, Truck, RefreshCw, Download, Package, CreditCard } from "lucide-react"
+import { useTranslations } from "@/hooks/useTranslations"
 
 interface Order {
   id: number
@@ -34,6 +35,7 @@ interface Order {
 }
 
 export default function OrdersPage() {
+  const t = useTranslations("admin")
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({
@@ -139,17 +141,17 @@ export default function OrdersPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight uppercase">Orders</h1>
-          <p className="text-muted-foreground">Manage and track customer orders.</p>
+          <h1 className="text-3xl font-bold tracking-tight uppercase">{t?.orders?.title}</h1>
+          <p className="text-muted-foreground">{t?.orders?.subtitle}</p>
         </div>
         <div className="flex gap-2">
           <AdidasButton className="border-2 border-foreground">
             <Download className="mr-2 h-4 w-4" />
-            Export
+            {t?.common?.export}
           </AdidasButton>
           <AdidasButton className="border-2 border-foreground">
             <RefreshCw className="mr-2 h-4 w-4" />
-            Refresh
+            {t?.common?.refresh}
           </AdidasButton>
         </div>
       </div>
@@ -158,7 +160,7 @@ export default function OrdersPage() {
       <div className="grid gap-4 md:grid-cols-5">
         <Card className="border-2 border-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.orders?.totalOrders}</CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -167,7 +169,7 @@ export default function OrdersPage() {
         </Card>
         <Card className="border-2 border-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.orders?.pending}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">23</div>
@@ -175,7 +177,7 @@ export default function OrdersPage() {
         </Card>
         <Card className="border-2 border-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Processing</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.orders?.processing}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">45</div>
@@ -183,7 +185,7 @@ export default function OrdersPage() {
         </Card>
         <Card className="border-2 border-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Shipped</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.orders?.shipped}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">67</div>
@@ -191,7 +193,7 @@ export default function OrdersPage() {
         </Card>
         <Card className="border-2 border-foreground">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed</CardTitle>
+            <CardTitle className="text-sm font-medium">{t?.orders?.completed}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">1,099</div>
@@ -202,13 +204,13 @@ export default function OrdersPage() {
       {/* Orders Table */}
       <Card className="border-2 border-foreground">
         <CardHeader>
-          <CardTitle className="uppercase tracking-wide">Order Management</CardTitle>
-          <CardDescription>A list of all orders in your store.</CardDescription>
+          <CardTitle className="uppercase tracking-wide">{t?.orders?.management}</CardTitle>
+          <CardDescription>{t?.orders?.managementHint}</CardDescription>
           <div className="flex items-center gap-2">
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search orders..."
+                placeholder={t?.orders?.search}
                 value={filters.q}
                 onChange={(e) => handleFilterChange("q", e.target.value)}
                 className="pl-8 border-2 border-foreground"
@@ -216,15 +218,15 @@ export default function OrdersPage() {
             </div>
             <Select value={filters.status} onValueChange={(value) => handleFilterChange("status", value)}>
               <SelectTrigger className="w-[180px] border-2 border-foreground">
-                <SelectValue placeholder="Order Status" />
+                <SelectValue placeholder={t?.orders?.orderStatus} />
               </SelectTrigger>
               <SelectContent className="border-2 border-foreground">
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="processing">Processing</SelectItem>
-                <SelectItem value="shipped">Shipped</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
+                <SelectItem value="all">{t?.status?.all}</SelectItem>
+                <SelectItem value="pending">{t?.status?.pending}</SelectItem>
+                <SelectItem value="processing">{t?.status?.processing}</SelectItem>
+                <SelectItem value="shipped">{t?.status?.shipped}</SelectItem>
+                <SelectItem value="completed">{t?.status?.completed}</SelectItem>
+                <SelectItem value="cancelled">{t?.status?.cancelled}</SelectItem>
               </SelectContent>
             </Select>
             <Select
@@ -232,14 +234,14 @@ export default function OrdersPage() {
               onValueChange={(value) => handleFilterChange("payment_status", value)}
             >
               <SelectTrigger className="w-[180px] border-2 border-foreground">
-                <SelectValue placeholder="Payment Status" />
+                <SelectValue placeholder={t?.orders?.paymentStatus} />
               </SelectTrigger>
               <SelectContent className="border-2 border-foreground">
-                <SelectItem value="all">All Payments</SelectItem>
-                <SelectItem value="paid">Paid</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="failed">Failed</SelectItem>
-                <SelectItem value="refunded">Refunded</SelectItem>
+                <SelectItem value="all">{t?.orders?.allPayments}</SelectItem>
+                <SelectItem value="paid">{t?.status?.paid}</SelectItem>
+                <SelectItem value="pending">{t?.status?.pending}</SelectItem>
+                <SelectItem value="failed">{t?.status?.failed}</SelectItem>
+                <SelectItem value="refunded">{t?.status?.refunded}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -253,14 +255,14 @@ export default function OrdersPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Order ID</TableHead>
-                  <TableHead>Customer</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Items</TableHead>
-                  <TableHead>Total</TableHead>
-                  <TableHead>Payment</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="w-[70px]">Actions</TableHead>
+                  <TableHead>{t?.orders?.orderId}</TableHead>
+                  <TableHead>{t?.common?.customer}</TableHead>
+                  <TableHead>{t?.common?.date}</TableHead>
+                  <TableHead>{t?.common?.items}</TableHead>
+                  <TableHead>{t?.common?.total}</TableHead>
+                  <TableHead>{t?.orders?.payment}</TableHead>
+                  <TableHead>{t?.common?.status}</TableHead>
+                  <TableHead className="w-[70px]">{t?.common?.actions}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

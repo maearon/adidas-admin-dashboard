@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, MoreHorizontal, Truck, Package, MapPin, Clock, Plus, Download, RefreshCw } from "lucide-react"
+import { useTranslations } from "@/hooks/useTranslations"
 
 interface Shipment {
   id: number
@@ -34,6 +35,7 @@ interface Shipment {
 }
 
 export default function ShippingPage() {
+  const t = useTranslations("admin")
   const [shipments, setShipments] = useState<Shipment[]>([])
   const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({
@@ -146,21 +148,21 @@ export default function ShippingPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight uppercase">Shipping</h1>
-          <p className="text-muted-foreground">Track and manage order shipments.</p>
+          <h1 className="text-3xl font-bold tracking-tight uppercase">{t?.shipping?.title}</h1>
+          <p className="text-muted-foreground">{t?.shipping?.subtitle}</p>
         </div>
         <div className="flex gap-2">
           <AdidasButton className="border-2 border-foreground">
             <Plus className="mr-2 h-4 w-4" />
-            Create Shipment
+            {t?.shipping?.createShipment}
           </AdidasButton>
           <AdidasButton className="border-2 border-foreground">
             <Download className="mr-2 h-4 w-4" />
-            Export
+            {t?.common?.export}
           </AdidasButton>
           <AdidasButton className="border-2 border-foreground">
             <RefreshCw className="mr-2 h-4 w-4" />
-            Refresh
+            {t?.common?.refresh}
           </AdidasButton>
         </div>
       </div>

@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Search, Send, MessageSquare, Users } from "lucide-react"
+import { useTranslations } from "@/hooks/useTranslations"
 
 interface ChatRoom {
   id: number
@@ -31,6 +32,7 @@ interface Message {
 }
 
 export default function ChatPage() {
+  const t = useTranslations("admin")
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([])
   const [selectedRoom, setSelectedRoom] = useState<ChatRoom | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
@@ -170,8 +172,8 @@ export default function ChatPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight uppercase">Chat Support</h1>
-          <p className="text-muted-foreground">Manage customer conversations and support requests.</p>
+          <h1 className="text-3xl font-bold tracking-tight uppercase">{t?.chatPage?.title}</h1>
+          <p className="text-muted-foreground">{t?.chatPage?.subtitle}</p>
         </div>
         <div className="flex gap-2">
           <Badge variant="secondary" className="px-3 py-1">
