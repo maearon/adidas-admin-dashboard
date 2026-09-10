@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect, useState } from "react"
+
 import { useAppSelector } from "@/store/hooks"
 import { selectLocale } from "@/store/localeSlice"
 import { locales, Locale, Namespace } from "@/lib/locale"
@@ -40,12 +42,22 @@ export function interpolate(
   )
 }
 
-export function useTranslations<N extends Namespace>(namespace: N) {
-  let locale = useAppSelector(selectLocale) as Locale | undefined
+/** Locale safe for SSR/hydration — uses server-synced store after mount. */
+export function useHydrationSafeLocale(): Locale {
+  const localeFromStore = useAppSelector(selectLocale) as Locale | undefined
+  const [mounted, setMounted] = useState(false)
 
-  if (!locale || !locales[locale]) {
-    locale = DEFAULT_LOCALE
-  }
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  return mounted && localeFromStore && locales[localeFromStore]
+    ? localeFromStore
+    : DEFAULT_LOCALE
+}
+
+export function useTranslations<N extends Namespace>(namespace: N) {
+  const locale = useHydrationSafeLocale()
 
   const base = locales[DEFAULT_LOCALE][namespace]
   const current = locales[locale][namespace] ?? base
