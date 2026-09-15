@@ -2,8 +2,8 @@ import axios, { type InternalAxiosRequestConfig, type AxiosResponse } from "axio
 import { getAccessToken, getRefreshToken, setTokens, clearTokens } from "@/lib/token"
 import type { Nullable } from "@/types/common"
 
-// Base URL config
-const BASE_URL = "https://adidas-microservices-fkgu.onrender.com"
+const railsApi = process.env.NEXT_PUBLIC_RAILS_API_URL || "http://localhost:3000/api"
+const BASE_URL = railsApi.replace(/\/api\/?$/, "") || "http://localhost:3000"
 
 // CSRF & credentials setup
 axios.defaults.xsrfCookieName = "CSRF-TOKEN"

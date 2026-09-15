@@ -14,24 +14,17 @@ export async function GET(req: NextRequest) {
     const cursor = req.nextUrl.searchParams.get("cursor")
     const pageSize = 10
 
-    const searchQuery = q
-      .trim()
-      .split(/\s+/)
-      .map((word) => word + ":*")
-      .join(" & ")
+    const term = q.trim()
+    const where = term
+      ? { name: { contains: term, mode: "insensitive" as const } }
+      : {}
 
     // ✅ Count total
-    const totalCount = await prisma.products.count({
-      where: { name: { search: searchQuery } },
-    })
+    const totalCount = await prisma.products.count({ where })
 
     // ✅ Query products
     const products = await prisma.products.findMany({
-      where: {
-        name: {
-          search: searchQuery, // maps to to_tsquery in PostgreSQL
-        },
-      },
+      where,
       // select: getProductSearchSelect(),
       include: {
         categories: { select: { name: true } },

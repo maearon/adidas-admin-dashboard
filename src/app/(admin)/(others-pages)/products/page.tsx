@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { EnhancedSearchField } from "@/components/search/enhanced-search-field"
 import Image from "next/image"
 import ComponentCard from "@/components/common/ComponentCard"
-import { useSearchProductsFeed } from "@/hooks/useProducts"
+import { useProducts, useSearchProductsFeed } from "@/hooks/useProducts"
 import Link from "next/link"
 import { slugify } from "@/utils/slugify"
 import { Mode } from "@/components/ui/mode-switcher"
@@ -53,15 +53,17 @@ export default function ProductsPage() {
   const query = searchParams.get("q") || ""
   const page = Number.parseInt(searchParams.get("page") || "1")
 
-  const { 
+  const searchFeed = useSearchProductsFeed(query)
+  const productsFeed = useProducts()
+  const {
     data,
     fetchNextPage,
     hasNextPage,
     isFetching,
-    isFetchingNextPage, 
+    isFetchingNextPage,
     status,
     refetch,
-  } = useSearchProductsFeed(query || 'a')
+  } = query.trim() ? searchFeed : productsFeed
 
   const products: Product[] = data?.pages.flatMap((p) => p.products) || []
   const totalCount = data?.pages?.[0]?.totalCount ?? 0;
@@ -110,7 +112,7 @@ export default function ProductsPage() {
             {products.length > 0 && (
               <p className="mt-1 font-normal text-gray-500 text-theme-sm dark:text-gray-400">
                 {t2?.showingResults?.replace('{count}', products.length.toString()).replace('{total}', totalCount.toString()) || `Showing ${products.length} of ${totalCount} results `}
-                {(query || "a") && ` for "${query || "a"}"`}
+                {query.trim() && ` for "${query}"`}
               </p>
             )}
           </div>

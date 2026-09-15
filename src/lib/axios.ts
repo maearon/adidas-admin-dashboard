@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // nếu cần
-  withCredentials: true, // nếu có dùng cookie
+  // Same-origin Next.js routes (/api/products, /api/search). Rails is client.ts.
+  withCredentials: true,
   transformResponse: [
     (data) => {
       try {

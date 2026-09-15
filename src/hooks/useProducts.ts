@@ -9,6 +9,7 @@ import type { AxiosError } from "axios";
 export const useSearchProductsFeed = (query: string) => {
   return useInfiniteQuery({
     queryKey: ["product-feed", "search", query],
+    enabled: query.trim().length > 0,
     queryFn: async ({ pageParam }) => {
       const response = await axiosInstance.get<ProductsPage>("/api/search", { // search/route.ts
         params: {
