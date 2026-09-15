@@ -1,6 +1,5 @@
 "use client";
 import { type Session } from "@/lib/auth"
-import { type User } from "@/lib/auth";
 import { LanguageToggleButton } from "@/components/common/LanguageToggleButton";
 import { ThemeToggleButton } from "@/components/common/ThemeToggleButton";
 import NotificationDropdown from "@/components/header/NotificationDropdown";
@@ -20,11 +19,16 @@ const AppHeader: React.FC = () => {
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
   const [session, setSession] = useState<Session | null>(null);
+  const [sessionLoading, setSessionLoading] = useState(true);
 
   useEffect(() => {
     async function loadSession() {
-      const { data } = await authClient.getSession()
-      setSession((data as Session) ?? null);
+      try {
+        const { data } = await authClient.getSession();
+        setSession((data as Session) ?? null);
+      } finally {
+        setSessionLoading(false);
+      }
     }
     loadSession();
   }, []);
@@ -188,7 +192,7 @@ const AppHeader: React.FC = () => {
             {/* <!-- Notification Menu Area --> */}
           </div>
           {/* <!-- User Area --> */}
-          <UserDropdown user={session?.user as User} />
+          <UserDropdown user={session?.user} isLoading={sessionLoading} />
     
         </div>
       </div>

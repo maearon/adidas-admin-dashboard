@@ -9,7 +9,8 @@ import { UserIcon } from "@/icons";
 import { useTranslations } from "@/hooks/useTranslations";
 
 interface UserDropdownProps {
-  user: User;
+  user?: User | null;
+  isLoading?: boolean;
 }
 
 function getFirstName(name?: string) {
@@ -17,34 +18,94 @@ function getFirstName(name?: string) {
   return name.trim().split(" ")[0];
 }
 
-export default function UserDropdown({ user }: UserDropdownProps) {
+function UserAvatar({ src, alt }: { src?: string | null; alt: string }) {
+  const [failed, setFailed] = useState(false);
+  const showIcon = !src || failed;
+
+  if (showIcon) {
+    return (
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+        <UserIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+      </span>
+    );
+  }
+
+  return (
+    <Image
+      width={44}
+      height={44}
+      src={src}
+      alt={alt}
+      className="h-11 w-11 shrink-0 rounded-full object-cover"
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
+function UserDropdownSkeleton() {
+  return (
+    <div
+      className="flex items-center"
+      aria-hidden="true"
+    >
+      <span className="mr-3 h-11 w-11 shrink-0 rounded-full bg-gray-200 animate-pulse dark:bg-gray-800" />
+      <span className="mr-1 hidden h-4 w-20 rounded bg-gray-200 animate-pulse sm:block dark:bg-gray-800" />
+      <svg
+        className="stroke-gray-300 dark:stroke-gray-700"
+        width="18"
+        height="20"
+        viewBox="0 0 18 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M4.3125 8.65625L9 13.3437L13.6875 8.65625"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
+export default function UserDropdown({ user, isLoading = false }: UserDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const t = useTranslations("admin");
 
-function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-  e.stopPropagation();
-  setIsOpen((prev) => !prev);
-}
+  function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.stopPropagation();
+    setIsOpen((prev) => !prev);
+  }
 
   function closeDropdown() {
     setIsOpen(false);
   }
+
+  if (isLoading || !user) {
+    return (
+      <div className="relative min-h-11 min-w-[3.75rem]">
+        <UserDropdownSkeleton />
+      </div>
+    );
+  }
+
+  const displayName = getFirstName(user.name) || user.email || "User";
+
   return (
     <div className="relative">
       <button
-        onClick={toggleDropdown} 
-        className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle"
+        onClick={toggleDropdown}
+        className="flex min-h-11 items-center text-gray-700 dark:text-gray-400 dropdown-toggle"
       >
-        <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          <Image
-            width={44}
-            height={44}
-            src={user?.image || "/images/user/owner.jpg"}
-            alt={user?.name || "User"}
-          />
+        <span className="mr-3 overflow-hidden rounded-full">
+          <UserAvatar src={user.image} alt={displayName} />
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm">{getFirstName(user?.name || "Manh Nguyen") || "Manh"}</span>
+        <span className="mr-1 hidden max-w-[8rem] truncate font-medium text-theme-sm sm:block">
+          {displayName}
+        </span>
 
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
@@ -73,10 +134,10 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-            {user?.name ?? "Manh Nguyen"}
+            {user.name || user.email || "User"}
           </span>
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-            {user?.email ?? "manhng132@gmail.com"}
+            {user.email ?? ""}
           </span>
         </div>
 
@@ -110,7 +171,7 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
             <DropdownItem
               onItemClick={closeDropdown}
               tag="a"
-              href="/profile"
+              href="/profile#security"
               className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
               <svg

@@ -78,7 +78,12 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
   )
 }
 
-function TableCell({ className, ...props }: React.ComponentProps<"td">) {
+function TableCell({
+  className,
+  isHeader,
+  ...props
+}: React.ComponentProps<"td"> & { isHeader?: boolean }) {
+  void isHeader
   return (
     <td
       data-slot="table-cell"

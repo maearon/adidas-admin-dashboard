@@ -4,12 +4,21 @@ const nextConfig = {
   experimental: {
     authInterrupts: true,
   },
-  output: 'standalone',
+  // Next 16.3 + Vercel adapter breaks when standalone is always on (missing next-server.js.nft.json).
+  ...(process.env.VERCEL ? {} : { output: "standalone" }),
   eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,
+  },
+  turbopack: {
+    rules: {
+      "*.svg": {
+        loaders: ["@svgr/webpack"],
+        as: "*.js",
+      },
+    },
   },
   images: {
     domains: ["blob.v0.dev"],
