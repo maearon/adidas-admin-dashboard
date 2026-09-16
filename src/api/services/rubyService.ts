@@ -150,11 +150,7 @@ const rubyService = {
   // ✅ Tạo sản phẩm mới
   createProduct: async (formData: FormData): Promise<WithStatus<Product | undefined> | undefined> => {
     try {
-      const { data } = await api.post<WithStatus<Product>>("/api/admin/products", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      const { data } = await api.post<WithStatus<Product>>("/api/admin/products", formData)
       return data
     } catch (error: unknown) {
       handleNetworkError(error)
@@ -169,9 +165,6 @@ const rubyService = {
   ): Promise<WithStatus<Product | undefined> | undefined> => {
     try {
       const { data } = await api.patch<WithStatus<Product>>(`/api/admin/products/${id}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
         timeout: 120000,
       })
       return data

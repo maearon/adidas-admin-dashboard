@@ -29,6 +29,15 @@ const dispatchRedirectToLogin = () => {
 // 🔐 Attach tokens and guest_cart_id
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    // Browser must set multipart boundary. A hardcoded Content-Type breaks Rails params.
+    if (typeof FormData !== "undefined" && config.data instanceof FormData && config.headers) {
+      delete config.headers["Content-Type"]
+      delete config.headers["content-type"]
+      if (typeof config.headers.delete === "function") {
+        config.headers.delete("Content-Type")
+      }
+    }
+
     if (typeof window !== "undefined" && config.headers) {
       const token = getAccessToken()
       if (token) {
