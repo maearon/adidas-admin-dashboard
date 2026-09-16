@@ -150,7 +150,10 @@ const rubyService = {
   // ✅ Tạo sản phẩm mới
   createProduct: async (formData: FormData): Promise<WithStatus<Product | undefined> | undefined> => {
     try {
-      const { data } = await api.post<WithStatus<Product>>("/api/admin/products", formData)
+      const { data } = await api.post<WithStatus<Product>>("/api/admin/products", formData, {
+        timeout: 120000,
+        withCredentials: false,
+      })
       return data
     } catch (error: unknown) {
       handleNetworkError(error)
@@ -164,8 +167,10 @@ const rubyService = {
     formData: FormData,
   ): Promise<WithStatus<Product | undefined> | undefined> => {
     try {
-      const { data } = await api.patch<WithStatus<Product>>(`/api/admin/products/${id}`, formData, {
+      // POST avoids PATCH being stalled/blocked cross-origin (Chrome "provisional headers", 0 bytes).
+      const { data } = await api.post<WithStatus<Product>>(`/api/admin/products/${id}/update`, formData, {
         timeout: 120000,
+        withCredentials: false,
       })
       return data
     } catch (error: unknown) {

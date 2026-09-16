@@ -120,7 +120,21 @@ export default function EditProductPageClient({ params }: EditProductPageProps) 
       }
     } catch (error) {
       console.error("Error updating product:", error)
-      toast.error("Failed to update product. Please try again.")
+      const axiosError = error as {
+        code?: string
+        message?: string
+        response?: { data?: { message?: string; errors?: string[] } }
+      }
+      const message =
+        axiosError.response?.data?.message ||
+        axiosError.response?.data?.errors?.[0] ||
+        (axiosError.code === "ECONNABORTED"
+          ? "Update timed out. Try smaller images (JPEG/PNG under 5MB)."
+          : axiosError.code === "ERR_NETWORK"
+            ? "Update request was blocked or dropped before Rails responded. Check Network for CORS/status."
+            : axiosError.message) ||
+        "Failed to update product. Please try again."
+      toast.error(message)
     }
   }
 

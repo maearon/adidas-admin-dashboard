@@ -5,18 +5,17 @@ import type { Nullable } from "@/types/common"
 // Base URL config
 const BASE_URL = "https://adidas-microservices-fkgu.onrender.com"
 
-// CSRF & credentials setup
-axios.defaults.xsrfCookieName = "CSRF-TOKEN"
-axios.defaults.xsrfHeaderName = "X-CSRF-Token"
-axios.defaults.withCredentials = true
-
 const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 30000,
+  timeout: 120000,
+  withCredentials: false,
+  maxContentLength: Infinity,
+  maxBodyLength: Infinity,
   headers: {
-    "Content-Type": "application/json",
     Accept: "application/json",
   },
+  xsrfCookieName: "",
+  xsrfHeaderName: "",
 })
 
 // 🔄 Redirect handler
@@ -26,27 +25,43 @@ const dispatchRedirectToLogin = () => {
   }
 }
 
+const isFormDataBody = (data: unknown): boolean =>
+  typeof FormData !== "undefined" && data instanceof FormData
+
 // 🔐 Attach tokens and guest_cart_id
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    config.withCredentials = false
+
+    if (config.headers) {
+      delete config.headers["X-CSRF-Token"]
+      delete config.headers["X-CSRF-TOKEN"]
+      delete config.headers["X-XSRF-TOKEN"]
+    }
+
     // Browser must set multipart boundary. A hardcoded Content-Type breaks Rails params.
-    if (typeof FormData !== "undefined" && config.data instanceof FormData && config.headers) {
+    if (isFormDataBody(config.data) && config.headers) {
       delete config.headers["Content-Type"]
       delete config.headers["content-type"]
       if (typeof config.headers.delete === "function") {
         config.headers.delete("Content-Type")
+        config.headers.delete("content-type")
       }
+    } else if (config.headers && !config.headers["Content-Type"] && !config.headers["content-type"]) {
+      config.headers["Content-Type"] = "application/json"
     }
 
     if (typeof window !== "undefined" && config.headers) {
       const token = getAccessToken()
-      if (token) {
+      // FormData product uploads skip Authorization so POST stays a simple CORS request.
+      if (token && !isFormDataBody(config.data)) {
         config.headers["Authorization"] = `Bearer ${token}`
       }
 
       const guestCartId = localStorage.getItem("guest_cart_id") ?? sessionStorage.getItem("guest_cart_id")
-      if (guestCartId) {
-        const url = new URL(config.url || "", BASE_URL)
+      const requestUrl = config.url || ""
+      if (guestCartId && !requestUrl.includes("/api/admin/")) {
+        const url = new URL(requestUrl, BASE_URL)
         if (!url.searchParams.has("guest_cart_id")) {
           url.searchParams.set("guest_cart_id", guestCartId)
           config.url = url.pathname + "?" + url.searchParams.toString()

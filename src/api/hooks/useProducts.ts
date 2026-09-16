@@ -314,10 +314,6 @@ export function useUpdateProduct() {
     },
     onError: (error: AxiosError<{ message?: string; errors?: string[] }>) => {
       console.error("Update product error:", error)
-      const errorMessage =
-        error.response?.data?.message || error.response?.data?.errors?.[0] || "Failed to update product"
-      toast.error(errorMessage)
-      throw error
     },
   })
 }
