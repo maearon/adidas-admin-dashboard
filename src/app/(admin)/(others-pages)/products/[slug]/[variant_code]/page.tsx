@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 import ProductDetailPageClient from "./ProductDetailPageClient";
 import { formatSlugTitle } from "@/utils/category-config.auto";
-import Loading from "@/components/loading";
+import { Loading } from "@/components/loading";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
 

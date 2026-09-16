@@ -2,7 +2,7 @@ import { BreadcrumbItem } from "@/types/bread-crumb";
 import { Product } from "@/types/product";
 // import { getCategoryConfig, categoryConfigs } from "@/utils/category-config.auto"
 import { capitalizeTitle } from "./sanitizeMenuTitleOnly";
-import { slugify } from "@/lib/utils";
+import { slugify } from "@/utils/slugify";
 
 export function formatSlugTitle(slug: string): string {
   return slug

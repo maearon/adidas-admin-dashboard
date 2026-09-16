@@ -6,9 +6,6 @@ const nextConfig = {
   },
   // Next 16.3 + Vercel adapter breaks when standalone is always on (missing next-server.js.nft.json).
   ...(process.env.VERCEL ? {} : { output: "standalone" }),
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -21,9 +18,14 @@ const nextConfig = {
     },
   },
   images: {
-    domains: ["blob.v0.dev"],
     unoptimized: true,
     remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'blob.v0.dev',
+        port: '',
+        pathname: '/**',
+      },
       {
         protocol: 'https',
         hostname: 'secure.gravatar.com',
